@@ -4,7 +4,7 @@ using System.Drawing;
 using MonoTouch.UIKit;
 using MonoTouch.Foundation;
 
-namespace MasterDetail
+namespace Bodo
 {
 	public sealed class ImageRepository
 	{

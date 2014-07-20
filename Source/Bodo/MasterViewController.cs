@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MasterDetail
+namespace Bodo
 {
 	public partial class MasterViewController : UITableViewController
 	{

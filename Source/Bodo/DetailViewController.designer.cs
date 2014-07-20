@@ -9,7 +9,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using System.CodeDom.Compiler;
 
-namespace MasterDetail
+namespace Bodo
 {
 	[Register ("DetailViewController")]
 	partial class DetailViewController
