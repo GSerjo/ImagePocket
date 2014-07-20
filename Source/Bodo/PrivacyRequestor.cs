@@ -1,7 +1,7 @@
 ﻿using System;
 using MonoTouch.AssetsLibrary;
 
-namespace MasterDetail
+namespace Bodo
 {
 	public class PrivacyRequestor
 	{

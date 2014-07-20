@@ -6,7 +6,7 @@ using MonoTouch.UIKit;
 using System.Collections.ObjectModel;
 using MonoTouch.CoreGraphics;
 
-namespace MasterDetail
+namespace Bodo
 {
 	public partial class DetailViewController : UIViewController
 	{

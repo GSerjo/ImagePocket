@@ -3,7 +3,7 @@ using MonoTouch.UIKit;
 using MonoTouch.Photos;
 using System.Drawing;
 
-namespace MasterDetail
+namespace Bodo
 {
 	public class PhotoViewController : UIViewController
 	{
