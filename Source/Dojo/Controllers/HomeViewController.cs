@@ -15,8 +15,15 @@ namespace Dojo
 			Title = "ImagePacket";
 		}
 
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+			ConfigureView ();
+		}
+
 		private void ConfigureView ()
 		{
+			CollectionView.BackgroundColor = UIColor.White;
 			CollectionView.RegisterClassForCell (typeof(ImpagePreviewCell), _cellId);
 			CollectionView.Source = new CollectionSource (this);
 			CollectionView.Delegate = new CollectionDelegate ();
