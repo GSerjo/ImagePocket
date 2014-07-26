@@ -99,7 +99,13 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Controllers\HomeViewController.cs" />
     <Compile Include="Controllers\TagViewController.cs" />
+    <Compile Include="ImpagePreviewCell.cs" />
+    <Compile Include="ImageRepository.cs" />
+    <Compile Include="Controllers\PhotoViewController.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

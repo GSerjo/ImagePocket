@@ -5,6 +5,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MonoTouch.SlideoutNavigation;
+using System.Drawing;
 
 namespace Dojo
 {
@@ -31,7 +32,7 @@ namespace Dojo
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 
 			Menu = new SimpleSlideoutNavigationController ();
-			Menu.MainViewController = new MainNavigationController (new HomeViewController (), Menu);
+			Menu.MainViewController = new MainNavigationController (CreateHomeController(), Menu);
 			Menu.MenuViewController = new MenuNavigationController (new TagViewController (), Menu)
 			{
 				NavigationBarHidden = true
@@ -43,6 +44,18 @@ namespace Dojo
 			window.MakeKeyAndVisible();
 			
 			return true;
+		}
+
+		private UIViewController CreateHomeController()
+		{
+			var layout = new UICollectionViewFlowLayout
+			{
+				MinimumInteritemSpacing = 10.0f,
+				SectionInset = new UIEdgeInsets (10, 15, 10, 15),
+				ItemSize = new SizeF(120, 120)
+			};
+			var controller = new HomeViewController (layout);
+			return controller;
 		}
 	}
 }
