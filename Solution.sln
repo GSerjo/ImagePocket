@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bodo", "Source\Bodo\Bodo.csproj", "{B4CCDB4B-6953-4E2F-B375-03F3C384F207}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dojo", "Source\Dojo\Dojo.csproj", "{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTouch.SlideoutNavigation", "Source\MonoTouch.SlideoutNavigation\MonoTouch.SlideoutNavigation.csproj", "{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -13,6 +17,30 @@ Global
 		AppStore|iPhone = AppStore|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Release|iPhone.Build.0 = Release|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Debug|iPhone.Build.0 = Debug|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Release|iPhone.ActiveCfg = Release|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Release|iPhone.Build.0 = Release|iPhone
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{6EE9ADA8-939D-4C68-9860-9C6EB5169C72}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{B4CCDB4B-6953-4E2F-B375-03F3C384F207}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
 		{B4CCDB4B-6953-4E2F-B375-03F3C384F207}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
 		{B4CCDB4B-6953-4E2F-B375-03F3C384F207}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
@@ -27,6 +55,6 @@ Global
 		{B4CCDB4B-6953-4E2F-B375-03F3C384F207}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Source\Bodo\Bodo.csproj
+		StartupItem = Source\Dojo\Dojo.csproj
 	EndGlobalSection
 EndGlobal

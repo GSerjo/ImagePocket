@@ -20,7 +20,7 @@ namespace Bodo
 
 		private void ConfigureView ()
 		{
-			CollectionView.RegisterClassForCell (typeof(ImageCell), _cellId);
+			CollectionView.RegisterClassForCell (typeof(ImpagePreviewCell), _cellId);
 			var layout = new UICollectionViewFlowLayout
 			{
 				MinimumInteritemSpacing = 10.0f,
@@ -29,6 +29,8 @@ namespace Bodo
 			};
 			CollectionView.CollectionViewLayout = layout;
 
+			CollectionView.Source = new CollectionSource (this);
+			CollectionView.Delegate = new CollectionDelegate ();
 		}
 
 		public override void ViewDidLoad ()
@@ -40,7 +42,6 @@ namespace Bodo
 		public override void ViewWillAppear (bool animated)
 		{
 			base.ViewWillAppear (animated);
-			CollectionView.Source = new Source (this);
 		}
 
 		[Export ("splitViewController:willHideViewController:withBarButtonItem:forPopoverController:")]
@@ -58,33 +59,13 @@ namespace Bodo
 			NavigationItem.SetLeftBarButtonItem (null, true);
 			masterPopoverController = null;
 		}
-
-		private sealed class ImageCell : UICollectionViewCell
-		{
-			private UIImageView _imageView;
-
-			[Export("initWithFrame:")]
-			public ImageCell(RectangleF frame) : base(frame)
-			{
-				_imageView = new UIImageView(frame);
-				_imageView.Center = ContentView.Center;
-				_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-				ContentView.AddSubview(_imageView);
-			}
-
-			public UIImage Image
-			{
-				set { _imageView.Image = value; }
-			}
-
-		}
 			
-		private sealed class Source : UICollectionViewSource
+		private sealed class CollectionSource : UICollectionViewSource
 		{
 
 			private DetailViewController _controller;
 
-			public Source (DetailViewController controller)
+			public CollectionSource (DetailViewController controller)
 			{
 				_controller = controller;
 			}
@@ -98,7 +79,7 @@ namespace Bodo
 
 			public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 			{
-				var imageCell = (ImageCell)collectionView.DequeueReusableCell (_cellId, indexPath);
+				var imageCell = (ImpagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
 				var image = _imageRepository.GetImage (indexPath.Item);
 				imageCell.Image = image;
 				return imageCell;
@@ -112,6 +93,25 @@ namespace Bodo
 				Console.WriteLine (indexPath.Item);
 				var photoController = new PhotoViewController (asset);
 				_controller.NavigationController.PushViewController (photoController, true);
+			}
+		}
+
+		private sealed class CollectionDelegate : UICollectionViewDelegate
+		{
+			public override bool ShouldSelectItem (UICollectionView collectionView, NSIndexPath indexPath)
+			{
+				return true;
+			}
+
+			public override bool ShouldDeselectItem (UICollectionView collectionView, NSIndexPath indexPath)
+			{
+				return true;
+			}
+
+			public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
+			{
+				var cell = collectionView.CellForItem (indexPath);
+				cell.BackgroundColor = UIColor.Black;
 			}
 		}
 	}
