@@ -2,11 +2,13 @@
 using MonoTouch.UIKit;
 using System.Drawing;
 using MonoTouch.Foundation;
+using Domain;
 
 namespace Dojo
 {
-	public class HomeViewController : UICollectionViewController
+	public sealed class HomeViewController : UICollectionViewController
 	{
+
 		private static NSString _cellId = new NSString ("ImageCell");
 		private static readonly ImageRepository _imageRepository = new ImageRepository();
 
@@ -19,6 +21,10 @@ namespace Dojo
 		{
 			base.ViewDidLoad ();
 			ConfigureView ();
+		}
+
+		public void SetTag (TagEntity entity)
+		{
 		}
 
 		private void ConfigureView ()

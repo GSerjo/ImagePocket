@@ -32,8 +32,9 @@ namespace Dojo
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 
 			Menu = new SimpleSlideoutNavigationController ();
-			Menu.MainViewController = new MainNavigationController (CreateHomeController(), Menu);
-			Menu.MenuViewController = new MenuNavigationController (new TagViewController (), Menu)
+			HomeViewController homeController = CreateHomeController ();
+			Menu.MainViewController = new MainNavigationController (homeController, Menu);
+			Menu.MenuViewController = new MenuNavigationController (new TagViewController (homeController), Menu)
 			{
 				NavigationBarHidden = true
 			};
@@ -46,7 +47,7 @@ namespace Dojo
 			return true;
 		}
 
-		private UIViewController CreateHomeController()
+		private HomeViewController CreateHomeController()
 		{
 			var layout = new UICollectionViewFlowLayout
 			{

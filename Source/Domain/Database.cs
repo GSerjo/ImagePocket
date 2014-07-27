@@ -21,6 +21,11 @@ namespace Domain
 			return _database.Table<T> ().ToListAsync ().Result;
 		}
 
+		public static Task<int> Add(object value)
+		{
+			return _database.InsertAsync (value);
+		}
+
 		public static Task<List<T>> GetAllAsync<T>()
 			where T: new()
 		{
@@ -40,4 +45,3 @@ namespace Domain
 		}
 	}
 }
-
