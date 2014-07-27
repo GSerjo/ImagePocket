@@ -5,6 +5,7 @@ using MonoTouch.Foundation;
 using Domain;
 using System.Reactive.Linq;
 using Core;
+using System.Collections.Generic;
 
 namespace Dojo
 {
@@ -18,23 +19,34 @@ namespace Dojo
 		private ImageRepository _imageRpository = new ImageRepository();
 		private Bag<TagEntity> _currentTag = Bag<TagEntity>.Empty;
 		private bool _shouldSelectItem;
-
+		private List<ImageEntity> _images = new List<ImageEntity> ();
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
 		{
 			Title = RootTitle;
-			ConfigureToolbar ();
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 			ConfigureView ();
+			ConfigureToolbar ();
+			_imageRpository.LoadAll ();
 		}
 
 		public void SetTag (TagEntity entity)
 		{
 			_currentTag = entity.ToBag();
+			FilterImages ();
+		}
+
+		private void FilterImages()
+		{
+			if (_currentTag.HasNoValue)
+			{
+				return;
+			}
+			_images = _imageRpository.GetByTag (_currentTag.Value);
 		}
 
 		private void ConfigureView ()
@@ -78,7 +90,7 @@ namespace Dojo
 
 		public override int GetItemsCount (UICollectionView collectionView, int section)
 		{
-			return _assetRepository.ImageCount;
+			return _images.Count;
 		}
 
 		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)

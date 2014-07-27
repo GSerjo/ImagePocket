@@ -21,8 +21,12 @@ namespace Domain
 				.ToDictionary (x => x.Key, y=> y.ToList());
 		}
 
-		private List<ImageEntity> GetByTag(TagEntity tag)
+		public List<ImageEntity> GetByTag(TagEntity tag)
 		{
+			if (tag.IsAll)
+			{
+				return _images.SelectMany (x => x.Value).ToList ();
+			}
 			if (_images.ContainsKey (tag.EntityId))
 			{
 				return _images [tag.EntityId];

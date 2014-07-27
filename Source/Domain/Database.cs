@@ -29,15 +29,7 @@ namespace Domain
 			{
 				return;
 			}
-			var allTag = new TagEntity
-			{
-				Name = "All"
-			};
-			var untagged = new TagEntity
-			{
-				Name = "Untagged"
-			};
-			Add (allTag).ContinueWith (x => Add (untagged));
+			Add (TagEntity.All).ContinueWith (x => Add (TagEntity.Untagged));
 		}
 
 		public static List<T> GetAll<T>()
