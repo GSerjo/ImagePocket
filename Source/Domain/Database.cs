@@ -40,8 +40,7 @@ namespace Domain
 		private static string GetDatabasePath()
 		{
 			var documentPath = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-			var libraryPath = Path.Combine (documentPath, "../Library/");
-			return Path.Combine (libraryPath, "Nelibur.db");
+			return Path.Combine (documentPath, "NeliburPocket.db");
 		}
 	}
 }

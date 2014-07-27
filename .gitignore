@@ -1,6 +1,8 @@
 Out
 obj
 bin
+samples
+android
 .idea
 _ReSharper.*
 *.dotCover

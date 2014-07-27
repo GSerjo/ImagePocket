@@ -11,10 +11,12 @@ namespace Dojo
 
 		private static NSString _cellId = new NSString ("ImageCell");
 		private static readonly ImageRepository _imageRepository = new ImageRepository();
+		private UIBarButtonItem _btSelect;
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
 		{
 			Title = "ImagePacket";
+			ConfigureToolbar ();
 		}
 
 		public override void ViewDidLoad ()
@@ -33,6 +35,16 @@ namespace Dojo
 			CollectionView.RegisterClassForCell (typeof(ImpagePreviewCell), _cellId);
 			CollectionView.Source = new CollectionSource (this);
 			CollectionView.Delegate = new CollectionDelegate ();
+		}
+
+		private void ConfigureToolbar ()
+		{
+			_btSelect = new UIBarButtonItem ("Select", UIBarButtonItemStyle.Plain, OnSelectPressed);
+			NavigationItem.RightBarButtonItem = _btSelect;
+		}
+
+		private void OnSelectPressed(object sender, EventArgs ea)
+		{
 		}
 
 		private sealed class CollectionSource : UICollectionViewSource

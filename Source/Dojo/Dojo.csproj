@@ -85,6 +85,24 @@
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
     <Reference Include="MonoTouch.Dialog-1" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Debugger">
+      <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.Debugger.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Experimental">
+      <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.Experimental.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -140,6 +158,10 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\MonoTouch.SlideoutNavigation\MonoTouch.SlideoutNavigation.csproj">
       <Project>{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}</Project>
@@ -149,5 +171,11 @@
       <Project>{FF5282BA-A31A-40AF-9EFF-F5FE8FF07C2B}</Project>
       <Name>Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <XamarinComponentReference Include="rxforxamarin">
+      <Version>2.1</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
   </ItemGroup>
 </Project>
