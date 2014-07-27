@@ -3,15 +3,15 @@ using MonoTouch.UIKit;
 using System.Drawing;
 using MonoTouch.Foundation;
 using Domain;
+using System.Reactive.Linq;
 
 namespace Dojo
 {
 	public sealed class HomeViewController : UICollectionViewController
 	{
-
 		private static NSString _cellId = new NSString ("ImageCell");
 		private static readonly ImageRepository _imageRepository = new ImageRepository();
-		private UIBarButtonItem _btSelect;
+		private UIBarButtonItem _btSelect, _btCancel, _btOpenMenu, _btTag;
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
 		{
@@ -39,12 +39,31 @@ namespace Dojo
 
 		private void ConfigureToolbar ()
 		{
-			_btSelect = new UIBarButtonItem ("Select", UIBarButtonItemStyle.Plain, OnSelectPressed);
+			_btSelect = new UIBarButtonItem ("Select", UIBarButtonItemStyle.Plain, OnSelectClicked);
 			NavigationItem.RightBarButtonItem = _btSelect;
+
+			_btCancel = new UIBarButtonItem (UIBarButtonSystemItem.Cancel);
+			_btCancel.Clicked += OnDoneClicked;
+
+			_btTag = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
 		}
 
-		private void OnSelectPressed(object sender, EventArgs ea)
+		private void OnTagClicked(object sender, EventArgs ea)
 		{
+
+		}
+
+		private void OnSelectClicked(object sender, EventArgs ea)
+		{
+			NavigationItem.RightBarButtonItem = _btCancel;
+			_btOpenMenu = NavigationItem.LeftBarButtonItem;
+			NavigationItem.LeftBarButtonItem = _btTag;
+		}
+
+		private void OnDoneClicked(object sender, EventArgs ea)
+		{
+			NavigationItem.RightBarButtonItem = _btSelect;
+			NavigationItem.LeftBarButtonItem = _btOpenMenu;
 		}
 
 		private sealed class CollectionSource : UICollectionViewSource
@@ -103,4 +122,3 @@ namespace Dojo
 		}
 	}
 }
-

@@ -2,24 +2,25 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.0" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/HomeViewController.cs">
     <Files>
-      <File FileName="Source/Bodo/AppDelegate.cs" Line="1" Column="1" />
       <File FileName="Source/MonoTouch.SlideoutNavigation/FlyinSlideoutNavigationController.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/AppDelegate.cs" Line="19" Column="19" />
-      <File FileName="Source/Dojo/ViewModels/ImageViewModel.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/ImageRepository.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/ViewModels/ImageWindowViewModel.cs" Line="3" Column="3" />
-      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="29" Column="29" />
+      <File FileName="Source/Dojo/AppDelegate.cs" Line="22" Column="22" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="4" Column="4" />
+      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="4" Column="4" />
+      <File FileName="Source/Domain/Database.cs" Line="4" Column="4" />
+      <File FileName="Source/MonoTouch.SlideoutNavigation/SlideoutNavigationController.cs" Line="3" Column="3" />
+      <File FileName="Source/MonoTouch.SlideoutNavigation/MainNavigationController.cs" Line="25" Column="25" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
+        <State expanded="True" selected="True">
+          <Node name="Bodo" expanded="True" />
           <Node name="Dojo" expanded="True">
-            <Node name="Controllers" expanded="True">
-              <Node name="HomeViewController.cs" selected="True" />
-            </Node>
+            <Node name="Controllers" expanded="True" />
             <Node name="ViewModels" expanded="True" />
           </Node>
-          <Node name="Domain" expanded="True" />
+          <Node name="Domain" expanded="True">
+            <Node name="Entities" expanded="True" />
+          </Node>
           <Node name="MonoTouch.SlideoutNavigation" expanded="True" />
         </State>
       </Pad>
