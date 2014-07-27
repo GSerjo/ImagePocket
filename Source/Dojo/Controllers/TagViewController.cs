@@ -33,7 +33,6 @@ namespace Dojo
 			var result = new Section();
 			var elements =tags.Select (x => new StyledStringElement (x.Name, () => FilterImage(x)));
 			result.AddAll (elements.Cast<Element> ());
-			result.Add(new StyledStringElement("Test", ()=> FilterImage(new TagEntity { Name = "Test"})));
 			return result;
 		}
 	}

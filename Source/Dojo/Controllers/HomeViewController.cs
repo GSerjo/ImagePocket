@@ -4,18 +4,25 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using Domain;
 using System.Reactive.Linq;
+using Core;
 
 namespace Dojo
 {
 	public sealed class HomeViewController : UICollectionViewController
 	{
 		private static NSString _cellId = new NSString ("ImageCell");
-		private static readonly ImageRepository _imageRepository = new ImageRepository();
+		private static readonly AssetRepository _assetRepository = new AssetRepository();
 		private UIBarButtonItem _btSelect, _btCancel, _btOpenMenu, _btTag;
+		private const string RootTitle = "ImagePocket";
+		private const string SelectImagesTitle = "Select images";
+		private ImageRepository _imageRpository = new ImageRepository();
+		private Bag<TagEntity> _currentTag = Bag<TagEntity>.Empty;
+		private bool _shouldSelectItem;
+
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
 		{
-			Title = "ImagePacket";
+			Title = RootTitle;
 			ConfigureToolbar ();
 		}
 
@@ -27,14 +34,13 @@ namespace Dojo
 
 		public void SetTag (TagEntity entity)
 		{
+			_currentTag = entity.ToBag();
 		}
 
 		private void ConfigureView ()
 		{
 			CollectionView.BackgroundColor = UIColor.White;
 			CollectionView.RegisterClassForCell (typeof(ImpagePreviewCell), _cellId);
-			CollectionView.Source = new CollectionSource (this);
-			CollectionView.Delegate = new CollectionDelegate ();
 		}
 
 		private void ConfigureToolbar ()
@@ -43,7 +49,7 @@ namespace Dojo
 			NavigationItem.RightBarButtonItem = _btSelect;
 
 			_btCancel = new UIBarButtonItem (UIBarButtonSystemItem.Cancel);
-			_btCancel.Clicked += OnDoneClicked;
+			_btCancel.Clicked += OnCancelClicked;
 
 			_btTag = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
 		}
@@ -55,20 +61,52 @@ namespace Dojo
 
 		private void OnSelectClicked(object sender, EventArgs ea)
 		{
+			Title = SelectImagesTitle;
 			NavigationItem.RightBarButtonItem = _btCancel;
 			_btOpenMenu = NavigationItem.LeftBarButtonItem;
 			NavigationItem.LeftBarButtonItem = _btTag;
+			_shouldSelectItem = true;
 		}
 
-		private void OnDoneClicked(object sender, EventArgs ea)
+		private void OnCancelClicked(object sender, EventArgs ea)
 		{
+			Title = RootTitle;
 			NavigationItem.RightBarButtonItem = _btSelect;
 			NavigationItem.LeftBarButtonItem = _btOpenMenu;
+			_shouldSelectItem = false;
+		}
+
+		public override int GetItemsCount (UICollectionView collectionView, int section)
+		{
+			return _assetRepository.ImageCount;
+		}
+
+		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			var imageCell = (ImpagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
+			var image = _assetRepository.GetImage (indexPath.Item);
+			imageCell.Image = image;
+			return imageCell;
+		}
+
+		public override bool ShouldSelectItem (UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			return _shouldSelectItem;
+		}
+
+		public override bool ShouldDeselectItem (UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			return _shouldSelectItem;
+		}
+
+		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			var cell = collectionView.CellForItem (indexPath);
+			cell.BackgroundColor = UIColor.Black;
 		}
 
 		private sealed class CollectionSource : UICollectionViewSource
 		{
-
 			private HomeViewController _controller;
 
 			public CollectionSource (HomeViewController controller)
@@ -76,48 +114,14 @@ namespace Dojo
 				_controller = controller;
 			}
 
-			public override int GetItemsCount (UICollectionView collectionView, int section)
-			{
-				// NOTE: Don't call the base implementation on a Model class
-				// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
-				return _imageRepository.ImageCount;
-			}
-
-			public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
-			{
-				var imageCell = (ImpagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
-				var image = _imageRepository.GetImage (indexPath.Item);
-				imageCell.Image = image;
-				return imageCell;
-			}
-
 			public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
 			{
 				// NOTE: Don't call the base implementation on a Model class
 				// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
-				var asset = _imageRepository.GetAsset (indexPath.Item);
+				var asset = _assetRepository.GetAsset (indexPath.Item);
 				Console.WriteLine (indexPath.Item);
 				var photoController = new PhotoViewController (asset);
 				_controller.NavigationController.PushViewController (photoController, true);
-			}
-		}
-
-		private sealed class CollectionDelegate : UICollectionViewDelegate
-		{
-			public override bool ShouldSelectItem (UICollectionView collectionView, NSIndexPath indexPath)
-			{
-				return true;
-			}
-
-			public override bool ShouldDeselectItem (UICollectionView collectionView, NSIndexPath indexPath)
-			{
-				return true;
-			}
-
-			public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
-			{
-				var cell = collectionView.CellForItem (indexPath);
-				cell.BackgroundColor = UIColor.Black;
 			}
 		}
 	}

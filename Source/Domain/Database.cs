@@ -13,6 +13,31 @@ namespace Domain
 		static Database()
 		{
 			_database = new Database(GetDatabasePath());
+			InitialiseTables ();
+		}
+
+		private Database(string databasePath) : base(databasePath)
+		{
+			CreateTablesAsync<TagEntity,ImageEntity> ()
+				.Wait();
+		}
+
+		private static void InitialiseTables ()
+		{
+			var count = _database.Table<TagEntity> ().CountAsync ().Result;
+			if (count > 0)
+			{
+				return;
+			}
+			var allTag = new TagEntity
+			{
+				Name = "All"
+			};
+			var untagged = new TagEntity
+			{
+				Name = "Untagged"
+			};
+			Add (allTag).ContinueWith (x => Add (untagged));
 		}
 
 		public static List<T> GetAll<T>()
@@ -30,11 +55,6 @@ namespace Domain
 			where T: new()
 		{
 			return _database.Table<T> ().ToListAsync ();
-		}
-
-		private Database(string databasePath) : base(databasePath)
-		{
-			CreateTablesAsync<TagEntity,ImageEntity>().Wait();
 		}
 
 		private static string GetDatabasePath()

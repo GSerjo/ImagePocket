@@ -6,13 +6,13 @@ using MonoTouch.Foundation;
 
 namespace Dojo
 {
-	public sealed class ImageRepository
+	public sealed class AssetRepository
 	{
 		private readonly PHImageManager _imageManager = new PHImageManager();
 		private readonly PHFetchResult _fetchResult;
 		private readonly SizeF _smallImage = new SizeF(200, 200);
 
-		public ImageRepository ()
+		public AssetRepository ()
 		{
 			_fetchResult = PHAsset.FetchAssets (PHAssetMediaType.Image, null);
 		}
@@ -39,6 +39,5 @@ namespace Dojo
 		{
 			get { return (int)_fetchResult.Count; }
 		}
-
 	}
 }

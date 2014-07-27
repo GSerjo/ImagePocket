@@ -119,11 +119,13 @@
     <Compile Include="Controllers\HomeViewController.cs" />
     <Compile Include="Controllers\TagViewController.cs" />
     <Compile Include="ImpagePreviewCell.cs" />
-    <Compile Include="ImageRepository.cs" />
     <Compile Include="Controllers\PhotoViewController.cs" />
     <Compile Include="ViewModels\ImageViewModel.cs" />
     <Compile Include="ViewModels\ImageWindowViewModel.cs" />
+    <Compile Include="AssetRepository.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
@@ -172,6 +174,10 @@
     <ProjectReference Include="..\Domain\Domain.csproj">
       <Project>{FF5282BA-A31A-40AF-9EFF-F5FE8FF07C2B}</Project>
       <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{6D39D05E-6C52-457E-AA26-9AC2E3691D01}</Project>
+      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

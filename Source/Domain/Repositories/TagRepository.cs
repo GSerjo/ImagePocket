@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain
 {
-	public class TagRepository
+	public sealed class TagRepository
 	{
 		public List<TagEntity> GetAll()
 		{
@@ -11,4 +11,3 @@ namespace Domain
 		}
 	}
 }
-
