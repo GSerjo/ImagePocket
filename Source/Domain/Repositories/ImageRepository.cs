@@ -23,7 +23,7 @@ namespace Domain
 
 		public List<ImageEntity> GetByTag(TagEntity tag)
 		{
-			if (tag.IsAll)
+			if (!_images.ContainsKey(tag.EntityId))
 			{
 				return _images.SelectMany (x => x.Value).ToList ();
 			}

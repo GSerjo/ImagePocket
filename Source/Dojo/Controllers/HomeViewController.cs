@@ -17,7 +17,7 @@ namespace Dojo
 		private const string RootTitle = "ImagePocket";
 		private const string SelectImagesTitle = "Select images";
 		private ImageRepository _imageRpository = new ImageRepository();
-		private Bag<TagEntity> _currentTag = Bag<TagEntity>.Empty;
+		private TagEntity _currentTag = TagEntity.All;
 		private bool _shouldSelectItem;
 		private List<ImageEntity> _images = new List<ImageEntity> ();
 
@@ -36,17 +36,13 @@ namespace Dojo
 
 		public void SetTag (TagEntity entity)
 		{
-			_currentTag = entity.ToBag();
+			_currentTag = entity;
 			FilterImages ();
 		}
 
 		private void FilterImages()
 		{
-			if (_currentTag.HasNoValue)
-			{
-				return;
-			}
-			_images = _imageRpository.GetByTag (_currentTag.Value);
+			_images = _imageRpository.GetByTag (_currentTag);
 		}
 
 		private void ConfigureView ()

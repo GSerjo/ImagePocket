@@ -10,8 +10,5 @@ namespace Domain
 
 		[Indexed]
 		public int TagId { get; set; }
-
-		[Ignore]
-		public TagEntity Tag { get; set; }
 	}
 }
