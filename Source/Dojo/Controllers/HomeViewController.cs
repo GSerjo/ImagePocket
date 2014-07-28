@@ -6,19 +6,20 @@ using Domain;
 using System.Reactive.Linq;
 using Core;
 using System.Collections.Generic;
+using MonoTouch.CoreFoundation;
 
 namespace Dojo
 {
 	public sealed class HomeViewController : UICollectionViewController
 	{
 		private static NSString _cellId = new NSString ("ImageCell");
-		private static readonly AssetRepository _assetRepository = new AssetRepository();
 		private UIBarButtonItem _btSelect, _btCancel, _btOpenMenu, _btTag;
 		private const string RootTitle = "ImagePocket";
 		private const string SelectImagesTitle = "Select images";
 		private TagEntity _currentTag = TagEntity.All;
 		private bool _shouldSelectItem;
 		private List<ImageEntity> _images = new List<ImageEntity> ();
+		private readonly ImageCache _imageCache = new ImageCache();
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
 		{
@@ -30,16 +31,24 @@ namespace Dojo
 			base.ViewDidLoad ();
 			ConfigureView ();
 			ConfigureToolbar ();
+			FilterImages ();
 		}
 
 		public void SetTag (TagEntity entity)
 		{
 			_currentTag = entity;
 			FilterImages ();
+			ReloadData ();
 		}
 
 		private void FilterImages()
 		{
+			_images = _imageCache.GetImages (_currentTag);
+		}
+
+		private void ReloadData()
+		{
+			DispatchQueue.MainQueue.DispatchAsync (() => CollectionView.ReloadData ());
 		}
 
 		private void ConfigureView ()
@@ -89,7 +98,9 @@ namespace Dojo
 		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 		{
 			var imageCell = (ImpagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
-			var image = _assetRepository.GetSmallImage (indexPath.Item);
+			ImageEntity imageEntiy = _images [indexPath.Item];
+
+			var image = _imageCache.GetSmallImage (imageEntiy.LocalIdentifier);
 			imageCell.Image = image;
 			return imageCell;
 		}
@@ -123,10 +134,10 @@ namespace Dojo
 			{
 				// NOTE: Don't call the base implementation on a Model class
 				// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
-				var asset = _assetRepository.GetAsset (indexPath.Item);
-				Console.WriteLine (indexPath.Item);
-				var photoController = new PhotoViewController (asset);
-				_controller.NavigationController.PushViewController (photoController, true);
+//				var asset = _assetRepository.GetAsset (indexPath.Item);
+//				Console.WriteLine (indexPath.Item);
+//				var photoController = new PhotoViewController (asset);
+//				_controller.NavigationController.PushViewController (photoController, true);
 			}
 		}
 	}

@@ -41,5 +41,10 @@ namespace Domain
 				return _tags;
 			}
 		}
+
+		public override int GetHashCode ()
+		{
+			return ((LocalIdentifier != null ? LocalIdentifier.GetHashCode () : 0) * 397) ^ EntityId;
+		}
 	}
 }

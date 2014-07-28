@@ -36,14 +36,10 @@ namespace Dojo
 			return _assets.Values.ToList();
 		}
 
-		public Bag<UIImage> GetSmallImage(string localId)
+		public UIImage GetSmallImage(string localId)
 		{
 			var asset = GetAsset (localId);
-			if (asset.HasNoValue)
-			{
-				return Bag<UIImage>.Empty;
-			}
-			return CreateSmallImage (asset.Value).ToBag();
+			return CreateSmallImage (asset.Value);
 		}
 
 		public UIImage GetSmallImage(int index)
