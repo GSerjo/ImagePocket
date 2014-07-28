@@ -12,10 +12,14 @@ namespace Dojo
 		private AssetRepository _assetRepository = new AssetRepository();
 		private ImageRepository _imageRepository = new ImageRepository();
 		private Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity> ();
+		private readonly List<ImageEntity> _actualImages;
 
 		public ImageCache()
 		{
 			_taggedImages = _imageRepository.GetAll ().ToDictionary (x => x.LocalIdentifier);
+			_actualImages =  _assetRepository.GetAll ()
+				.Select (x => new ImageEntity { LocalIdentifier = x.LocalIdentifier })
+				.ToList();
 		}
 
 		public List<ImageEntity> GetImages(TagEntity tag)
@@ -47,10 +51,8 @@ namespace Dojo
 		private List<ImageEntity> GetUntagged()
 		{
 			var result = new List<ImageEntity> ();
-			var actualImages =  _assetRepository.GetAll ()
-				.Select (x => new ImageEntity { LocalIdentifier = x.LocalIdentifier });
 			var comparer = new FuncComparer<ImageEntity> ((x, y) => string.Equals (x.LocalIdentifier, y.LocalIdentifier, StringComparison.OrdinalIgnoreCase));
-			var untaggedImages = actualImages.Except (_taggedImages.Values.ToList(), comparer).ToList();
+			var untaggedImages = _actualImages.Except (_taggedImages.Values.ToList(), comparer).ToList();
 			result.AddRange (untaggedImages);
 			return result;
 		}

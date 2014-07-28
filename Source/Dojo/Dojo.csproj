@@ -107,7 +107,6 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Controllers\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -120,11 +119,12 @@
     <Compile Include="Controllers\TagViewController.cs" />
     <Compile Include="ImpagePreviewCell.cs" />
     <Compile Include="Controllers\PhotoViewController.cs" />
-    <Compile Include="ViewModels\ImageViewModel.cs" />
-    <Compile Include="ViewModels\ImageWindowViewModel.cs" />
     <Compile Include="AssetRepository.cs" />
     <Compile Include="ImageCache.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

@@ -42,29 +42,6 @@ namespace Dojo
 			return CreateSmallImage (asset.Value);
 		}
 
-		public UIImage GetSmallImage(int index)
-		{
-			UIImage result = null;
-			var asset = (PHAsset)_fetchResult [(uint)index];
-			var options = new PHImageRequestOptions ();
-			_imageManager.RequestImageForAsset (asset, _smallImage, PHImageContentMode.Default,
-				options, (image, info) =>
-				{
-					result = image;
-				});
-			return result;
-		}
-
-		public PHAsset GetAsset(int index)
-		{
-			return (PHAsset)_fetchResult [(uint)index];
-		}
-
-		public int ImageCount
-		{
-			get { return (int)_fetchResult.Count; }
-		}
-
 		private UIImage CreateSmallImage(PHAsset asset)
 		{
 			UIImage result = null;
