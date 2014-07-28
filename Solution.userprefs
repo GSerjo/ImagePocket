@@ -1,27 +1,36 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.0" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/HomeViewController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/AssetRepository.cs">
     <Files>
-      <File FileName="Source/MonoTouch.SlideoutNavigation/FlyinSlideoutNavigationController.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/AppDelegate.cs" Line="22" Column="22" />
       <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="4" Column="4" />
-      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="4" Column="4" />
-      <File FileName="Source/Domain/Database.cs" Line="4" Column="4" />
-      <File FileName="Source/MonoTouch.SlideoutNavigation/SlideoutNavigationController.cs" Line="3" Column="3" />
-      <File FileName="Source/MonoTouch.SlideoutNavigation/MainNavigationController.cs" Line="25" Column="25" />
+      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/AssetRepository.cs" Line="44" Column="44" />
+      <File FileName="Source/Domain/Database.cs" Line="1" Column="1" />
+      <File FileName="Source/Domain/Repositories/TagRepository.cs" Line="4" Column="4" />
+      <File FileName="Source/Domain/Entities/TagEntity.cs" Line="47" Column="47" />
+      <File FileName="Source/Domain/Entities/TagNames.cs" Line="43" Column="43" />
+      <File FileName="Source/Core/Extensions/BagExtensions.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/ImageCache.cs" Line="18" Column="18" />
+      <File FileName="Source/Domain/Repositories/ImageRepository.cs" Line="37" Column="37" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Node name="Bodo" expanded="True" />
+          <Node name="Core" expanded="True">
+            <Node name="DataStructures" expanded="True" />
+            <Node name="Extensions" expanded="True" />
+          </Node>
           <Node name="Dojo" expanded="True">
             <Node name="Controllers" expanded="True" />
             <Node name="ViewModels" expanded="True" />
+            <Node name="AssetRepository.cs" selected="True" />
           </Node>
           <Node name="Domain" expanded="True">
+            <Node name="ComponentReferenceFolder" expanded="True" />
             <Node name="Entities" expanded="True" />
+            <Node name="Repositories" expanded="True" />
           </Node>
-          <Node name="MonoTouch.SlideoutNavigation" expanded="True" />
         </State>
       </Pad>
     </Pads>

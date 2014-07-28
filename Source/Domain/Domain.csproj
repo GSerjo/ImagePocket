@@ -50,8 +50,8 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Repositories\TagRepository.cs" />
     <Compile Include="Repositories\ImageRepository.cs" />
-    <Compile Include="Entities\TagNames.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

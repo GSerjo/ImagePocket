@@ -31,17 +31,22 @@ namespace Dojo
 			return _assets [localId].ToBag();
 		}
 
-		public Bag<UIImage> GetImage(string localId)
+		public List<PHAsset> GetAll()
+		{
+			return _assets.Values.ToList();
+		}
+
+		public Bag<UIImage> GetSmallImage(string localId)
 		{
 			var asset = GetAsset (localId);
 			if (asset.HasNoValue)
 			{
 				return Bag<UIImage>.Empty;
 			}
-			return CreateImage (asset.Value).ToBag();
+			return CreateSmallImage (asset.Value).ToBag();
 		}
 
-		public UIImage GetImage(int index)
+		public UIImage GetSmallImage(int index)
 		{
 			UIImage result = null;
 			var asset = (PHAsset)_fetchResult [(uint)index];
@@ -64,7 +69,7 @@ namespace Dojo
 			get { return (int)_fetchResult.Count; }
 		}
 
-		private UIImage CreateImage(PHAsset asset)
+		private UIImage CreateSmallImage(PHAsset asset)
 		{
 			UIImage result = null;
 			var options = new PHImageRequestOptions ();
@@ -75,6 +80,5 @@ namespace Dojo
 				});
 			return result;
 		}
-
 	}
 }

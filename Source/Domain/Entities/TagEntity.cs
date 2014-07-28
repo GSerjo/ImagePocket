@@ -5,8 +5,8 @@ namespace Domain
 {
 	public sealed class TagEntity : Entity
 	{
-		private static readonly TagEntity _all = new TagEntity{ Name = TagNames.All};
-		private static readonly TagEntity _untagged = new TagEntity{ Name = TagNames.Untagged};
+		private static readonly TagEntity _all = new TagEntity{ Name = "All"};
+		private static readonly TagEntity _untagged = new TagEntity{ Name = "Untagged"};
 
 		[Indexed]
 		public string Name { get; set; }

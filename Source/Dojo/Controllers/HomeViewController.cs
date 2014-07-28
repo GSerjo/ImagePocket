@@ -16,7 +16,6 @@ namespace Dojo
 		private UIBarButtonItem _btSelect, _btCancel, _btOpenMenu, _btTag;
 		private const string RootTitle = "ImagePocket";
 		private const string SelectImagesTitle = "Select images";
-		private ImageRepository _imageRpository = new ImageRepository();
 		private TagEntity _currentTag = TagEntity.All;
 		private bool _shouldSelectItem;
 		private List<ImageEntity> _images = new List<ImageEntity> ();
@@ -31,7 +30,6 @@ namespace Dojo
 			base.ViewDidLoad ();
 			ConfigureView ();
 			ConfigureToolbar ();
-			_imageRpository.LoadAll ();
 		}
 
 		public void SetTag (TagEntity entity)
@@ -42,7 +40,6 @@ namespace Dojo
 
 		private void FilterImages()
 		{
-			_images = _imageRpository.GetByTag (_currentTag);
 		}
 
 		private void ConfigureView ()
@@ -92,7 +89,7 @@ namespace Dojo
 		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 		{
 			var imageCell = (ImpagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
-			var image = _assetRepository.GetImage (indexPath.Item);
+			var image = _assetRepository.GetSmallImage (indexPath.Item);
 			imageCell.Image = image;
 			return imageCell;
 		}
