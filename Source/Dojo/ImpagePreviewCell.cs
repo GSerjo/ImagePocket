@@ -25,8 +25,6 @@ namespace Dojo
 		{
 			set { _imageView.Image = value; }
 		}
-
-		public bool Selected { get; set; }
 	}
 }
 
