@@ -13,8 +13,11 @@ namespace Dojo
 		public ImpagePreviewCell(RectangleF frame) : base(frame)
 		{
 			_imageView = new UIImageView(frame);
+//			_imageView = new UIImageView (Bounds);
 			_imageView.Center = ContentView.Center;
 			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+//			_imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+//			_imageView.ClipsToBounds = true;
 			ContentView.AddSubview(_imageView);
 		}
 
@@ -22,6 +25,8 @@ namespace Dojo
 		{
 			set { _imageView.Image = value; }
 		}
+
+		public bool Selected { get; set; }
 	}
 }
 

@@ -12,14 +12,13 @@ namespace Dojo
 	public sealed class AssetRepository
 	{
 		private readonly PHImageManager _imageManager = new PHImageManager();
-		private readonly PHFetchResult _fetchResult;
-		private readonly SizeF _smallImage = new SizeF(200, 200);
+		private readonly SizeF _smallImage = new SizeF(150, 150);
 		private Dictionary<string, PHAsset> _assets = new Dictionary<string, PHAsset>();
 
 		public AssetRepository ()
 		{
-			_fetchResult = PHAsset.FetchAssets (PHAssetMediaType.Image, null);
-			_assets = _fetchResult.ToDictionary (x => ((PHAsset)x).LocalIdentifier, y => ((PHAsset)y));
+			var fetchResult = PHAsset.FetchAssets (PHAssetMediaType.Image, null);
+			_assets = fetchResult.ToDictionary (x => ((PHAsset)x).LocalIdentifier, y => ((PHAsset)y));
 		}
 
 		public Bag<PHAsset> GetAsset(string localId)

@@ -14,12 +14,13 @@ namespace Dojo
 	{
 		private static NSString _cellId = new NSString ("ImageCell");
 		private UIBarButtonItem _btSelect, _btCancel, _btOpenMenu, _btTag;
-		private const string RootTitle = "ImagePocket";
+		private const string RootTitle = "Bodo Title";
 		private const string SelectImagesTitle = "Select images";
 		private TagEntity _currentTag = TagEntity.All;
 		private bool _shouldSelectItem;
 		private List<ImageEntity> _images = new List<ImageEntity> ();
 		private readonly ImageCache _imageCache = new ImageCache();
+		private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity> ();
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
 		{
@@ -59,21 +60,23 @@ namespace Dojo
 
 		private void ConfigureToolbar ()
 		{
-			_btSelect = new UIBarButtonItem ("Select", UIBarButtonItemStyle.Plain, OnSelectClicked);
+			_btSelect = new UIBarButtonItem ("Select", UIBarButtonItemStyle.Plain, OnBatchSelect);
 			NavigationItem.RightBarButtonItem = _btSelect;
 
 			_btCancel = new UIBarButtonItem (UIBarButtonSystemItem.Cancel);
-			_btCancel.Clicked += OnCancelClicked;
+			_btCancel.Clicked += OnBatchSelectCancel;
 
 			_btTag = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
 		}
 
 		private void OnTagClicked(object sender, EventArgs ea)
 		{
-
+			var controller = new TagSelectorViewController ();
+			controller.Closed += OnTagSelectorCancel;
+			NavigationController.PresentViewController (controller, true, null);
 		}
 
-		private void OnSelectClicked(object sender, EventArgs ea)
+		private void OnBatchSelect(object sender, EventArgs ea)
 		{
 			Title = SelectImagesTitle;
 			NavigationItem.RightBarButtonItem = _btCancel;
@@ -82,7 +85,12 @@ namespace Dojo
 			_shouldSelectItem = true;
 		}
 
-		private void OnCancelClicked(object sender, EventArgs ea)
+		private void OnBatchSelectCancel(object sender, EventArgs ea)
+		{
+			CancelBatchSelect ();
+		}
+
+		private void CancelBatchSelect()
 		{
 			Title = RootTitle;
 			NavigationItem.RightBarButtonItem = _btSelect;
@@ -99,8 +107,7 @@ namespace Dojo
 		{
 			var imageCell = (ImpagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
 			ImageEntity imageEntiy = _images [indexPath.Item];
-
-			var image = _imageCache.GetSmallImage (imageEntiy.LocalIdentifier);
+			UIImage image = _imageCache.GetSmallImage (imageEntiy.LocalIdentifier);
 			imageCell.Image = image;
 			return imageCell;
 		}
@@ -117,28 +124,25 @@ namespace Dojo
 
 		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
 		{
-			var cell = collectionView.CellForItem (indexPath);
-			cell.BackgroundColor = UIColor.Black;
+			var cell = (ImpagePreviewCell)collectionView.CellForItem (indexPath);
+			ImageEntity imageEntiy = _images [indexPath.Item];
+			if (_selectedImages.ContainsKey (imageEntiy.LocalIdentifier))
+			{
+				_selectedImages.Remove (imageEntiy.LocalIdentifier);
+				cell.BackgroundColor = UIColor.White;
+				cell.Selected = false;
+			} 
+			else
+			{
+				_selectedImages [imageEntiy.LocalIdentifier] = imageEntiy;
+				cell.BackgroundColor = UIColor.Black;
+				cell.Selected = true;
+			}
 		}
 
-		private sealed class CollectionSource : UICollectionViewSource
+		private void OnTagSelectorCancel(object sender, EventArgs ea)
 		{
-			private HomeViewController _controller;
-
-			public CollectionSource (HomeViewController controller)
-			{
-				_controller = controller;
-			}
-
-			public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
-			{
-				// NOTE: Don't call the base implementation on a Model class
-				// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
-//				var asset = _assetRepository.GetAsset (indexPath.Item);
-//				Console.WriteLine (indexPath.Item);
-//				var photoController = new PhotoViewController (asset);
-//				_controller.NavigationController.PushViewController (photoController, true);
-			}
+			CancelBatchSelect ();
 		}
 	}
 }

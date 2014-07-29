@@ -56,7 +56,6 @@ namespace Dojo
 			result.AddRange (untaggedImages);
 			return result;
 		}
-
 	}
 }
 
