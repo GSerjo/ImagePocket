@@ -55,7 +55,7 @@ namespace Dojo
 		private void ConfigureView ()
 		{
 			CollectionView.BackgroundColor = UIColor.White;
-			CollectionView.RegisterClassForCell (typeof(ImpagePreviewCell), _cellId);
+			CollectionView.RegisterClassForCell (typeof(ImagePreviewCell), _cellId);
 		}
 
 		private void ConfigureToolbar ()
@@ -105,7 +105,7 @@ namespace Dojo
 
 		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 		{
-			var imageCell = (ImpagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
+			var imageCell = (ImagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
 			ImageEntity imageEntiy = _images [indexPath.Item];
 			UIImage image = _imageCache.GetSmallImage (imageEntiy.LocalIdentifier);
 			imageCell.Image = image;
@@ -124,7 +124,7 @@ namespace Dojo
 
 		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
 		{
-			var cell = (ImpagePreviewCell)collectionView.CellForItem (indexPath);
+			var cell = (ImagePreviewCell)collectionView.CellForItem (indexPath);
 			ImageEntity imageEntiy = _images [indexPath.Item];
 			if (_selectedImages.ContainsKey (imageEntiy.LocalIdentifier))
 			{

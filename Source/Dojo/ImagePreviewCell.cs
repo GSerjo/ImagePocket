@@ -5,12 +5,12 @@ using MonoTouch.Foundation;
 
 namespace Dojo
 {
-	public class ImpagePreviewCell : UICollectionViewCell
+	public class ImagePreviewCell : UICollectionViewCell
 	{
 		private UIImageView _imageView;
 
 		[Export("initWithFrame:")]
-		public ImpagePreviewCell(RectangleF frame) : base(frame)
+		public ImagePreviewCell(RectangleF frame) : base(frame)
 		{
 			_imageView = new UIImageView(frame);
 //			_imageView = new UIImageView (Bounds);
