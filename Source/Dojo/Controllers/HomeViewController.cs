@@ -73,10 +73,25 @@ namespace Dojo
 		{
 			var controller = new TagSelectorViewController ();
 			controller.Closed += OnTagSelectorCancel;
-			NavigationController.PresentViewController (controller, true, null);
+			controller.Done += OnTagSelectorDone;
+//			NavigationController.PresentViewController (controller, true, null);
+			NavigationController.PresentViewController (new UINavigationController (controller)
+				{
+					ModalPresentationStyle = UIModalPresentationStyle.FormSheet
+				}, true, null);
 		}
 
 		private void OnBatchSelect(object sender, EventArgs ea)
+		{
+			SetSelectMode ();
+		}
+
+		private void OnBatchSelectCancel(object sender, EventArgs ea)
+		{
+			SetReadMode ();
+		}
+
+		private void SetSelectMode()
 		{
 			Title = SelectImagesTitle;
 			NavigationItem.RightBarButtonItem = _btCancel;
@@ -85,12 +100,7 @@ namespace Dojo
 			_shouldSelectItem = true;
 		}
 
-		private void OnBatchSelectCancel(object sender, EventArgs ea)
-		{
-			CancelBatchSelect ();
-		}
-
-		private void CancelBatchSelect()
+		private void SetReadMode()
 		{
 			Title = RootTitle;
 			NavigationItem.RightBarButtonItem = _btSelect;
@@ -142,7 +152,12 @@ namespace Dojo
 
 		private void OnTagSelectorCancel(object sender, EventArgs ea)
 		{
-			CancelBatchSelect ();
+			SetReadMode ();
+		}
+
+		private void OnTagSelectorDone(object sender, EventArgs ea)
+		{
+			SetReadMode ();
 		}
 	}
 }
