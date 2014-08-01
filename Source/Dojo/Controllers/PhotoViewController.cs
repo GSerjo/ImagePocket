@@ -22,7 +22,7 @@ namespace Dojo
 		{
 			View.BackgroundColor = UIColor.White;
 			_imageView = new UIImageView (View.Frame);
-			PHImageManager.GetDefaultManager.RequestImageForAsset (_asset, View.Frame.Size, 
+			PHImageManager.DefaultManager.RequestImageForAsset (_asset, View.Frame.Size, 
 				PHImageContentMode.AspectFit, new PHImageRequestOptions (), (img, info) => {
 					_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
 					_imageView.Image = img;
