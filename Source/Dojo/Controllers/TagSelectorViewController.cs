@@ -6,6 +6,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using Domain;
 using System.Collections.Generic;
+using MonoTouch.CoreFoundation;
 
 namespace Dojo
 {
@@ -21,20 +22,15 @@ namespace Dojo
 
 		public override void DidReceiveMemoryWarning ()
 		{
-			// Releases the view if it doesn't have a superview.
 			base.DidReceiveMemoryWarning ();
-
-			// Release any cached data, images, etc that aren't in use.
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			allTags.Source = new TableSource ();
+			allTags.Source = new TableSource (this);
 			btCancel.Clicked += OnCancel;
 			btDone.Clicked += OnDone;
-			
-			// Perform any additional setup after loading the view, typically from a nib.
 		}
 
 		private void OnCancel(object sender, EventArgs ea)
@@ -49,13 +45,21 @@ namespace Dojo
 			DismissViewController (true, null);
 		}
 
-		public class TableSource : UITableViewSource
+		private void ReloadData()
 		{
-			protected List<TagEntity> _tags;
-			protected string cellIdentifier = "TableCell";
+			DispatchQueue.MainQueue.DispatchAsync (() => allTags.ReloadData());
+		}
 
-			public TableSource ()
+		private sealed class TableSource : UITableViewSource
+		{
+
+			private string cellIdentifier = "TableCell";
+			private List<TagEntity> _tags;
+			private TagSelectorViewController _controller;
+
+			public TableSource (TagSelectorViewController controller)
 			{
+				_controller = controller;
 				_tags = _tagRepository.GetAll();
 			}
 
@@ -74,7 +78,13 @@ namespace Dojo
 				cell.TextLabel.Text = _tags[indexPath.Row].Name;
 				return cell;
 			}
+
+			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
+			{
+				TagEntity tag = _tags[indexPath.Item];
+				_tags.Remove (tag);
+				_controller.ReloadData ();
+			}
 		}
 	}
 }
-

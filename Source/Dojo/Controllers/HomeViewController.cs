@@ -76,7 +76,7 @@ namespace Dojo
 				ModalPresentationStyle = UIModalPresentationStyle.FormSheet
 			};
 			controller.Closed += OnTagSelectorCancel;
-			//controller.Done += OnTagSelectorDone;
+			controller.Done += OnTagSelectorDone;
 			NavigationController.PresentViewController (controller, true, null);
 //			NavigationController.PresentViewController (new UINavigationController (controller)
 //				{
