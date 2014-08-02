@@ -26,7 +26,7 @@ namespace Domain
 				_tags = Database.GetAll<TagEntity> ()
 					.ToDictionary (x => x.EntityId);
 			}
-			return _tags.Values.ToList();//.OrderBy(x => x.Name).ToList();
+			return _tags.Values.OrderBy(x => x.Name).ToList();
 		}
 
 		public TagEntity GetById(int id)
