@@ -10,7 +10,7 @@ namespace Dojo
 	public sealed class ImageCache
 	{
 		private AssetRepository _assetRepository = new AssetRepository();
-		private ImageRepository _imageRepository = new ImageRepository();
+		private ImageRepository _imageRepository = ImageRepository.Instance;
 		private Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity> ();
 		private readonly List<ImageEntity> _actualImages;
 

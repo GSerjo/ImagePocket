@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 namespace Dojo
 {
-	public sealed class TagSelectorViewController :AAPLBasicDataSource// UIViewController
+	public sealed class TagSelectorViewController : UIViewController
 	{
 		public event EventHandler<EventArgs> Closed = delegate { };
 		public event EventHandler<EventArgs> Done = delegate { };
-		private static TagRepository _tagRepository = new TagRepository();
+		private static TagRepository _tagRepository = TagRepository.Instance;
 
 		public TagSelectorViewController ()
 		{
@@ -24,9 +24,13 @@ namespace Dojo
 		{
 			base.ViewDidLoad ();
 			var tableBounds = new RectangleF (0, 44, View.Bounds.Width, View.Bounds.Height - 44);
-			var tableView = new UITableView (tableBounds);
-			tableView.Source = new TableSource ();
-			Add (tableView);
+			var table = new UITableView (tableBounds);
+			var tagBounds = new RectangleF (0, 44, View.Bounds.Width, 20);
+			var tagTextField = new UITextField (tagBounds);
+			Add (tagTextField);
+//			Add (table);
+			table.Source = new TableSource ();
+
 		}
 
 		private void OnCancel(object sender, EventArgs ea)

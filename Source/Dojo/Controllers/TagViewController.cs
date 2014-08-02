@@ -9,7 +9,7 @@ namespace Dojo
 {
 	public sealed class TagViewController : DialogViewController
 	{
-		private readonly TagRepository _repository = new TagRepository ();
+		private readonly TagRepository _repository = TagRepository.Instance;
 		private readonly HomeViewController _homeViewController;
 
 		public TagViewController (HomeViewController homeViewController) : base(UITableViewStyle.Plain, null)
