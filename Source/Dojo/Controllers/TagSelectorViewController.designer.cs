@@ -20,6 +20,9 @@ namespace Dojo
 
 		[Outlet]
 		MonoTouch.UIKit.UIBarButtonItem btDone { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UITextField currentTags { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -36,6 +39,11 @@ namespace Dojo
 			if (allTags != null) {
 				allTags.Dispose ();
 				allTags = null;
+			}
+
+			if (currentTags != null) {
+				currentTags.Dispose ();
+				currentTags = null;
 			}
 		}
 	}

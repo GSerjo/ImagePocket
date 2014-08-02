@@ -9,6 +9,7 @@
                 <outlet property="allTags" destination="scK-u4-hYu" id="v36-0I-LCe"/>
                 <outlet property="btCancel" destination="yL3-9q-J7t" id="BYC-5K-jZN"/>
                 <outlet property="btDone" destination="LO8-IK-q6h" id="ph7-h8-NBf"/>
+                <outlet property="currentTags" destination="EM2-Nr-jVs" id="MXw-5Q-WZu"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
             </connections>
         </placeholder>

@@ -2,6 +2,7 @@
 using SQLite;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 
 namespace Domain
 {
@@ -32,14 +33,31 @@ namespace Domain
 		{
 			get
 			{
-				if (_tags.Count == 0)
+				if (_tags.IsNotEmpty())
 				{
-					_tags = _tagInternal.Split(Separator[0])
-						.Select (x => int.Parse (x))
-						.ToList ();
+					return _tags;
 				}
+				if (string.IsNullOrEmpty (_tagInternal)) 
+				{
+					return new List<int> ();
+				}
+				_tags = _tagInternal.Split(Separator[0])
+					.Select (x => int.Parse (x))
+					.ToList ();
 				return _tags;
 			}
+		}
+
+		public ImageEntity CloneDeep()
+		{
+			var result = new ImageEntity
+			{
+				EntityId = EntityId,
+				LocalIdentifier = LocalIdentifier,
+				TagsInternal = _tagInternal
+			};
+			result._tags.AddRange (Tags);
+			return result;
 		}
 
 		public override int GetHashCode ()

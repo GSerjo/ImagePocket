@@ -1,12 +1,12 @@
-﻿
-using System;
+﻿using System;
 using System.Drawing;
-
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using Domain;
 using System.Collections.Generic;
 using MonoTouch.CoreFoundation;
+using System.Linq;
+using Core;
 
 namespace Dojo
 {
@@ -15,9 +15,11 @@ namespace Dojo
 		public event EventHandler<EventArgs> Closed = delegate { };
 		public event EventHandler<EventArgs> Done = delegate { };
 		private static TagRepository _tagRepository = TagRepository.Instance;
+		private List<ImageEntity> _images = new List<ImageEntity>();
 
-		public TagSelectorViewController () : base ("TagSelectorViewController", null)
+		public TagSelectorViewController (ImageEntity image) : base ("TagSelectorViewController", null)
 		{
+			_images.Add (image);
 		}
 
 		public override void DidReceiveMemoryWarning ()
@@ -31,6 +33,14 @@ namespace Dojo
 			allTags.Source = new TableSource (this);
 			btCancel.Clicked += OnCancel;
 			btDone.Clicked += OnDone;
+			InitialiseTag ();
+		}
+
+		private void InitialiseTag()
+		{
+			IEnumerable<int> tagIds = _images.SelectMany (x => x.Tags);
+			List<TagEntity> tags = _tagRepository.GetById (tagIds);
+			currentTags.Text = string.Join(" ", tags.Select (x => x.Name));
 		}
 
 		private void OnCancel(object sender, EventArgs ea)
@@ -84,6 +94,7 @@ namespace Dojo
 				TagEntity tag = _tags[indexPath.Item];
 				_tags.Remove (tag);
 				_controller.ReloadData ();
+				_controller._images.Iter (x => x.Tags.Add (tag.EntityId));
 			}
 		}
 	}

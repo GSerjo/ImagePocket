@@ -29,7 +29,9 @@ namespace Domain
 			{
 				return;
 			}
-			Add (TagEntity.All).ContinueWith (x => Add (TagEntity.Untagged));
+			Add (TagEntity.All)
+				.ContinueWith (x => Add (TagEntity.Untagged))
+				.ContinueWith(x => Add(new TagEntity { Name = "MyTag"}));
 		}
 
 		public static List<T> GetAll<T>()

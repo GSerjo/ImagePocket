@@ -71,7 +71,7 @@ namespace Dojo
 
 		private void OnTagClicked(object sender, EventArgs ea)
 		{
-			var controller = new TagSelectorViewController ()
+			var controller = new TagSelectorViewController (new ImageEntity())
 			{
 				ModalPresentationStyle = UIModalPresentationStyle.FormSheet
 			};
