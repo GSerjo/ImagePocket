@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Domain
 {
@@ -20,5 +21,9 @@ namespace Domain
 			get { return new ImageRepository (); }
 		}
 
+		public Task<int> SaveOrUpdate(List<ImageEntity> images)
+		{
+			return Database.Add (images);
+		}
 	}
 }

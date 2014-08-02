@@ -60,6 +60,11 @@ namespace Domain
 			return result;
 		}
 
+		public void AddTag(TagEntity tag)
+		{
+			_tags.Add (tag.EntityId);
+		}
+
 		public override int GetHashCode ()
 		{
 			return ((LocalIdentifier != null ? LocalIdentifier.GetHashCode () : 0) * 397) ^ EntityId;

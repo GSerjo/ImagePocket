@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 
 namespace Domain
 {
@@ -20,12 +21,12 @@ namespace Domain
 
 		public List<TagEntity> GetAll()
 		{
-			if (_tags.Count == 0)
+			if (_tags.IsEmpty())
 			{
 				_tags = Database.GetAll<TagEntity> ()
 					.ToDictionary (x => x.EntityId);
 			}
-			return _tags.Values.OrderBy(x => x.Name).ToList();
+			return _tags.Values.ToList();//.OrderBy(x => x.Name).ToList();
 		}
 
 		public TagEntity GetById(int id)

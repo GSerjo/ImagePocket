@@ -3,6 +3,8 @@ using SQLite;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core;
+using System.Collections;
 
 namespace Domain
 {
@@ -31,7 +33,7 @@ namespace Domain
 			}
 			Add (TagEntity.All)
 				.ContinueWith (x => Add (TagEntity.Untagged))
-				.ContinueWith(x => Add(new TagEntity { Name = "MyTag"}));
+				.ContinueWith(x => 5.Times(y => Add(new TagEntity { Name = "MyTag" + y})));
 		}
 
 		public static List<T> GetAll<T>()
@@ -43,6 +45,11 @@ namespace Domain
 		public static Task<int> Add(object value)
 		{
 			return _database.InsertAsync (value);
+		}
+
+		public static Task<int> Add(IList values)
+		{
+			return _database.InsertAllAsync (values);
 		}
 
 		public static Task<List<T>> GetAllAsync<T>()

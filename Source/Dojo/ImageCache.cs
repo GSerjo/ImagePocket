@@ -32,12 +32,26 @@ namespace Dojo
 			{
 				return GetUntagged ().Take(3).ToList();
 			}
-			return new List<ImageEntity> ();
+			return _taggedImages.Values.Where (x => x.Tags.Contains (tag.EntityId)).ToList ();
+		}
+
+		public void SaveOrUpdate(List<ImageEntity> images)
+		{
+			_imageRepository.SaveOrUpdate (images)
+				.ContinueWith(x => UpdateTaggedImages (images));
 		}
 
 		public UIImage GetSmallImage(string localId)
 		{
 			return _assetRepository.GetSmallImage (localId);
+		}
+
+		private void UpdateTaggedImages(List<ImageEntity> images)
+		{
+			foreach (ImageEntity image in images)
+			{
+				_taggedImages [image.LocalIdentifier] = image;
+			}
 		}
 
 		private List<ImageEntity> GetAll()
@@ -58,4 +72,3 @@ namespace Dojo
 		}
 	}
 }
-

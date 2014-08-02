@@ -13,13 +13,18 @@ namespace Dojo
 	public partial class TagSelectorViewController : UIViewController
 	{
 		public event EventHandler<EventArgs> Closed = delegate { };
-		public event EventHandler<EventArgs> Done = delegate { };
+		public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
 		private static TagRepository _tagRepository = TagRepository.Instance;
 		private List<ImageEntity> _images = new List<ImageEntity>();
 
 		public TagSelectorViewController (ImageEntity image) : base ("TagSelectorViewController", null)
 		{
-			_images.Add (image);
+			_images.Add (image.CloneDeep());
+		}
+
+		public TagSelectorViewController (List<ImageEntity> images) : base ("TagSelectorViewController", null)
+		{
+			_images.AddRange (images.Select (x => x.CloneDeep ()));
 		}
 
 		public override void DidReceiveMemoryWarning ()
@@ -33,12 +38,12 @@ namespace Dojo
 			allTags.Source = new TableSource (this);
 			btCancel.Clicked += OnCancel;
 			btDone.Clicked += OnDone;
-			InitialiseTag ();
+			UpdateTagText ();
 		}
 
-		private void InitialiseTag()
+		private void UpdateTagText()
 		{
-			IEnumerable<int> tagIds = _images.SelectMany (x => x.Tags);
+			List<int> tagIds = _images.SelectMany (x => x.Tags).ToList();
 			List<TagEntity> tags = _tagRepository.GetById (tagIds);
 			currentTags.Text = string.Join(" ", tags.Select (x => x.Name));
 		}
@@ -51,7 +56,11 @@ namespace Dojo
 
 		private void OnDone(object sender, EventArgs ea)
 		{
-			Done (null, EventArgs.Empty);
+			var eventArgs = new EventArgsOf<List<ImageEntity>>
+			{
+				Data = _images
+			};
+			Done (null, eventArgs);
 			DismissViewController (true, null);
 		}
 
@@ -62,7 +71,6 @@ namespace Dojo
 
 		private sealed class TableSource : UITableViewSource
 		{
-
 			private string cellIdentifier = "TableCell";
 			private List<TagEntity> _tags;
 			private TagSelectorViewController _controller;
@@ -70,7 +78,7 @@ namespace Dojo
 			public TableSource (TagSelectorViewController controller)
 			{
 				_controller = controller;
-				_tags = _tagRepository.GetAll();
+				_tags = _tagRepository.GetAll().Where(x=>!x.IsAll && !x.IsUntagged).ToList();
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)
@@ -94,7 +102,8 @@ namespace Dojo
 				TagEntity tag = _tags[indexPath.Item];
 				_tags.Remove (tag);
 				_controller.ReloadData ();
-				_controller._images.Iter (x => x.Tags.Add (tag.EntityId));
+				_controller._images.Iter (x => x.AddTag (tag));
+				_controller.UpdateTagText ();
 			}
 		}
 	}
