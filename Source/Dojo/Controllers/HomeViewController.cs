@@ -71,7 +71,7 @@ namespace Dojo
 
 		private void OnTagClicked(object sender, EventArgs ea)
 		{
-			var controller = new TagSelectorViewController1 ();
+			var controller = new TagSelectorViewController ();
 			controller.Closed += OnTagSelectorCancel;
 			controller.Done += OnTagSelectorDone;
 			NavigationController.PresentViewController (new UINavigationController (controller)

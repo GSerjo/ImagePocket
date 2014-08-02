@@ -120,10 +120,11 @@
     <Compile Include="Controllers\PhotoViewController.cs" />
     <Compile Include="AssetRepository.cs" />
     <Compile Include="ImageCache.cs" />
-    <Compile Include="Controllers\TagSelectorViewController.cs" />
     <Compile Include="ImagePreviewCell.cs" />
     <Compile Include="Controllers\TagSelectorViewController1.cs" />
+    <Compile Include="Controllers\TagSelectorViewController2.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

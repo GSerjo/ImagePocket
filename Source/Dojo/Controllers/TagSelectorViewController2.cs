@@ -23,12 +23,17 @@ namespace Dojo
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			var tableBounds = new RectangleF (0, 44, View.Bounds.Width, View.Bounds.Height - 44);
-			var table = new UITableView (tableBounds);
 			var tagBounds = new RectangleF (0, 44, View.Bounds.Width, 20);
 			var tagTextField = new UITextField (tagBounds);
+			tagTextField.Text = "test";
+			tagTextField.Layer.BorderWidth = 1f;
+			tagTextField.Layer.BorderColor = UIColor.LightGray.CGColor;
+
+			var tableBounds = new RectangleF (0, 60, View.Bounds.Width, View.Bounds.Height - 44);
+			var table = new UITableView (tableBounds);
+
 			Add (tagTextField);
-//			Add (table);
+			Add (table);
 			table.Source = new TableSource ();
 
 		}
