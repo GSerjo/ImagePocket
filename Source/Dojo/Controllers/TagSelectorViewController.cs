@@ -1,41 +1,40 @@
-﻿using System;
-using MonoTouch.Dialog;
-using MonoTouch.UIKit;
+﻿
+using System;
 using System.Drawing;
+
+using MonoTouch.Foundation;
+using MonoTouch.UIKit;
 using Domain;
 using System.Collections.Generic;
 
 namespace Dojo
 {
-	public sealed class TagSelectorViewController2 : UIViewController
+	public partial class TagSelectorViewController : UIViewController
 	{
 		public event EventHandler<EventArgs> Closed = delegate { };
 		public event EventHandler<EventArgs> Done = delegate { };
 		private static TagRepository _tagRepository = TagRepository.Instance;
 
-		public TagSelectorViewController2 ()
+		public TagSelectorViewController () : base ("TagSelectorViewController", null)
 		{
-			View.BackgroundColor = UIColor.White;
-			NavigationItem.LeftBarButtonItem = new UIBarButtonItem (UIBarButtonSystemItem.Cancel, OnCancel);
-			NavigationItem.RightBarButtonItem = new UIBarButtonItem (UIBarButtonSystemItem.Done, OnDone);
+		}
+
+		public override void DidReceiveMemoryWarning ()
+		{
+			// Releases the view if it doesn't have a superview.
+			base.DidReceiveMemoryWarning ();
+
+			// Release any cached data, images, etc that aren't in use.
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			var tagBounds = new RectangleF (0, 44, View.Bounds.Width, 20);
-			var tagTextField = new UITextField (tagBounds);
-			tagTextField.Text = "test";
-			tagTextField.Layer.BorderWidth = 1f;
-			tagTextField.Layer.BorderColor = UIColor.LightGray.CGColor;
-
-			var tableBounds = new RectangleF (0, 60, View.Bounds.Width, View.Bounds.Height - 44);
-			var table = new UITableView (tableBounds);
-
-			Add (tagTextField);
-			Add (table);
-			table.Source = new TableSource ();
-
+			allTags.Source = new TableSource ();
+			btCancel.Clicked += OnCancel;
+			btDone.Clicked += OnDone;
+			
+			// Perform any additional setup after loading the view, typically from a nib.
 		}
 
 		private void OnCancel(object sender, EventArgs ea)
@@ -78,3 +77,4 @@ namespace Dojo
 		}
 	}
 }
+

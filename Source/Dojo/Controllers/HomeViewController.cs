@@ -71,13 +71,17 @@ namespace Dojo
 
 		private void OnTagClicked(object sender, EventArgs ea)
 		{
-			var controller = new TagSelectorViewController ();
+			var controller = new TagSelectorViewController ()
+			{
+				ModalPresentationStyle = UIModalPresentationStyle.FormSheet
+			};
 			controller.Closed += OnTagSelectorCancel;
-			controller.Done += OnTagSelectorDone;
-			NavigationController.PresentViewController (new UINavigationController (controller)
-				{
-					ModalPresentationStyle = UIModalPresentationStyle.FormSheet
-				}, true, null);
+			//controller.Done += OnTagSelectorDone;
+			NavigationController.PresentViewController (controller, true, null);
+//			NavigationController.PresentViewController (new UINavigationController (controller)
+//				{
+//					ModalPresentationStyle = UIModalPresentationStyle.FormSheet
+//				}, true, null);
 		}
 
 		private void OnBatchSelect(object sender, EventArgs ea)
