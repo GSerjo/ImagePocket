@@ -88,7 +88,6 @@ namespace Dojo
 		private void OnBatchSelectCancel(object sender, EventArgs ea)
 		{
 			SetReadMode ();
-			ReloadData ();
 		}
 
 		private void SetSelectMode()
@@ -108,6 +107,7 @@ namespace Dojo
 			NavigationItem.LeftBarButtonItem = _btOpenMenu;
 			_viewMode = ViewMode.Read;
 			ClearSelectedCells ();
+			ReloadData ();
 		}
 
 		public override int GetItemsCount (UICollectionView collectionView, int section)
@@ -159,14 +159,12 @@ namespace Dojo
 		private void OnTagSelectorCancel(object sender, EventArgs ea)
 		{
 			SetReadMode ();
-			ReloadData ();
 		}
 
 		private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
 		{
 			SetReadMode ();
 			_imageCache.SaveOrUpdate (ea.Data);
-			ReloadData ();
 		}
 
 		private void ClearSelectedCells()
