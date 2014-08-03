@@ -88,6 +88,7 @@ namespace Dojo
 		private void OnBatchSelectCancel(object sender, EventArgs ea)
 		{
 			SetReadMode ();
+			ReloadData ();
 		}
 
 		private void SetSelectMode()
@@ -106,6 +107,7 @@ namespace Dojo
 			NavigationItem.RightBarButtonItem = _btSelect;
 			NavigationItem.LeftBarButtonItem = _btOpenMenu;
 			_viewMode = ViewMode.Read;
+			ClearSelectedCells ();
 		}
 
 		public override int GetItemsCount (UICollectionView collectionView, int section)
@@ -119,6 +121,7 @@ namespace Dojo
 			ImageEntity entity = _images [indexPath.Item];
 			UIImage image = _imageCache.GetSmallImage (entity.LocalIdentifier);
 			cell.Image = image;
+			UpdateSelectCellStatus (cell, entity);
 			return cell;
 		}
 
@@ -136,35 +139,42 @@ namespace Dojo
 
 		private void UpdateSelectCellStatus(ImagePreviewCell cell, ImageEntity entity)
 		{
+			if (_viewMode == ViewMode.Read)
+			{
+				cell.Unselect ();
+				return;
+			}
 			if (IsCellSelected(entity))
 			{
-				_selectedImages.Remove (entity.LocalIdentifier);
-				cell.BackgroundColor = UIColor.White;
+				_selectedImages.Remove(entity.LocalIdentifier);
+				cell.Unselect ();
 			} 
 			else
 			{
 				_selectedImages [entity.LocalIdentifier] = entity;
-				cell.BackgroundColor = UIColor.Black;
+				cell.Select ();
 			}
 		}
 
 		private void OnTagSelectorCancel(object sender, EventArgs ea)
 		{
 			SetReadMode ();
-			ClearSelectedCells ();
+			ReloadData ();
 		}
 
 		private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
 		{
 			SetReadMode ();
-			ClearSelectedCells ();
 			_imageCache.SaveOrUpdate (ea.Data);
-			ClearSelectedCells ();
+			ReloadData ();
 		}
 
 		private void ClearSelectedCells()
 		{
 			_selectedImages = new Dictionary<string, ImageEntity> ();
+//			CollectionView.VisibleCells.Cast<ImagePreviewCell> ()
+//				.Where(x=>x.Selected)
+//				.Iter(x => x.Unselect ());
 		}
 
 		private bool IsCellSelected(ImageEntity entity)

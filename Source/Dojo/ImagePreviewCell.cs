@@ -25,6 +25,18 @@ namespace Dojo
 		{
 			set { _imageView.Image = value; }
 		}
+
+		public new void Select()
+		{
+			BackgroundColor = UIColor.Black;
+			Selected = true;
+		}
+
+		public void Unselect()
+		{
+			BackgroundColor = UIColor.White;
+			Selected = false;
+		}
 	}
 }
 
