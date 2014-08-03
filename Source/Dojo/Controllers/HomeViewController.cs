@@ -165,6 +165,7 @@ namespace Dojo
 		{
 			SetReadMode ();
 			_imageCache.SaveOrUpdate (ea.Data);
+			FilterImages ();
 		}
 
 		private void ClearSelectedCells()

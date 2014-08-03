@@ -5,7 +5,7 @@ using MonoTouch.Foundation;
 
 namespace Dojo
 {
-	public class ImagePreviewCell : UICollectionViewCell
+	public sealed class ImagePreviewCell : UICollectionViewCell
 	{
 		private UIImageView _imageView;
 

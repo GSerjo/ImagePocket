@@ -62,6 +62,10 @@ namespace Domain
 
 		public void AddTag(TagEntity tag)
 		{
+			if (_tags.Contains (tag.EntityId))
+			{
+				return;
+			}
 			_tags.Add (tag.EntityId);
 		}
 

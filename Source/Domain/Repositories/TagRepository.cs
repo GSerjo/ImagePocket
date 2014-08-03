@@ -12,6 +12,7 @@ namespace Domain
 
 		private TagRepository()
 		{
+			_tags = Database.GetAll<TagEntity> ().ToDictionary (x => x.EntityId);
 		}
 
 		public static TagRepository Instance
@@ -21,11 +22,6 @@ namespace Domain
 
 		public List<TagEntity> GetAll()
 		{
-			if (_tags.IsEmpty())
-			{
-				_tags = Database.GetAll<TagEntity> ()
-					.ToDictionary (x => x.EntityId);
-			}
 			return _tags.Values.OrderBy(x => x.Name).ToList();
 		}
 

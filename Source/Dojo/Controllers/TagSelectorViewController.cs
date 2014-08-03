@@ -43,9 +43,19 @@ namespace Dojo
 
 		private void UpdateTagText()
 		{
-			List<int> tagIds = _images.SelectMany (x => x.Tags).Distinct().ToList();
-			List<TagEntity> tags = _tagRepository.GetById (tagIds);
-			currentTags.Text = string.Join(" ", tags.Select (x => x.Name));
+			List<TagEntity> entities = GetCommonTags ();
+			currentTags.Text = string.Join(" ", entities.Select (x => x.Name));
+		}
+
+		private List<TagEntity> GetCommonTags()
+		{
+			var tagIds = _images.First ().Tags;
+			IEnumerable<List<int>> imageTags = _images.Select (x => x.Tags);
+			foreach (var tags in imageTags)
+			{
+				tagIds = tagIds.Intersect (tags).ToList();
+			}
+			return _tagRepository.GetById (tagIds);
 		}
 
 		private void OnCancel(object sender, EventArgs ea)
@@ -78,7 +88,11 @@ namespace Dojo
 			public TableSource (TagSelectorViewController controller)
 			{
 				_controller = controller;
-				_tags = _tagRepository.GetAll().Where(x=>!x.IsAll && !x.IsUntagged).ToList();
+				var commonTags = _controller.GetCommonTags();
+				_tags = _tagRepository.GetAll()
+					.Where(x=>!x.IsAll && !x.IsUntagged)
+					.Except(commonTags, new FuncComparer<TagEntity>((x,y)=>x.EntityId == y.EntityId))
+					.ToList();
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)

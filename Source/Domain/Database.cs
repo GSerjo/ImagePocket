@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core;
 using System.Collections;
+using System.Linq;
 
 namespace Domain
 {
@@ -31,9 +32,9 @@ namespace Domain
 			{
 				return;
 			}
-			Add (TagEntity.All)
-				.ContinueWith (x => Add (TagEntity.Untagged))
-				.ContinueWith(x => 5.Times(y => Add(new TagEntity { Name = "MyTag" + y})));
+			AddOrUpdate (TagEntity.All)
+				.ContinueWith (x => AddOrUpdate (TagEntity.Untagged))
+				.ContinueWith(x => 5.Times(y => AddOrUpdate(new TagEntity { Name = "MyTag" + y})));
 		}
 
 		public static List<T> GetAll<T>()
@@ -42,14 +43,32 @@ namespace Domain
 			return _database.Table<T> ().ToListAsync ().Result;
 		}
 
-		public static Task<int> Add(object value)
+		public static Task<int> AddOrUpdate<T>(T value)
+			where T: Entity
 		{
-			return _database.InsertAsync (value);
+			if (value.New)
+			{
+				return _database.InsertAsync (value);
+			}
+			return _database.UpdateAsync (value);
 		}
 
-		public static Task<int> Add(IList values)
+		public static Task AddOrUpdateAll<T>(IList<T> values)
+			where T : Entity
 		{
-			return _database.InsertAllAsync (values);
+			IEnumerable<IGrouping<bool, T>> groups = values.GroupBy (x => x.New);
+			foreach (IGrouping<bool, T> group in groups)
+			{
+				if (group.Key)
+				{
+					_database.InsertAllAsync (values.ToList ()).Wait();
+				}
+				else
+				{
+					_database.UpdateAllAsync (values.ToList ()).Wait();
+				}
+			}
+			return Task.FromResult (true);
 		}
 
 		public static Task<List<T>> GetAllAsync<T>()

@@ -21,9 +21,9 @@ namespace Domain
 			get { return new ImageRepository (); }
 		}
 
-		public Task<int> SaveOrUpdate(List<ImageEntity> images)
+		public Task SaveOrUpdate(List<ImageEntity> images)
 		{
-			return Database.Add (images);
+			return Database.AddOrUpdateAll (images);
 		}
 	}
 }
