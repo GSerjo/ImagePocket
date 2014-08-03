@@ -30,7 +30,7 @@ namespace Dojo
 			} 
 			else if (tag.IsUntagged)
 			{
-				return GetUntagged ().Take(3).ToList();
+				return GetUntagged ();
 			}
 			return _taggedImages.Values.Where (x => x.Tags.Contains (tag.EntityId)).ToList ();
 		}

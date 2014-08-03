@@ -12,7 +12,7 @@ namespace Dojo
 {
 	public partial class TagSelectorViewController : UIViewController
 	{
-		public event EventHandler<EventArgs> Closed = delegate { };
+		public event EventHandler<EventArgs> Cancel = delegate { };
 		public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
 		private static TagRepository _tagRepository = TagRepository.Instance;
 		private List<ImageEntity> _images = new List<ImageEntity>();
@@ -43,14 +43,14 @@ namespace Dojo
 
 		private void UpdateTagText()
 		{
-			List<int> tagIds = _images.SelectMany (x => x.Tags).ToList();
+			List<int> tagIds = _images.SelectMany (x => x.Tags).Distinct().ToList();
 			List<TagEntity> tags = _tagRepository.GetById (tagIds);
 			currentTags.Text = string.Join(" ", tags.Select (x => x.Name));
 		}
 
 		private void OnCancel(object sender, EventArgs ea)
 		{
-			Closed (null, EventArgs.Empty);
+			Cancel (null, EventArgs.Empty);
 			DismissViewController (true, null);
 		}
 

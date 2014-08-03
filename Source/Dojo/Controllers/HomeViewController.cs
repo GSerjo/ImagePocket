@@ -17,9 +17,9 @@ namespace Dojo
 		private const string RootTitle = "Bodo Title";
 		private const string SelectImagesTitle = "Select images";
 		private TagEntity _currentTag = TagEntity.All;
-		private bool _shouldSelectItem;
 		private List<ImageEntity> _images = new List<ImageEntity> ();
 		private readonly ImageCache _imageCache = new ImageCache();
+		private ViewMode _viewMode = ViewMode.Read;
 		private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity> ();
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
@@ -75,7 +75,7 @@ namespace Dojo
 			{
 				ModalPresentationStyle = UIModalPresentationStyle.FormSheet
 			};
-			controller.Closed += OnTagSelectorCancel;
+			controller.Cancel += OnTagSelectorCancel;
 			controller.Done += OnTagSelectorDone;
 			NavigationController.PresentViewController (controller, true, null);
 		}
@@ -97,7 +97,7 @@ namespace Dojo
 			_btOpenMenu = NavigationItem.LeftBarButtonItem;
 			NavigationItem.LeftBarButtonItem = _btTag;
 			NavigationItem.LeftBarButtonItem.Enabled = false;
-			_shouldSelectItem = true;
+			_viewMode = ViewMode.Select;
 		}
 
 		private void SetReadMode()
@@ -105,7 +105,7 @@ namespace Dojo
 			Title = RootTitle;
 			NavigationItem.RightBarButtonItem = _btSelect;
 			NavigationItem.LeftBarButtonItem = _btOpenMenu;
-			_shouldSelectItem = false;
+			_viewMode = ViewMode.Read;
 		}
 
 		public override int GetItemsCount (UICollectionView collectionView, int section)
@@ -115,53 +115,61 @@ namespace Dojo
 
 		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 		{
-			var imageCell = (ImagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
-			ImageEntity imageEntiy = _images [indexPath.Item];
-			UIImage image = _imageCache.GetSmallImage (imageEntiy.LocalIdentifier);
-			imageCell.Image = image;
-			return imageCell;
-		}
-
-		public override bool ShouldSelectItem (UICollectionView collectionView, NSIndexPath indexPath)
-		{
-			return _shouldSelectItem;
-		}
-
-		public override bool ShouldDeselectItem (UICollectionView collectionView, NSIndexPath indexPath)
-		{
-			return _shouldSelectItem;
+			var cell = (ImagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
+			ImageEntity entity = _images [indexPath.Item];
+			UIImage image = _imageCache.GetSmallImage (entity.LocalIdentifier);
+			cell.Image = image;
+			return cell;
 		}
 
 		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
 		{
-			var cell = (ImagePreviewCell)collectionView.CellForItem (indexPath);
-			ImageEntity imageEntiy = _images [indexPath.Item];
-			if (_selectedImages.ContainsKey (imageEntiy.LocalIdentifier))
+			if (_viewMode == ViewMode.Read)
 			{
-				_selectedImages.Remove (imageEntiy.LocalIdentifier);
+				return;
+			}
+			var cell = (ImagePreviewCell)collectionView.CellForItem (indexPath);
+			ImageEntity entity = _images [indexPath.Item];
+			UpdateSelectCellStatus (cell, entity);
+			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
+		}
+
+		private void UpdateSelectCellStatus(ImagePreviewCell cell, ImageEntity entity)
+		{
+			if (IsCellSelected(entity))
+			{
+				_selectedImages.Remove (entity.LocalIdentifier);
 				cell.BackgroundColor = UIColor.White;
-				cell.Selected = false;
 			} 
 			else
 			{
-				_selectedImages [imageEntiy.LocalIdentifier] = imageEntiy;
+				_selectedImages [entity.LocalIdentifier] = entity;
 				cell.BackgroundColor = UIColor.Black;
-				cell.Selected = true;
 			}
-			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
 		}
 
 		private void OnTagSelectorCancel(object sender, EventArgs ea)
 		{
 			SetReadMode ();
-			_selectedImages = new Dictionary<string, ImageEntity> ();
+			ClearSelectedCells ();
 		}
 
 		private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
 		{
 			SetReadMode ();
+			ClearSelectedCells ();
 			_imageCache.SaveOrUpdate (ea.Data);
+			ClearSelectedCells ();
+		}
+
+		private void ClearSelectedCells()
+		{
 			_selectedImages = new Dictionary<string, ImageEntity> ();
+		}
+
+		private bool IsCellSelected(ImageEntity entity)
+		{
+			return _selectedImages.ContainsKey (entity.LocalIdentifier);
 		}
 	}
 }
