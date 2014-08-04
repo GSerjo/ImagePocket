@@ -28,12 +28,20 @@ namespace Dojo
 					_imageView.Image = img;
 			});
 			View.AddSubview (_imageView);
+//			View.UserInteractionEnabled = true;
+			var tapGesture = new UITapGestureRecognizer (OnViewTap);
+			View.AddGestureRecognizer (tapGesture);
+
+		}
+
+		private void OnViewTap(UITapGestureRecognizer gesture)
+		{
+			Console.WriteLine ("Hey!!");
 		}
 
 		private void OnTagClicked(object sender, EventArgs ea)
 		{
 		}
-
 	}
 }
 
