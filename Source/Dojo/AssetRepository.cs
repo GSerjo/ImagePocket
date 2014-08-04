@@ -14,20 +14,22 @@ namespace Dojo
 		private readonly PHImageManager _imageManager = new PHImageManager();
 		private readonly SizeF _smallImage = new SizeF(150, 150);
 		private Dictionary<string, PHAsset> _assets = new Dictionary<string, PHAsset>();
+		private static AssetRepository _instance = new AssetRepository();
 
-		public AssetRepository ()
+		private AssetRepository ()
 		{
 			var fetchResult = PHAsset.FetchAssets (PHAssetMediaType.Image, null);
 			_assets = fetchResult.ToDictionary (x => ((PHAsset)x).LocalIdentifier, y => ((PHAsset)y));
 		}
 
-		public Bag<PHAsset> GetAsset(string localId)
+		public static AssetRepository Instance
 		{
-			if (!_assets.ContainsKey (localId))
-			{
-				return Bag<PHAsset>.Empty;
-			}
-			return _assets [localId].ToBag();
+			get { return _instance; }
+		}
+
+		public PHAsset GetAsset(string localId)
+		{
+			return _assets [localId];
 		}
 
 		public List<PHAsset> GetAll()
@@ -37,8 +39,8 @@ namespace Dojo
 
 		public UIImage GetSmallImage(string localId)
 		{
-			var asset = GetAsset (localId);
-			return CreateSmallImage (asset.Value);
+			PHAsset asset = GetAsset (localId);
+			return CreateSmallImage (asset);
 		}
 
 		private UIImage CreateSmallImage(PHAsset asset)

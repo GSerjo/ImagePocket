@@ -7,6 +7,7 @@ using Core;
 using System.Collections.Generic;
 using MonoTouch.CoreFoundation;
 using System.Linq;
+using MonoTouch.Photos;
 
 namespace Dojo
 {
@@ -20,6 +21,7 @@ namespace Dojo
 		private List<ImageEntity> _images = new List<ImageEntity> ();
 		private readonly ImageCache _imageCache = new ImageCache();
 		private ViewMode _viewMode = ViewMode.Read;
+		private AssetRepository _assetRepository = AssetRepository.Instance;
 		private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity> ();
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
@@ -129,6 +131,10 @@ namespace Dojo
 		{
 			if (_viewMode == ViewMode.Read)
 			{
+				ImageEntity image = _images [indexPath.Item];
+				PHAsset asset = _assetRepository.GetAsset (image.LocalIdentifier);
+				var photoController = new PhotoViewController (asset);
+				NavigationController.PushViewController (photoController, true);
 				return;
 			}
 			var cell = (ImagePreviewCell)collectionView.CellForItem (indexPath);

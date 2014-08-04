@@ -14,7 +14,7 @@ namespace Dojo
 		public PhotoViewController (PHAsset asset)
 		{
 			_asset = asset;
-			_tabButton = new UIBarButtonItem (UIBarButtonSystemItem.Bookmarks);
+			_tabButton = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
 			NavigationItem.RightBarButtonItem = _tabButton;
 		}
 
@@ -29,6 +29,11 @@ namespace Dojo
 			});
 			View.AddSubview (_imageView);
 		}
+
+		private void OnTagClicked(object sender, EventArgs ea)
+		{
+		}
+
 	}
 }
 

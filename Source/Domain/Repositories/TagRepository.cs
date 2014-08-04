@@ -7,7 +7,7 @@ namespace Domain
 {
 	public sealed class TagRepository
 	{
-
+		private static TagRepository _instance = new TagRepository();
 		private Dictionary<int, TagEntity> _tags = new Dictionary<int, TagEntity> ();
 
 		private TagRepository()
@@ -17,7 +17,7 @@ namespace Domain
 
 		public static TagRepository Instance
 		{
-			get { return new TagRepository (); }
+			get { return _instance; }
 		}
 
 		public List<TagEntity> GetAll()

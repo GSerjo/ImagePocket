@@ -7,6 +7,8 @@ namespace Domain
 	public sealed class ImageRepository
 	{
 
+		private static ImageRepository _instance = new ImageRepository();
+
 		private ImageRepository()
 		{
 		}
@@ -18,7 +20,7 @@ namespace Domain
 
 		public static ImageRepository Instance
 		{
-			get { return new ImageRepository (); }
+			get { return _instance; }
 		}
 
 		public Task SaveOrUpdate(List<ImageEntity> images)
