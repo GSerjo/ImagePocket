@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Dojo
 {
-	public class PhotoViewController : UIViewController
+	public sealed class PhotoViewController : UIViewController
 	{
 		private readonly PHAsset _asset;
 		private readonly UIBarButtonItem _tabButton;
