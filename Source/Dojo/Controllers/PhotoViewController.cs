@@ -2,6 +2,9 @@
 using MonoTouch.UIKit;
 using MonoTouch.Photos;
 using System.Drawing;
+using Domain;
+using Core;
+using System.Collections.Generic;
 
 namespace Dojo
 {
@@ -10,10 +13,15 @@ namespace Dojo
 		private readonly PHAsset _asset;
 		private readonly UIBarButtonItem _tabButton;
 		private UIImageView _imageView;
+		private bool _fullScreen;
+		private ImageEntity _image;
+		private AssetRepository _assetRepository = AssetRepository.Instance;
+		private readonly ImageCache _imageCache = ImageCache.Instance;
 
-		public PhotoViewController (PHAsset asset)
+		public PhotoViewController (ImageEntity image)
 		{
-			_asset = asset;
+			_image = image;
+			_asset = _assetRepository.GetAsset (image.LocalIdentifier);
 			_tabButton = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
 			NavigationItem.RightBarButtonItem = _tabButton;
 		}
@@ -28,20 +36,30 @@ namespace Dojo
 					_imageView.Image = img;
 			});
 			View.AddSubview (_imageView);
-//			View.UserInteractionEnabled = true;
 			var tapGesture = new UITapGestureRecognizer (OnViewTap);
 			View.AddGestureRecognizer (tapGesture);
-
 		}
 
 		private void OnViewTap(UITapGestureRecognizer gesture)
 		{
-			Console.WriteLine ("Hey!!");
+			_fullScreen = !_fullScreen;
+			NavigationController.SetNavigationBarHidden (_fullScreen, false);
+			View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
 		}
 
 		private void OnTagClicked(object sender, EventArgs ea)
 		{
+			var controller = new TagSelectorViewController (_image)
+			{
+				ModalPresentationStyle = UIModalPresentationStyle.FormSheet
+			};
+			controller.Done += OnTagSelectorDone;
+			NavigationController.PresentViewController (controller, true, null);
+		}
+
+		private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
+		{
+			_imageCache.SaveOrUpdate (ea.Data);
 		}
 	}
 }
-

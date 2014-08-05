@@ -19,9 +19,8 @@ namespace Dojo
 		private const string SelectImagesTitle = "Select images";
 		private TagEntity _currentTag = TagEntity.All;
 		private List<ImageEntity> _images = new List<ImageEntity> ();
-		private readonly ImageCache _imageCache = new ImageCache();
+		private readonly ImageCache _imageCache = ImageCache.Instance;
 		private ViewMode _viewMode = ViewMode.Read;
-		private AssetRepository _assetRepository = AssetRepository.Instance;
 		private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity> ();
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
@@ -34,6 +33,12 @@ namespace Dojo
 			base.ViewDidLoad ();
 			ConfigureView ();
 			ConfigureToolbar ();
+			FilterImages ();
+		}
+
+		public override void ViewWillAppear (bool animated)
+		{
+			base.ViewWillAppear (animated);
 			FilterImages ();
 		}
 
@@ -132,8 +137,7 @@ namespace Dojo
 			if (_viewMode == ViewMode.Read)
 			{
 				ImageEntity image = _images [indexPath.Item];
-				PHAsset asset = _assetRepository.GetAsset (image.LocalIdentifier);
-				var photoController = new PhotoViewController (asset);
+				var photoController = new PhotoViewController (image);
 				NavigationController.PushViewController (photoController, true);
 				return;
 			}
@@ -171,7 +175,6 @@ namespace Dojo
 		{
 			SetReadMode ();
 			_imageCache.SaveOrUpdate (ea.Data);
-			FilterImages ();
 		}
 
 		private void ClearSelectedCells()

@@ -13,13 +13,19 @@ namespace Dojo
 		private ImageRepository _imageRepository = ImageRepository.Instance;
 		private Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity> ();
 		private readonly List<ImageEntity> _actualImages;
+		private static ImageCache _instance = new ImageCache();
 
-		public ImageCache()
+		private ImageCache()
 		{
 			_taggedImages = _imageRepository.GetAll ().ToDictionary (x => x.LocalIdentifier);
 			_actualImages =  _assetRepository.GetAll ()
 				.Select (x => new ImageEntity { LocalIdentifier = x.LocalIdentifier })
 				.ToList();
+		}
+
+		public static ImageCache Instance
+		{
+			get { return _instance; }
 		}
 
 		public List<ImageEntity> GetImages(TagEntity tag)
