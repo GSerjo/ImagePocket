@@ -50,5 +50,10 @@ namespace Domain
 		{
 			return _tags.Values.Where (x => x.Name.Contains (name)).ToList ();
 		}
+
+		public void Add(List<TagEntity> values)
+		{
+			Database.AddOrUpdateAll (values);
+		}
 	}
 }

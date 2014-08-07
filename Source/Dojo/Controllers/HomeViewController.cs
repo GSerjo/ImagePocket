@@ -180,9 +180,6 @@ namespace Dojo
 		private void ClearSelectedCells()
 		{
 			_selectedImages = new Dictionary<string, ImageEntity> ();
-//			CollectionView.VisibleCells.Cast<ImagePreviewCell> ()
-//				.Where(x=>x.Selected)
-//				.Iter(x => x.Unselect ());
 		}
 
 		private bool IsCellSelected(ImageEntity entity)

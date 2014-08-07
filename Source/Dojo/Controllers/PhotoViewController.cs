@@ -20,6 +20,7 @@ namespace Dojo
 
 		public PhotoViewController (ImageEntity image)
 		{
+			Title = "Image";
 			_image = image;
 			_asset = _assetRepository.GetAsset (image.LocalIdentifier);
 			_tabButton = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
