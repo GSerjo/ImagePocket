@@ -44,7 +44,7 @@ namespace TestApp
 			backgroundView.BackgroundColor = backgroundColor;
 		}
 
-		private void SetColorSheme(UIColor colorSheme)
+		public void SetColorSheme(UIColor colorSheme)
 		{
 			_colorScheme = colorSheme;
 			titleLable.TextColor = _colorScheme;

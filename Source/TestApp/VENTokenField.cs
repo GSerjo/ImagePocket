@@ -13,12 +13,12 @@ namespace TestApp
 		private List<VENToken> _tokens = new List<VENToken> ();
 		private float _orifinalHeight;
 		private UITapGestureRecognizer _tapGestureRecognizer;
-		private const float DefaultVerticalInset = 7.0;
-		private const float DefaultHorizontalInset = 15.0;
-		private const float DefaultToLabelPadding = 5.0;
-		private const float DefaultTokenPadding = 2.0;
-		private const float DefaultMinImputWidth = 80.0;
-		private const float DefaultMaxHeight = 150.0;
+		private const float DefaultVerticalInset = 7.0f;
+		private const float DefaultHorizontalInset = 15.0f;
+		private const float DefaultToLabelPadding = 5.0f;
+		private const float DefaultTokenPadding = 2.0f;
+		private const float DefaultMinImputWidth = 80.0f;
+		private const float DefaultMaxHeight = 150.0f;
 		private VENBackspaceTextField _invisibleTextField;
 		private VENBackspaceTextField _inputTextField;
 		private UIColor _colorScheme;
@@ -57,6 +57,20 @@ namespace TestApp
 			float currentX = 0;
 		}
 
+		private void ReloadData()
+		{
+			bool inputFieldShouldBecomeFirstResponder = _inputTextField.IsFirstResponder;
+			_collapsedLabel.RemoveFromSuperview ();
+//			_scrollView.Subviews.make
+			_scrollView.Hidden = false;
+			_tokens = new List<VENToken> ();
+			float currentX = 0;
+			float currentY = 0;
+			LayoutToLabelInView (_scrollView, new PointF (), currentX);
+			LayoutTokenWithCurrentX ();
+			LayoutInputTextFieldWithCurrentX (currentX, currentY);
+		}
+
 		public override bool BecomeFirstResponder ()
 		{
 			ReloadData ();
@@ -78,7 +92,6 @@ namespace TestApp
 			_inputTextField.BecomeFirstResponder();
 			if (RespondsToSelector (new MonoTouch.ObjCRuntime.Selector ())) 
 			{
-				var thheDelegate = Delegate;
 			}
 		}
 
@@ -133,30 +146,91 @@ namespace TestApp
 			}
 		}
 
+		private void SetColorScheme(UIColor color)
+		{
+			_colorScheme = color;
+			_collapsedLabel.TextColor = color;
+			_inputTextField.TintColor = color;
+			foreach (var token in _tokens)
+			{
+				token.SetColorSheme (color);
+			}
+		}
+
+		private string InputText()
+		{
+			return _inputTextField.Text;
+		}
+
+		private void LayoutScrollView()
+		{
+			_scrollView = new UIScrollView (new RectangleF (0, 0, Frame.Width, Frame.Height));
+			_scrollView.ContentSize = new SizeF (Frame.Width - _horizontalInset * 2, Frame.Height - _verticalInset * 2);
+			_scrollView.ContentInset = new UIEdgeInsets(_verticalInset, _horizontalInset, _verticalInset, _horizontalInset);
+			_scrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
+			AddSubview (_scrollView);
+		}
+
+		private void LayoutInputTextFieldWithCurrentX(float currentX, float currentY)
+		{
+			float inputTextFieldWidth = _scrollView.ContentSize.Width - currentX;
+			if (inputTextFieldWidth < _minInputWidth)
+			{
+				inputTextFieldWidth = _scrollView.ContentSize.Width;
+				currentY += HeightForToken ();
+				currentX = 0;
+			}
+			var inputTextField = _inputTextField;
+			inputTextField.Text = "";
+			inputTextField.Frame = new RectangleF (currentX, currentY + 1, inputTextFieldWidth, HeightForToken () - 1);
+			inputTextField.TintColor = _colorScheme;
+			_scrollView.AddSubview (inputTextField);
+		}
+
 		private void UpdateInputTextField()
 		{
 			_inputTextField.Placeholder = _tokens.Count == 0 ? string.Empty : _placeholder;
 		}
 
-		private float heightForToken()
+		private float HeightForToken()
 		{
-			return 30.0;
+			return 30.0f;
+		}
+
+		private void LayoutInvisibleTextField()
+		{
+			_invisibleTextField = new VENBackspaceTextField ();
+			//Add Delegate
+			AddSubview (_invisibleTextField);
 		}
 
 		private void FocusInputTextField()
 		{
 			PointF contentOffset = _scrollView.ContentOffset;
-			float targetY = _inputTextField.Frame.Y + heightForToken () - _maxHeight;
+			float targetY = _inputTextField.Frame.Y + HeightForToken () - _maxHeight;
 			if (targetY > contentOffset.Y)
 			{
 				_scrollView.SetContentOffset (new PointF (), false);
 			}
 		}
 
-		private void LayoutToLabelInView(UIView view, PointF originX, PointF currentX)
+		private void LayoutToLabelInView(UIView view, PointF originX, float currentX)
 		{
 			_toLabel.RemoveFromSuperview ();
 			_toLabel = ToLabel ();
 		}
+
+		private UILabel ToLabel()
+		{
+			if (_toLabel == null)
+			{
+				_toLabel = new UILabel ();
+				_toLabel.TextColor = _toLabelTextColor;
+				_toLabel.Text = "To:";
+				_toLabel.SizeToFit ();
+			}
+			return _toLabel;
+		}
+
 	}
 }
