@@ -9,21 +9,8 @@ namespace TestApp
 	{
 
 		private UIColor _colorScheme = UIColor.Blue;
-		private bool _highlighted;
-		private const float DefaultVerticalInset = 7.0;
-		private const float DefaultHorizontalInset = 15.0;
-		private const float DefaultToLabelPadding = 5.0;
-		private const float DefaultTokenPadding = 2.0;
-		private const float DefaultMinImputWidth = 80.0;
-		private const float DefaultMaxHeight = 150.0;
-		private VENBackspaceTextField _invisibleTextField;
-		private VENBackspaceTextField _inputTextField;
-		private UILabel collapsedLabel;
+		public bool Highlighted { get ; set; }
 
-		private UIScrollView _scrollView;
-		private NSMutableArray _tokens;
-		private float _orifinalHeight;
-		private UITapGestureRecognizer _tapGestureRecognizer;
 
 		[Export("initWithFrame:")]
 		public VENToken(RectangleF frame) : base(frame)
@@ -50,9 +37,9 @@ namespace TestApp
 
 		private void SetHighlighted(bool highlighted)
 		{
-			_highlighted = highlighted;
-			var textColor = _highlighted ? UIColor.White : _colorScheme;
-			var backgroundColor = _highlighted ? _colorScheme : UIColor.Clear;
+			Highlighted = highlighted;
+			var textColor = Highlighted ? UIColor.White : _colorScheme;
+			var backgroundColor = Highlighted ? _colorScheme : UIColor.Clear;
 			titleLable.TextColor = textColor;
 			backgroundView.BackgroundColor = backgroundColor;
 		}
@@ -61,7 +48,7 @@ namespace TestApp
 		{
 			_colorScheme = colorSheme;
 			titleLable.TextColor = _colorScheme;
-			SetHighlighted (_highlighted);
+			SetHighlighted (Highlighted);
 		}
 
 		private void DidTapToken(UITapGestureRecognizer gesture)
