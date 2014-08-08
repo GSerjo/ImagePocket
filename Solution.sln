@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Source\Core\Core.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Source\Domain\Domain.csproj", "{FF5282BA-A31A-40AF-9EFF-F5FE8FF07C2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "Source\TestApp\TestApp.csproj", "{2367CFDB-4202-4596-91FB-A8A017570B7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -21,6 +23,18 @@ Global
 		AppStore|iPhone = AppStore|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Debug|iPhone.Build.0 = Debug|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Release|iPhone.ActiveCfg = Release|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Release|iPhone.Build.0 = Release|iPhone
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{2367CFDB-4202-4596-91FB-A8A017570B7A}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{6D39D05E-6C52-457E-AA26-9AC2E3691D01}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
 		{6D39D05E-6C52-457E-AA26-9AC2E3691D01}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
 		{6D39D05E-6C52-457E-AA26-9AC2E3691D01}.AppStore|iPhone.ActiveCfg = Release|Any CPU
@@ -83,6 +97,6 @@ Global
 		{FF5282BA-A31A-40AF-9EFF-F5FE8FF07C2B}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Source\Dojo\Dojo.csproj
+		StartupItem = Source\TestApp\TestApp.csproj
 	EndGlobalSection
 EndGlobal
