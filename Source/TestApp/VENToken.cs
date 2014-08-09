@@ -8,7 +8,7 @@ namespace TestApp
 	public partial class VENToken : UIView
 	{
 
-		private UIColor _colorScheme = UIColor.Blue;
+		public UIColor ColorScheme { get; set; }
 		public bool Highlighted { get ; set; }
 
 
@@ -17,37 +17,36 @@ namespace TestApp
 		{
 		}
 
-		public override bool BecomeFirstResponder ()
-		{
-		}
-
 		private void SetupInit()
 		{
 			Layer.CornerRadius = 5;
+			ColorScheme = UIColor.Blue;
+			titleLable.TextColor = ColorScheme;
 			UITapGestureRecognizer gesture = new UITapGestureRecognizer (DidTapToken);
 			this.AddGestureRecognizer (gesture);
 		}
 
-		private void SetTitleText(string title)
+		public void SetTitleText(string title)
 		{
 			titleLable.Text = title;
-			titleLable.TextColor = _colorScheme;
+			titleLable.TextColor = ColorScheme;
+			Frame = new RectangleF (Frame.X, Frame.Y, titleLable.Frame.X + 3, Frame.Height);
 			titleLable.SizeToFit ();
 		}
 
 		private void SetHighlighted(bool highlighted)
 		{
 			Highlighted = highlighted;
-			var textColor = Highlighted ? UIColor.White : _colorScheme;
-			var backgroundColor = Highlighted ? _colorScheme : UIColor.Clear;
+			var textColor = Highlighted ? UIColor.White : ColorScheme;
+			var backgroundColor = Highlighted ? ColorScheme : UIColor.Clear;
 			titleLable.TextColor = textColor;
 			backgroundView.BackgroundColor = backgroundColor;
 		}
 
 		public void SetColorSheme(UIColor colorSheme)
 		{
-			_colorScheme = colorSheme;
-			titleLable.TextColor = _colorScheme;
+			ColorScheme = colorSheme;
+			titleLable.TextColor = ColorScheme;
 			SetHighlighted (Highlighted);
 		}
 
