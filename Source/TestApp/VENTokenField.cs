@@ -32,7 +32,7 @@ namespace TestApp
 		private UIColor _toLabelTextColor;
 		private UIColor _inputTextFieldTextColor;
 		private UILabel _toLabel;
-		private string _placeholder;
+		private string _placeholderText;
 
 		private void SetupInit()
 		{
@@ -43,15 +43,18 @@ namespace TestApp
 			_minInputWidth = DefaultMinImputWidth;
 			_colorScheme = UIColor.Blue;
 			_toLabelTextColor = new UIColor (112 / 255.0f, 124 / 255.0f, 124 / 255.0f, 1.0f);
+			_inputTextFieldTextColor = new UIColor (38 / 255.0f, 39 / 255.0f, 41 / 255.0f, 1.0f);
 			_orifinalHeight = Frame.Height;
+
 			LayoutInvisibleTextField ();
 			LayoutScrollView ();
+
 			ReloadData ();
 		}
 
 		private void Collapse()
 		{
-			var removeFromSuperView = _collapsedLabel;
+			_collapsedLabel.RemoveFromSuperview();
 			_scrollView.Hidden = true;
 //			setHeight;
 			float currentX = 0;
@@ -69,6 +72,24 @@ namespace TestApp
 			LayoutToLabelInView (_scrollView, new PointF (), currentX);
 			LayoutTokenWithCurrentX ();
 			LayoutInputTextFieldWithCurrentX (currentX, currentY);
+		}
+
+		private void SetPlaceholderText(string placeholderText)
+		{
+			_placeholderText = placeholderText;
+			_inputTextField.Placeholder = _placeholderText;
+		}
+
+		private void SetInputTextFieldTextColor(UIColor inputTextFieldTextColor)
+		{
+			_inputTextFieldTextColor = inputTextFieldTextColor;
+			_inputTextField.TextColor = _inputTextFieldTextColor;
+		}
+
+		private void SetToLabelTextColor(UIColor toLabelTextColor)
+		{
+			_toLabelTextColor = toLabelTextColor;
+			_toLabel.TextColor = _toLabelTextColor;
 		}
 
 		public override bool BecomeFirstResponder ()
@@ -189,7 +210,7 @@ namespace TestApp
 
 		private void UpdateInputTextField()
 		{
-			_inputTextField.Placeholder = _tokens.Count == 0 ? string.Empty : _placeholder;
+			_inputTextField.Placeholder = _tokens.Count == 0 ? string.Empty : _placeholderText;
 		}
 
 		private float HeightForToken()
