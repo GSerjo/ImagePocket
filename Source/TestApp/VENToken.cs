@@ -12,9 +12,15 @@ namespace TestApp
 		public bool Highlighted { get ; set; }
 
 
+	    public VENToken ()
+		{
+			SetupInit ();
+		}
+
 		[Export("initWithFrame:")]
 		public VENToken(RectangleF frame) : base(frame)
 		{
+			SetupInit ();
 		}
 
 		private void SetupInit()

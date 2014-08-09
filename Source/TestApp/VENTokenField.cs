@@ -69,8 +69,12 @@ namespace TestApp
 		{
 			_collapsedLabel.RemoveFromSuperview();
 			_scrollView.Hidden = true;
-//			setHeight;
+			Frame = new RectangleF (Frame.X, Frame.Y, Frame.Width, _orifinalHeight);
 			float currentX = 0;
+			LayoutToLabelInView (this, new PointF (_horizontalInset, _verticalInset), ref currentX);
+			LayoutCollapsedLabelWithCurrentX (ref currentX);
+			_tapGestureRecognizer = new UITapGestureRecognizer (HandleSingleTap);
+			AddGestureRecognizer (_tapGestureRecognizer);
 		}
 
 		private void ReloadData()
@@ -159,7 +163,7 @@ namespace TestApp
 			_scrollView.AddSubview (inputTextField);
 		}
 
-		private void LayoutCollapsedLabelWithCurrentX(float currentX)
+		private void LayoutCollapsedLabelWithCurrentX(ref float currentX)
 		{
 			var label = new UILabel(new RectangleF(currentX, _toLabel.Frame.Y, Frame.Width - currentX - _horizontalInset, _toLabel.Frame.Height));
 //			label.Font = new UIFont()
@@ -228,9 +232,9 @@ namespace TestApp
 				return;
 			}
 			_inputTextField.BecomeFirstResponder();
-			if (RespondsToSelector (new MonoTouch.ObjCRuntime.Selector ())) 
-			{
-			}
+//			if (RespondsToSelector (new MonoTouch.ObjCRuntime.Selector ())) 
+//			{
+//			}
 		}
 
 		private UILabel ToLabel()
