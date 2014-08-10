@@ -16,15 +16,18 @@ namespace Dojo
 		public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
 		private static TagRepository _tagRepository = TagRepository.Instance;
 		private List<ImageEntity> _images = new List<ImageEntity>();
+		private TableSource _tableSource;
 
 		public TagSelectorViewController (ImageEntity image) : base ("TagSelectorViewController", null)
 		{
 			_images.Add (image.CloneDeep());
+			_tableSource = new TableSource (this);
 		}
 
 		public TagSelectorViewController (List<ImageEntity> images) : base ("TagSelectorViewController", null)
 		{
 			_images.AddRange (images.Select (x => x.CloneDeep ()));
+			_tableSource = new TableSource (this);
 		}
 
 		public override void DidReceiveMemoryWarning ()
@@ -43,7 +46,7 @@ namespace Dojo
 			tokenField.SetColorScheme (new UIColor (61 / 255.0f, 149 / 255.0f, 206 / 255.0f, 1.0f));
 			tokenField.BecomeFirstResponder ();
 
-			allTags.Source = new TableSource (this);
+			allTags.Source = _tableSource;
 			btCancel.Clicked += OnCancel;
 			btDone.Clicked += OnDone;
 			UpdateTagText ();
@@ -53,15 +56,15 @@ namespace Dojo
 
 		public int NumberOfTokensInTokenField (VENTokenField tokenField)
 		{
-			throw new System.NotImplementedException ();
+			return _tableSource.TagCount;
 		}
 		public string TokenField (VENTokenField tokenField, int index)
 		{
-			throw new System.NotImplementedException ();
+			return _tableSource.GetTag (index).Name;
 		}
 		public string TokenFieldCollapsedText (VENTokenField tokenField)
 		{
-			throw new System.NotImplementedException ();
+			return string.Format ("Tags count: {0}", _tableSource.TagCount);
 		}
 
 		#endregion
@@ -133,6 +136,13 @@ namespace Dojo
 			private List<TagEntity> _tags;
 			private TagSelectorViewController _controller;
 
+			public int TagCount { get { return _tags.Count; } }
+
+			public TagEntity GetTag(int index)
+			{
+				return _tags [index];
+			}
+
 			public TableSource (TagSelectorViewController controller)
 			{
 				_controller = controller;
@@ -167,7 +177,6 @@ namespace Dojo
 				_controller._images.Iter (x => x.AddTag (tag));
 				_controller.UpdateTagText ();
 			}
-				
 		}
 	}
 }
