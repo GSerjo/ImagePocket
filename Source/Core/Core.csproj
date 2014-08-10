@@ -39,7 +39,6 @@
     <Folder Include="Security\" />
     <Folder Include="DataStructures\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Controls\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -51,14 +50,6 @@
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="DataStructures\EventArgsOf.cs" />
-    <Compile Include="Controls\VENTokenField.cs" />
-    <Compile Include="Controls\VENToken.cs" />
-    <Compile Include="Controls\VENToken.designer.cs">
-      <DependentUpon>VENToken.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\VENBackspaceTextField.cs" />
-    <Compile Include="Controls\ITokenDelegate.cs" />
-    <Compile Include="Controls\ITokenDataSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
@@ -88,7 +79,4 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
-  <ItemGroup>
-    <InterfaceDefinition Include="Controls\TokenField.xib" />
-  </ItemGroup>
 </Project>

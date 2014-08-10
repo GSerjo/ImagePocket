@@ -4,8 +4,9 @@ using MonoTouch.Foundation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using MonoTouch.ObjCRuntime;
 
-namespace Core
+namespace Dojo
 {
 	[Register ("VENTokenField")]
 	public sealed class VENTokenField : UIView
@@ -40,7 +41,7 @@ namespace Core
 
 		public VENTokenField (IntPtr handle) : base(handle)
 		{
-//			SetupInit ();
+			SetupInit ();
 		}
 
 		[Export("initWithFrame:")]
@@ -97,7 +98,7 @@ namespace Core
 			AddGestureRecognizer (_tapGestureRecognizer);
 		}
 
-		private void ReloadData()
+		public void ReloadData()
 		{
 			bool inputFieldShouldBecomeFirstResponder = _inputTextField.IsFirstResponder;
 			_collapsedLabel.RemoveFromSuperview ();
@@ -152,7 +153,7 @@ namespace Core
 			_colorScheme = color;
 			_collapsedLabel.TextColor = color;
 			_inputTextField.TintColor = color;
-			foreach (var token in _tokens)
+			foreach (VENToken token in _tokens)
 			{
 				token.SetColorSheme (color);
 			}
@@ -215,7 +216,13 @@ namespace Core
 			for (int i = 0; i < NumberOfTokens(); i++)
 			{
 				var title = TitleForTokenAtIndex (i);
-				var token = new VENToken ();
+
+				var nibObjects = NSBundle.MainBundle.LoadNib("VENToken", this, null);
+				var token = (VENToken)Runtime.GetNSObject(nibObjects.ValueAt(0));
+
+//				var token = new VENToken ();
+//				token.Init ();
+//				token.SetupInit ();
 				token.ColorScheme = _colorScheme;
 				token.SetTitleText (title);
 				_tokens.Add (token);
@@ -260,7 +267,6 @@ namespace Core
 			_inputTextField.BecomeFirstResponder();
 			if (Delegate != null)
 			{
-				Delegate.TokenFieldDidBeginEditing (this);
 			}
 		}
 
@@ -407,6 +413,10 @@ namespace Core
 
 		private bool TextFieldShouldReturn(UITextField textField)
 		{
+			if (Delegate != null && textField.Text.Length > 0)
+			{
+				Delegate.DidEnterText (this, textField.Text);
+			}
 			return false;
 		}
 
@@ -422,6 +432,11 @@ namespace Core
 		{
 			UnhighlightAllTokens ();
 			return true;
+		}
+
+		private void TextFieldDidEnterBackspace(VENBackspaceTextField textField)
+		{
+			Console.WriteLine ("TextFieldDidEnterBackspace");
 		}
 	}
 }

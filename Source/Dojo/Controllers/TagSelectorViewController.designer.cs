@@ -26,7 +26,7 @@ namespace Dojo
 		MonoTouch.UIKit.UITextField currentTags { get; set; }
 
 		[Outlet]
-		Core.VENTokenField tokenField { get; set; }
+		Dojo.VENTokenField tokenField { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core
+namespace Dojo
 {
 	public interface ITokenDataSource
 	{

@@ -71,19 +71,16 @@ namespace Dojo
 
 		#region ITokenDelegate implementation
 
-		public void TokenFieldDidBeginEditing (VENTokenField tokenField)
+		public void DidDeleteTokenAtIndex (VENTokenField tokenField, int index)
 		{
-			throw new System.NotImplementedException ();
+			_tableSource.RemoveTag (index);
+			tokenField.ReloadData ();
 		}
 
-		public void InputTextFIeldDidChange (VENTokenField tokenField, string didChangeText)
+		public void DidEnterText (VENTokenField tokenField, string text)
 		{
-			throw new System.NotImplementedException ();
-		}
-
-		public void TokenFieldShouldReturn (VENTokenField tokenField, string didEnterText)
-		{
-			throw new System.NotImplementedException ();
+			Console.WriteLine (text);
+			tokenField.ReloadData ();
 		}
 
 		#endregion
@@ -143,6 +140,12 @@ namespace Dojo
 				return _tags [index];
 			}
 
+			public void RemoveTag(int index)
+			{
+				TagEntity tag = _tags[index];
+				ReloadTags (tag);
+			}
+
 			public TableSource (TagSelectorViewController controller)
 			{
 				_controller = controller;
@@ -172,6 +175,11 @@ namespace Dojo
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				TagEntity tag = _tags[indexPath.Item];
+				ReloadTags (tag);
+			}
+
+			private void ReloadTags(TagEntity tag)
+			{
 				_tags.Remove (tag);
 				_controller.ReloadData ();
 				_controller._images.Iter (x => x.AddTag (tag));
