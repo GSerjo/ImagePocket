@@ -99,19 +99,15 @@
     <Compile Include="TestAppViewController.designer.cs">
       <DependentUpon>TestAppViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="SelectedTextView.cs" />
-    <Compile Include="VENToken.cs" />
-    <Compile Include="VENToken.designer.cs">
-      <DependentUpon>VENToken.cs</DependentUpon>
-    </Compile>
-    <Compile Include="VENTokenField.cs" />
-    <Compile Include="VENBackspaceTextField.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainStoryboard.storyboard" />
-    <InterfaceDefinition Include="SelectedTextView.xib" />
-    <InterfaceDefinition Include="Test.xib" />
-    <InterfaceDefinition Include="TokenField.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{6D39D05E-6C52-457E-AA26-9AC2E3691D01}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

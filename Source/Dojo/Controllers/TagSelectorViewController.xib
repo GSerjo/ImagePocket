@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6205" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TagSelectorViewController">
@@ -10,6 +10,7 @@
                 <outlet property="btCancel" destination="yL3-9q-J7t" id="BYC-5K-jZN"/>
                 <outlet property="btDone" destination="LO8-IK-q6h" id="ph7-h8-NBf"/>
                 <outlet property="currentTags" destination="EM2-Nr-jVs" id="MXw-5Q-WZu"/>
+                <outlet property="tokenField" destination="izQ-RP-a0h" id="xv1-1h-8KY"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
             </connections>
         </placeholder>
@@ -28,7 +29,7 @@
                     </items>
                 </navigationBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="scK-u4-hYu">
-                    <rect key="frame" x="0.0" y="102" width="540" height="518"/>
+                    <rect key="frame" x="0.0" y="286" width="540" height="334"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GDN-mU-0c4">
@@ -49,6 +50,10 @@
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="izQ-RP-a0h" customClass="VENTokenField">
+                    <rect key="frame" x="0.0" y="102" width="540" height="53"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

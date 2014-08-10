@@ -3,14 +3,13 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace TestApp
+namespace Core
 {
 	public partial class VENToken : UIView
 	{
 
 		public UIColor ColorScheme { get; set; }
 		public bool Highlighted { get ; set; }
-
 
 	    public VENToken ()
 		{
@@ -58,7 +57,7 @@ namespace TestApp
 
 		private void DidTapToken(UITapGestureRecognizer gesture)
 		{
-
+			Console.WriteLine ("DidTapToken");
 		}
 	}
 }

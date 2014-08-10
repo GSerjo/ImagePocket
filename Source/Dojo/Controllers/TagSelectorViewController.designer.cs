@@ -23,9 +23,17 @@ namespace Dojo
 
 		[Outlet]
 		MonoTouch.UIKit.UITextField currentTags { get; set; }
+
+		[Outlet]
+		Core.VENTokenField tokenField { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (allTags != null) {
+				allTags.Dispose ();
+				allTags = null;
+			}
+
 			if (btCancel != null) {
 				btCancel.Dispose ();
 				btCancel = null;
@@ -36,14 +44,14 @@ namespace Dojo
 				btDone = null;
 			}
 
-			if (allTags != null) {
-				allTags.Dispose ();
-				allTags = null;
-			}
-
 			if (currentTags != null) {
 				currentTags.Dispose ();
 				currentTags = null;
+			}
+
+			if (tokenField != null) {
+				tokenField.Dispose ();
+				tokenField = null;
 			}
 		}
 	}

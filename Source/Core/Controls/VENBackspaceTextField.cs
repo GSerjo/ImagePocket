@@ -2,7 +2,7 @@
 using MonoTouch.UIKit;
 using MonoTouch.ObjCRuntime;
 
-namespace TestApp
+namespace Core
 {
 	public class VENBackspaceTextField : UITextField
 	{
@@ -19,4 +19,3 @@ namespace TestApp
 		}
 	}
 }
-

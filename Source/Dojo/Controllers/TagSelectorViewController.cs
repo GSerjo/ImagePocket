@@ -35,6 +35,11 @@ namespace Dojo
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+
+			tokenField.PlaceholderText = "Enter Tag";
+			tokenField.SetColorScheme (new UIColor (61 / 255.0f, 149 / 255.0f, 206 / 255.0f, 1.0f));
+			tokenField.BecomeFirstResponder ();
+
 			allTags.Source = new TableSource (this);
 			btCancel.Clicked += OnCancel;
 			btDone.Clicked += OnDone;

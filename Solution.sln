@@ -97,6 +97,6 @@ Global
 		{FF5282BA-A31A-40AF-9EFF-F5FE8FF07C2B}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Source\TestApp\TestApp.csproj
+		StartupItem = Source\Dojo\Dojo.csproj
 	EndGlobalSection
 EndGlobal

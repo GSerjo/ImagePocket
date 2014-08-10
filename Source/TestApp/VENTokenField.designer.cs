@@ -11,12 +11,9 @@ using System.CodeDom.Compiler;
 
 namespace TestApp
 {
-	[Register ("TestAppViewController")]
-	partial class TestAppViewController
+	[Register ("VENTokenField")]
+	partial class VENTokenField
 	{
-		[Outlet]
-		MonoTouch.Foundation.NSObject tokenField { get; set; }
-
 		void ReleaseDesignerOutlets ()
 		{
 		}

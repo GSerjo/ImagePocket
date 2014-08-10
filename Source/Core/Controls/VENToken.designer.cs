@@ -7,7 +7,7 @@
 using MonoTouch.Foundation;
 using System.CodeDom.Compiler;
 
-namespace TestApp
+namespace Core
 {
 	[Register ("TokenField")]
 	partial class VENToken

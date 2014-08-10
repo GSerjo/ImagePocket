@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 
-namespace TestApp
+namespace Core
 {
-	public class VENTokenField : UIView
+	[Register ("VENTokenField")]
+	public sealed class VENTokenField : UIView
 	{
 		private UIScrollView _scrollView;
 		private List<VENToken> _tokens = new List<VENToken> ();
@@ -31,8 +32,19 @@ namespace TestApp
 		private UIKeyboardType _inputTextFieldKeyboardType;
 		private UIColor _toLabelTextColor;
 		private UIColor _inputTextFieldTextColor;
-		private UILabel _toLabel;
-		private string _placeholderText;
+//		private UILabel _toLabel;
+		public string PlaceholderText { get; set; }
+
+		public VENTokenField (IntPtr handle) : base(handle)
+		{
+			SetupInit ();
+		}
+
+		[Export("initWithFrame:")]
+		public VENTokenField(RectangleF frame) : base(frame)
+		{
+			SetupInit ();
+		}
 
 		public override bool BecomeFirstResponder ()
 		{
@@ -59,6 +71,11 @@ namespace TestApp
 			_inputTextFieldTextColor = new UIColor (38 / 255.0f, 39 / 255.0f, 41 / 255.0f, 1.0f);
 			_orifinalHeight = Frame.Height;
 
+			_inputTextField = InputTextField ();
+//			_toLabel = ToLabel ();
+			float value = 0;
+			LayoutCollapsedLabelWithCurrentX (ref value);
+
 			LayoutInvisibleTextField ();
 			LayoutScrollView ();
 
@@ -71,7 +88,7 @@ namespace TestApp
 			_scrollView.Hidden = true;
 			Frame = new RectangleF (Frame.X, Frame.Y, Frame.Width, _orifinalHeight);
 			float currentX = 0;
-			LayoutToLabelInView (this, new PointF (_horizontalInset, _verticalInset), ref currentX);
+//			LayoutToLabelInView (this, new PointF (_horizontalInset, _verticalInset), ref currentX);
 			LayoutCollapsedLabelWithCurrentX (ref currentX);
 			_tapGestureRecognizer = new UITapGestureRecognizer (HandleSingleTap);
 			AddGestureRecognizer (_tapGestureRecognizer);
@@ -83,10 +100,15 @@ namespace TestApp
 			_collapsedLabel.RemoveFromSuperview ();
 //			_scrollView.Subviews.make
 			_scrollView.Hidden = false;
+			if (_tapGestureRecognizer != null)
+			{
+				RemoveGestureRecognizer (_tapGestureRecognizer);
+			}
+
 			_tokens = new List<VENToken> ();
 			float currentX = 0;
 			float currentY = 0;
-			LayoutToLabelInView (_scrollView, new PointF (), ref currentX);
+//			LayoutToLabelInView (_scrollView, new PointF (), ref currentX);
 			LayoutTokensWithCurrentX (ref currentX, ref currentY);
 			LayoutInputTextFieldWithCurrentX (ref currentX, ref currentY);
 
@@ -106,8 +128,8 @@ namespace TestApp
 
 		private void SetPlaceholderText(string placeholderText)
 		{
-			_placeholderText = placeholderText;
-			_inputTextField.Placeholder = _placeholderText;
+			PlaceholderText = placeholderText;
+			_inputTextField.Placeholder = PlaceholderText;
 		}
 
 		private void SetInputTextFieldTextColor(UIColor inputTextFieldTextColor)
@@ -119,10 +141,10 @@ namespace TestApp
 		private void SetToLabelTextColor(UIColor toLabelTextColor)
 		{
 			_toLabelTextColor = toLabelTextColor;
-			_toLabel.TextColor = _toLabelTextColor;
+//			_toLabel.TextColor = _toLabelTextColor;
 		}
 
-		private void SetColorScheme(UIColor color)
+		public void SetColorScheme(UIColor color)
 		{
 			_colorScheme = color;
 			_collapsedLabel.TextColor = color;
@@ -165,8 +187,9 @@ namespace TestApp
 
 		private void LayoutCollapsedLabelWithCurrentX(ref float currentX)
 		{
-			var label = new UILabel(new RectangleF(currentX, _toLabel.Frame.Y, Frame.Width - currentX - _horizontalInset, _toLabel.Frame.Height));
-//			label.Font = new UIFont()
+			//var label = new UILabel(new RectangleF(currentX, _toLabel.Frame.Y, Frame.Width - currentX - _horizontalInset, _toLabel.Frame.Height));
+			var label = new UILabel(new RectangleF(currentX, Frame.Y, Frame.Width - currentX - _horizontalInset, Frame.Height));
+			//label.Font = new UIFont()
 			label.Text = CollapsedText ();
 			label.TextColor = _colorScheme;
 			label.MinimumScaleFactor = 5 / label.Font.PointSize;
@@ -174,15 +197,15 @@ namespace TestApp
 			AddSubview (label);
 			_collapsedLabel = label;
 		}
-
-		private void LayoutToLabelInView(UIView view, PointF originX, ref float currentX)
-		{
-			_toLabel.RemoveFromSuperview ();
-			_toLabel = ToLabel ();
-			//Origin
-			view.AddSubview (_toLabel);
-			currentX += _toLabel.Hidden ? _toLabel.Frame.X : _toLabel.Frame.X + DefaultToLabelPadding;
-		}
+//
+//		private void LayoutToLabelInView(UIView view, PointF originX, ref float currentX)
+//		{
+//			_toLabel.RemoveFromSuperview ();
+//			_toLabel = ToLabel ();
+//			//Origin
+//			view.AddSubview (_toLabel);
+//			currentX += _toLabel.Hidden ? _toLabel.Frame.X : _toLabel.Frame.X + DefaultToLabelPadding;
+//		}
 
 		private void LayoutTokensWithCurrentX(ref float currentX, ref float currentY)
 		{
@@ -237,18 +260,6 @@ namespace TestApp
 //			}
 		}
 
-		private UILabel ToLabel()
-		{
-			if (_toLabel == null)
-			{
-				_toLabel = new UILabel ();
-				_toLabel.TextColor = _toLabelTextColor;
-				_toLabel.Text = "To:";
-				_toLabel.SizeToFit ();
-			}
-			return _toLabel;
-		}
-
 		private void AdjustHeightForCurrentY(float currentY)
 		{
 			float height;
@@ -285,10 +296,11 @@ namespace TestApp
 				_inputTextField.KeyboardType = _inputTextFieldKeyboardType;
 				_inputTextField.TextColor = _inputTextFieldTextColor;
 				//Font
-				_inputTextField.AccessibilityLabel = "To";
+				_inputTextField.AccessibilityLabel = "Toeee";
 				_inputTextField.AutocorrectionType = UITextAutocorrectionType.No;
 				_inputTextField.TintColor = _colorScheme;
-				_inputTextField.Placeholder = _placeholderText;
+				_inputTextField.Placeholder = PlaceholderText;
+				_inputTextField.AddTarget (InputTextFieldDidChange, UIControlEvent.EditingChanged);
 				//addTarget
 			}
 			return _inputTextField;
@@ -300,7 +312,7 @@ namespace TestApp
 			_inputTextField.KeyboardType = _inputTextFieldKeyboardType;
 		}
 
-		private void InputTextFieldDidChange(UITextField textField)
+		private void InputTextFieldDidChange(object sender, EventArgs ea)
 		{
 
 		}
@@ -350,7 +362,7 @@ namespace TestApp
 
 		private void UpdateInputTextField()
 		{
-			_inputTextField.Placeholder = _tokens.Count == 0 ? string.Empty : _placeholderText;
+			_inputTextField.Placeholder = _tokens.Count != 0 ? string.Empty : PlaceholderText;
 		}
 
 		private void FocusInputTextField()
@@ -359,7 +371,7 @@ namespace TestApp
 			float targetY = _inputTextField.Frame.Y + HeightForToken () - _maxHeight;
 			if (targetY > contentOffset.Y)
 			{
-				_scrollView.SetContentOffset (new PointF (), false);
+				_scrollView.SetContentOffset (new PointF(contentOffset.X, targetY), false);
 			}
 		}
 
