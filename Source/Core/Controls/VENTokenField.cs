@@ -35,9 +35,12 @@ namespace Core
 //		private UILabel _toLabel;
 		public string PlaceholderText { get; set; }
 
+		public ITokenDataSource DataSource { get; set; }
+		public ITokenDelegate Delegate { get; set; }
+
 		public VENTokenField (IntPtr handle) : base(handle)
 		{
-			SetupInit ();
+//			SetupInit ();
 		}
 
 		[Export("initWithFrame:")]
@@ -59,7 +62,7 @@ namespace Core
 			return _inputTextField.ResignFirstResponder ();
 		}
 
-		private void SetupInit()
+		public void SetupInit()
 		{
 			_maxHeight = DefaultMaxHeight;
 			_verticalInset = DefaultVerticalInset;
@@ -244,7 +247,7 @@ namespace Core
 		private void LayoutInvisibleTextField()
 		{
 			_invisibleTextField = new VENBackspaceTextField ();
-			//Add Delegate
+			_invisibleTextField.Delgate = Delegate;
 			AddSubview (_invisibleTextField);
 		}
 
@@ -255,9 +258,10 @@ namespace Core
 				return;
 			}
 			_inputTextField.BecomeFirstResponder();
-//			if (RespondsToSelector (new MonoTouch.ObjCRuntime.Selector ())) 
-//			{
-//			}
+			if (Delegate != null)
+			{
+				Delegate.TokenFieldDidBeginEditing (this);
+			}
 		}
 
 		private void AdjustHeightForCurrentY(float currentY)
@@ -295,13 +299,12 @@ namespace Core
 				_inputTextField = new VENBackspaceTextField ();
 				_inputTextField.KeyboardType = _inputTextFieldKeyboardType;
 				_inputTextField.TextColor = _inputTextFieldTextColor;
-				//Font
+				_inputTextField.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
 				_inputTextField.AccessibilityLabel = "Toeee";
 				_inputTextField.AutocorrectionType = UITextAutocorrectionType.No;
 				_inputTextField.TintColor = _colorScheme;
 				_inputTextField.Placeholder = PlaceholderText;
 				_inputTextField.AddTarget (InputTextFieldDidChange, UIControlEvent.EditingChanged);
-				//addTarget
 			}
 			return _inputTextField;
 		}
@@ -377,16 +380,28 @@ namespace Core
 
 		private string TitleForTokenAtIndex(int index)
 		{
-			return "Data";
+			if (DataSource != null)
+			{
+				return DataSource.TokenField (this, index);
+			}
+			return string.Empty;
 		}
 
 		private int NumberOfTokens()
 		{
+			if (DataSource != null)
+			{
+				return DataSource.NumberOfTokensInTokenField (this);
+			}
 			return 0;
 		}
 
 		private string CollapsedText()
 		{
+			if (DataSource != null)
+			{
+				return DataSource.TokenFieldCollapsedText (this);
+			}
 			return string.Empty;
 		}
 

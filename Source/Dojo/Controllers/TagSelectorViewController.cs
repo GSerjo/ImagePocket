@@ -10,7 +10,7 @@ using Core;
 
 namespace Dojo
 {
-	public partial class TagSelectorViewController : UIViewController
+	public partial class TagSelectorViewController : UIViewController, ITokenDelegate, ITokenDataSource
 	{
 		public event EventHandler<EventArgs> Cancel = delegate { };
 		public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
@@ -36,6 +36,9 @@ namespace Dojo
 		{
 			base.ViewDidLoad ();
 
+			tokenField.Delegate = this;
+			tokenField.DataSource = this;
+			tokenField.SetupInit ();
 			tokenField.PlaceholderText = "Enter Tag";
 			tokenField.SetColorScheme (new UIColor (61 / 255.0f, 149 / 255.0f, 206 / 255.0f, 1.0f));
 			tokenField.BecomeFirstResponder ();
@@ -45,6 +48,42 @@ namespace Dojo
 			btDone.Clicked += OnDone;
 			UpdateTagText ();
 		}
+
+		#region ITokenDataSource implementation
+
+		public int NumberOfTokensInTokenField (VENTokenField tokenField)
+		{
+			throw new System.NotImplementedException ();
+		}
+		public string TokenField (VENTokenField tokenField, int index)
+		{
+			throw new System.NotImplementedException ();
+		}
+		public string TokenFieldCollapsedText (VENTokenField tokenField)
+		{
+			throw new System.NotImplementedException ();
+		}
+
+		#endregion
+
+		#region ITokenDelegate implementation
+
+		public void TokenFieldDidBeginEditing (VENTokenField tokenField)
+		{
+			throw new System.NotImplementedException ();
+		}
+
+		public void InputTextFIeldDidChange (VENTokenField tokenField, string didChangeText)
+		{
+			throw new System.NotImplementedException ();
+		}
+
+		public void TokenFieldShouldReturn (VENTokenField tokenField, string didEnterText)
+		{
+			throw new System.NotImplementedException ();
+		}
+
+		#endregion
 
 		private void UpdateTagText()
 		{
@@ -128,6 +167,7 @@ namespace Dojo
 				_controller._images.Iter (x => x.AddTag (tag));
 				_controller.UpdateTagText ();
 			}
+				
 		}
 	}
 }

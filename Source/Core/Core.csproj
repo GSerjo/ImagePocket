@@ -57,6 +57,8 @@
       <DependentUpon>VENToken.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\VENBackspaceTextField.cs" />
+    <Compile Include="Controls\ITokenDelegate.cs" />
+    <Compile Include="Controls\ITokenDataSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

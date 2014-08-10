@@ -6,6 +6,7 @@
 //
 using MonoTouch.Foundation;
 using System.CodeDom.Compiler;
+using Core;
 
 namespace Dojo
 {

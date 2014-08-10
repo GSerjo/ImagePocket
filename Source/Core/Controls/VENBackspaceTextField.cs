@@ -6,6 +6,8 @@ namespace Core
 {
 	public class VENBackspaceTextField : UITextField
 	{
+		public ITokenDelegate Delgate {	get; set; }
+
 		public override void DeleteBackward ()
 		{
 			if (Text.Length == 0)
