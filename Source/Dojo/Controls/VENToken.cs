@@ -10,9 +10,12 @@ namespace Dojo
 	{
 		public UIColor ColorScheme { get; set; }
 		public bool Highlighted { get ; set; }
+		public Action<VENToken> OnDidTapToken { get; set; }
+		public Guid Id { get; private set; }
 
 		public VENToken (IntPtr handle) : base(handle)
 		{
+			Id = Guid.NewGuid ();
 			//SetupInit ();
 		}
 
@@ -51,7 +54,17 @@ namespace Dojo
 
 		private void DidTapToken(UITapGestureRecognizer gesture)
 		{
+			if (OnDidTapToken != null)
+			{
+				OnDidTapToken (this);
+			}
 			Console.WriteLine ("DidTapToken");
 		}
+
+		public override int GetHashCode ()
+		{
+			return  (int)((Frame.X + Frame.Y + Frame.Width + Frame.Height)) ^ 397;
+		}
+
 	}
 }

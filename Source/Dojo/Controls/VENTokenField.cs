@@ -193,7 +193,7 @@ namespace Dojo
 		{
 			//var label = new UILabel(new RectangleF(currentX, _toLabel.Frame.Y, Frame.Width - currentX - _horizontalInset, _toLabel.Frame.Height));
 			var label = new UILabel(new RectangleF(currentX, Frame.Y, Frame.Width - currentX - _horizontalInset, Frame.Height));
-			//label.Font = new UIFont()
+			label.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
 			label.Text = CollapsedText ();
 			label.TextColor = _colorScheme;
 			label.MinimumScaleFactor = 5 / label.Font.PointSize;
@@ -221,6 +221,7 @@ namespace Dojo
 				var token = (VENToken)Runtime.GetNSObject(nibObjects.ValueAt(0));
 				token.SetupInit ();
 				token.ColorScheme = _colorScheme;
+				token.OnDidTapToken = DidTapToken;
 				token.SetTitleText (title);
 				_tokens.Add (token);
 				if (currentX + token.Frame.Width <= _scrollView.Frame.Width)
@@ -328,7 +329,7 @@ namespace Dojo
 			BecomeFirstResponder ();
 		}
 
-		private void DidTapToken(VENToken token)
+		public void DidTapToken(VENToken token)
 		{
 			foreach (var item in _tokens)
 			{
