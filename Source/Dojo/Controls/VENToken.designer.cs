@@ -11,8 +11,23 @@ namespace Dojo
 {
 	partial class VENToken
 	{
+		[Outlet]
+		MonoTouch.UIKit.UIView backgroundView { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UILabel titleLabel { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
+			if (titleLabel != null) {
+				titleLabel.Dispose ();
+				titleLabel = null;
+			}
+
+			if (backgroundView != null) {
+				backgroundView.Dispose ();
+				backgroundView = null;
+			}
 		}
 	}
 }

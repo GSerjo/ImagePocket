@@ -219,10 +219,7 @@ namespace Dojo
 
 				var nibObjects = NSBundle.MainBundle.LoadNib("VENToken", this, null);
 				var token = (VENToken)Runtime.GetNSObject(nibObjects.ValueAt(0));
-
-//				var token = new VENToken ();
-//				token.Init ();
-//				token.SetupInit ();
+				token.SetupInit ();
 				token.ColorScheme = _colorScheme;
 				token.SetTitleText (title);
 				_tokens.Add (token);
@@ -240,9 +237,9 @@ namespace Dojo
 						tokenWidth = _scrollView.ContentSize.Width;
 					}
 					token.Frame = new RectangleF (currentX, currentY, tokenWidth, token.Frame.Height);
-				}currentX += token.Frame.Width + _tokenPadding;
+				}
+				currentX += token.Frame.Width + _tokenPadding;
 				_scrollView.AddSubview (token);
-
 			}
 		}
 

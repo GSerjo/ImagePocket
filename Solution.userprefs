@@ -1,9 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.0" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controls/VENToken.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controls/VENTokenField.cs">
     <Files>
       <File FileName="Source/Dojo/Controls/VENTokenField.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controls/VENToken.cs" Line="27" Column="27" />
+      <File FileName="Source/Dojo/Controls/VENToken.cs" Line="86" Column="86" />
       <File FileName="Source/Dojo/Controls/VENToken.designer.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
@@ -17,7 +17,6 @@
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENToken.cs" line="36" column="1" />
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENToken.cs" line="16" column="4" />
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENTokenField.cs" line="220" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controls/VENTokenField.cs" line="220" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

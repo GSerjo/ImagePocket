@@ -13,24 +13,24 @@ namespace Dojo
 
 		public VENToken (IntPtr handle) : base(handle)
 		{
-			SetupInit ();
+			//SetupInit ();
 		}
 
 		public void SetupInit()
 		{
 			Layer.CornerRadius = 5;
 			ColorScheme = UIColor.Blue;
-//			titleLable.TextColor = ColorScheme;
+			titleLabel.TextColor = ColorScheme;
 			UITapGestureRecognizer gesture = new UITapGestureRecognizer (DidTapToken);
 			this.AddGestureRecognizer (gesture);
 		}
 
 		public void SetTitleText(string title)
 		{
-//			titleLable.Text = title;
-//			titleLable.TextColor = ColorScheme;
-//			Frame = new RectangleF (Frame.X, Frame.Y, titleLable.Frame.X + 3, Frame.Height);
-//			titleLable.SizeToFit ();
+			titleLabel.Text = title;
+			titleLabel.TextColor = ColorScheme;
+			Frame = new RectangleF (Frame.X, Frame.Y, titleLabel.Frame.Right + 3, Frame.Height);
+			titleLabel.SizeToFit ();
 		}
 
 		private void SetHighlighted(bool highlighted)
@@ -38,14 +38,14 @@ namespace Dojo
 			Highlighted = highlighted;
 			var textColor = Highlighted ? UIColor.White : ColorScheme;
 			var backgroundColor = Highlighted ? ColorScheme : UIColor.Clear;
-//			titleLable.TextColor = textColor;
-//			backgroundView.BackgroundColor = backgroundColor;
+			titleLabel.TextColor = textColor;
+			backgroundView.BackgroundColor = backgroundColor;
 		}
 
 		public void SetColorSheme(UIColor colorSheme)
 		{
 			ColorScheme = colorSheme;
-//			titleLable.TextColor = ColorScheme;
+			titleLabel.TextColor = ColorScheme;
 			SetHighlighted (Highlighted);
 		}
 
