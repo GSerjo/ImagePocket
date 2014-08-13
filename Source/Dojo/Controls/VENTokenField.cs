@@ -73,17 +73,23 @@ namespace Dojo
 			_colorScheme = UIColor.Blue;
 			_toLabelTextColor = new UIColor (112 / 255.0f, 124 / 255.0f, 124 / 255.0f, 1.0f);
 			_inputTextFieldTextColor = new UIColor (38 / 255.0f, 39 / 255.0f, 41 / 255.0f, 1.0f);
+
 			_orifinalHeight = Frame.Height;
 
-			_inputTextField = InputTextField ();
-//			_toLabel = ToLabel ();
-			float value = 0;
-			LayoutCollapsedLabelWithCurrentX (ref value);
 
 			LayoutInvisibleTextField ();
-			LayoutScrollView ();
 
+			LayoutScrollView ();
 			ReloadData ();
+
+			//_inputTextField = InputTextField ();
+//			_toLabel = ToLabel ();
+//			float value = 0;
+//			LayoutCollapsedLabelWithCurrentX (ref value);
+//
+
+//			LayoutScrollView ();
+
 		}
 
 		private void Collapse()
@@ -102,16 +108,30 @@ namespace Dojo
 		{
 			bool inputFieldShouldBecomeFirstResponder = _inputTextField.IsFirstResponder;
 			_collapsedLabel.RemoveFromSuperview ();
-//			_scrollView.Subviews.make
+
+			var removeSubviews = _scrollView.Subviews.ToList();
+			foreach (var view in removeSubviews)
+			{
+				var t = view as VENToken;
+				if (t != null) {
+					Console.WriteLine (t.Id);
+					//view.RemoveFromSuperview ();
+				}
+				view.RemoveFromSuperview ();
+			}
+
 			_scrollView.Hidden = false;
+				
 			if (_tapGestureRecognizer != null)
 			{
 				RemoveGestureRecognizer (_tapGestureRecognizer);
 			}
 
-			_tokens = new List<VENToken> ();
+			_tokens.Clear ();
+				
 			float currentX = 0;
 			float currentY = 0;
+
 //			LayoutToLabelInView (_scrollView, new PointF (), ref currentX);
 			LayoutTokensWithCurrentX (ref currentX, ref currentY);
 			LayoutInputTextFieldWithCurrentX (ref currentX, ref currentY);
@@ -182,11 +202,10 @@ namespace Dojo
 				currentY += HeightForToken ();
 				currentX = 0;
 			}
-			var inputTextField = _inputTextField;
-			inputTextField.Text = "";
-			inputTextField.Frame = new RectangleF (currentX, currentY + 1, inputTextFieldWidth, HeightForToken () - 1);
-			inputTextField.TintColor = _colorScheme;
-			_scrollView.AddSubview (inputTextField);
+			_inputTextField.Text = "";
+			_inputTextField.Frame = new RectangleF (currentX, currentY + 1, inputTextFieldWidth, HeightForToken () - 1);
+			_inputTextField.TintColor = _colorScheme;
+			_scrollView.AddSubview (_inputTextField);
 		}
 
 		private void LayoutCollapsedLabelWithCurrentX(ref float currentX)
@@ -223,7 +242,6 @@ namespace Dojo
 				token.ColorScheme = _colorScheme;
 				token.OnDidTapToken = DidTapToken;
 				token.SetTitleText (title);
-				_tokens.Add (token);
 				if (currentX + token.Frame.Width <= _scrollView.Frame.Width)
 				{
 					token.Frame = new RectangleF (currentX, currentY, token.Frame.Width, token.Frame.Height);
@@ -241,6 +259,8 @@ namespace Dojo
 				}
 				currentX += token.Frame.Width + _tokenPadding;
 				_scrollView.AddSubview (token);
+				_tokens.Add (token);
+				Console.WriteLine ("Id " + token.Id);
 			}
 		}
 

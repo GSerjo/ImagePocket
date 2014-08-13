@@ -60,11 +60,5 @@ namespace Dojo
 			}
 			Console.WriteLine ("DidTapToken");
 		}
-
-		public override int GetHashCode ()
-		{
-			return  (int)((Frame.X + Frame.Y + Frame.Width + Frame.Height)) ^ 397;
-		}
-
 	}
 }
