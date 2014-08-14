@@ -75,39 +75,29 @@ namespace Dojo
 			_inputTextFieldTextColor = new UIColor (38 / 255.0f, 39 / 255.0f, 41 / 255.0f, 1.0f);
 
 			_orifinalHeight = Frame.Height;
-
-
+			_inputTextField = InputTextField ();
 			LayoutInvisibleTextField ();
-
 			LayoutScrollView ();
+
 			ReloadData ();
-
-			//_inputTextField = InputTextField ();
-//			_toLabel = ToLabel ();
-//			float value = 0;
-//			LayoutCollapsedLabelWithCurrentX (ref value);
-//
-
-//			LayoutScrollView ();
-
 		}
 
-		private void Collapse()
-		{
-			_collapsedLabel.RemoveFromSuperview();
-			_scrollView.Hidden = true;
-			Frame = new RectangleF (Frame.X, Frame.Y, Frame.Width, _orifinalHeight);
-			float currentX = 0;
-//			LayoutToLabelInView (this, new PointF (_horizontalInset, _verticalInset), ref currentX);
-			LayoutCollapsedLabelWithCurrentX (ref currentX);
-			_tapGestureRecognizer = new UITapGestureRecognizer (HandleSingleTap);
-			AddGestureRecognizer (_tapGestureRecognizer);
-		}
+//		private void Collapse()
+//		{
+//			_collapsedLabel.RemoveFromSuperview();
+//			_scrollView.Hidden = true;
+//			Frame = new RectangleF (Frame.X, Frame.Y, Frame.Width, _orifinalHeight);
+//			float currentX = 0;
+//			LayoutCollapsedLabelWithCurrentX (ref currentX);
+//			_tapGestureRecognizer = new UITapGestureRecognizer (HandleSingleTap);
+//			AddGestureRecognizer (_tapGestureRecognizer);
+//		}
 
 		public void ReloadData()
 		{
+
 			bool inputFieldShouldBecomeFirstResponder = _inputTextField.IsFirstResponder;
-			_collapsedLabel.RemoveFromSuperview ();
+			//_collapsedLabel.RemoveFromSuperview ();
 
 			var removeSubviews = _scrollView.Subviews.ToList();
 			foreach (var view in removeSubviews)
@@ -115,9 +105,8 @@ namespace Dojo
 				var t = view as VENToken;
 				if (t != null) {
 					Console.WriteLine (t.Id);
-					//view.RemoveFromSuperview ();
+					t.RemoveFromSuperview ();
 				}
-				view.RemoveFromSuperview ();
 			}
 
 			_scrollView.Hidden = false;
@@ -148,6 +137,7 @@ namespace Dojo
 			{
 				FocusInputTextField ();
 			}
+			InputTextFieldBecomeFirstResponder ();
 		}
 
 		private void SetPlaceholderText(string placeholderText)
@@ -171,7 +161,7 @@ namespace Dojo
 		public void SetColorScheme(UIColor color)
 		{
 			_colorScheme = color;
-			_collapsedLabel.TextColor = color;
+			//_collapsedLabel.TextColor = color;
 			_inputTextField.TintColor = color;
 			foreach (VENToken token in _tokens)
 			{
