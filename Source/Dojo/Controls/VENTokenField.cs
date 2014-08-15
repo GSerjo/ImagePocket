@@ -232,7 +232,7 @@ namespace Dojo
 				currentY += HeightForToken ();
 				currentX = 0;
 			}
-			InputTextField.Text = "";
+			InputTextField.Text = string.Empty;
 			InputTextField.Frame = new RectangleF (currentX, currentY + 1, inputTextFieldWidth, HeightForToken () - 1);
 			InputTextField.TintColor = ColorScheme;
 			_scrollView.AddSubview (InputTextField);
