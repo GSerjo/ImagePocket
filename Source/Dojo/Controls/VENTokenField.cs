@@ -33,21 +33,84 @@ namespace Dojo
 		private UIKeyboardType _inputTextFieldKeyboardType;
 		private UIColor _toLabelTextColor;
 		private UIColor _inputTextFieldTextColor;
+		private string _placeholderText;
 //		private UILabel _toLabel;
-		public string PlaceholderText { get; set; }
 
 		public ITokenDataSource DataSource { get; set; }
 		public ITokenDelegate Delegate { get; set; }
 
 		public VENTokenField (IntPtr handle) : base(handle)
 		{
-			SetupInit ();
 		}
 
 		[Export("initWithFrame:")]
 		public VENTokenField(RectangleF frame) : base(frame)
 		{
-			SetupInit ();
+		}
+
+		public UIColor ColorScheme
+		{
+			get { return _colorScheme; }
+			set
+			{
+				_colorScheme = value;
+				//_collapsedLabel.TextColor = color;
+				InputTextField.TintColor = _colorScheme;
+				foreach (VENToken token in _tokens)
+				{
+					token.ColorScheme = _colorScheme;
+				}
+			}
+		}
+
+		public string PlaceholderText
+		{
+			get { return _placeholderText; }
+			set
+			{
+				_placeholderText = value;
+				InputTextField.Placeholder = _placeholderText;
+			}
+		}
+
+		public UIColor InputTextFieldTextColor
+		{
+			get { return _inputTextFieldTextColor; }
+			set 
+			{
+				_inputTextFieldTextColor = value;
+				InputTextField.TextColor = _inputTextFieldTextColor;
+			}
+		}
+
+		public UIKeyboardType InputTextFieldKeyboardType
+		{
+			get { return _inputTextFieldKeyboardType; }
+			set 
+			{
+				_inputTextFieldKeyboardType = value;
+				InputTextField.KeyboardType = _inputTextFieldKeyboardType;
+			}
+		}
+
+		public VENBackspaceTextField InputTextField
+		{
+			get
+			{
+				if (_inputTextField == null)
+				{
+					_inputTextField = new VENBackspaceTextField ();
+					_inputTextField.KeyboardType = InputTextFieldKeyboardType;
+					_inputTextField.TextColor = InputTextFieldTextColor;
+					_inputTextField.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
+					_inputTextField.AccessibilityLabel = "Toeee";
+					_inputTextField.AutocorrectionType = UITextAutocorrectionType.No;
+					_inputTextField.TintColor = ColorScheme;
+					_inputTextField.Placeholder = PlaceholderText;
+					_inputTextField.AddTarget (InputTextFieldDidChange, UIControlEvent.EditingChanged);
+				}
+				return _inputTextField;
+			}
 		}
 
 		public override bool BecomeFirstResponder ()
@@ -60,7 +123,7 @@ namespace Dojo
 
 		public override bool ResignFirstResponder ()
 		{
-			return _inputTextField.ResignFirstResponder ();
+			return InputTextField.ResignFirstResponder ();
 		}
 
 		public void SetupInit()
@@ -70,12 +133,11 @@ namespace Dojo
 			_horizontalInset = DefaultHorizontalInset;
 			_tokenPadding = DefaultTokenPadding;
 			_minInputWidth = DefaultMinImputWidth;
-			_colorScheme = UIColor.Blue;
+			ColorScheme = UIColor.Blue;
 			_toLabelTextColor = new UIColor (112 / 255.0f, 124 / 255.0f, 124 / 255.0f, 1.0f);
-			_inputTextFieldTextColor = new UIColor (38 / 255.0f, 39 / 255.0f, 41 / 255.0f, 1.0f);
+			InputTextFieldTextColor = new UIColor (38 / 255.0f, 39 / 255.0f, 41 / 255.0f, 1.0f);
 
 			_orifinalHeight = Frame.Height;
-			_inputTextField = InputTextField ();
 			LayoutInvisibleTextField ();
 			LayoutScrollView ();
 
@@ -96,16 +158,17 @@ namespace Dojo
 		public void ReloadData()
 		{
 
-			bool inputFieldShouldBecomeFirstResponder = _inputTextField.IsFirstResponder;
+			bool inputFieldShouldBecomeFirstResponder = InputTextField.IsFirstResponder;
 			//_collapsedLabel.RemoveFromSuperview ();
 
 			var removeSubviews = _scrollView.Subviews.ToList();
 			foreach (var view in removeSubviews)
 			{
-				var t = view as VENToken;
-				if (t != null) {
-					Console.WriteLine (t.Id);
-					t.RemoveFromSuperview ();
+				var token = view as VENToken;
+				if (token != null)
+				{
+					Console.WriteLine (token.Id);
+					token.RemoveFromSuperview ();
 				}
 			}
 
@@ -140,38 +203,15 @@ namespace Dojo
 			InputTextFieldBecomeFirstResponder ();
 		}
 
-		private void SetPlaceholderText(string placeholderText)
-		{
-			PlaceholderText = placeholderText;
-			_inputTextField.Placeholder = PlaceholderText;
-		}
-
-		private void SetInputTextFieldTextColor(UIColor inputTextFieldTextColor)
-		{
-			_inputTextFieldTextColor = inputTextFieldTextColor;
-			_inputTextField.TextColor = _inputTextFieldTextColor;
-		}
-
 		private void SetToLabelTextColor(UIColor toLabelTextColor)
 		{
 			_toLabelTextColor = toLabelTextColor;
 //			_toLabel.TextColor = _toLabelTextColor;
 		}
 
-		public void SetColorScheme(UIColor color)
-		{
-			_colorScheme = color;
-			//_collapsedLabel.TextColor = color;
-			_inputTextField.TintColor = color;
-			foreach (VENToken token in _tokens)
-			{
-				token.ColorScheme = color;
-			}
-		}
-
 		private string InputText()
 		{
-			return _inputTextField.Text;
+			return InputTextField.Text;
 		}
 
 		private void LayoutScrollView()
@@ -192,10 +232,10 @@ namespace Dojo
 				currentY += HeightForToken ();
 				currentX = 0;
 			}
-			_inputTextField.Text = "";
-			_inputTextField.Frame = new RectangleF (currentX, currentY + 1, inputTextFieldWidth, HeightForToken () - 1);
-			_inputTextField.TintColor = _colorScheme;
-			_scrollView.AddSubview (_inputTextField);
+			InputTextField.Text = "";
+			InputTextField.Frame = new RectangleF (currentX, currentY + 1, inputTextFieldWidth, HeightForToken () - 1);
+			InputTextField.TintColor = ColorScheme;
+			_scrollView.AddSubview (InputTextField);
 		}
 
 		private void LayoutCollapsedLabelWithCurrentX(ref float currentX)
@@ -204,7 +244,7 @@ namespace Dojo
 			var label = new UILabel(new RectangleF(currentX, Frame.Y, Frame.Width - currentX - _horizontalInset, Frame.Height));
 			label.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
 			label.Text = CollapsedText ();
-			label.TextColor = _colorScheme;
+			label.TextColor = ColorScheme;
 			label.MinimumScaleFactor = 5 / label.Font.PointSize;
 			label.AdjustsFontSizeToFitWidth = true;
 			AddSubview (label);
@@ -229,7 +269,7 @@ namespace Dojo
 				var nibObjects = NSBundle.MainBundle.LoadNib("VENToken", this, null);
 				var token = (VENToken)Runtime.GetNSObject(nibObjects.ValueAt(0));
 				token.SetupInit ();
-				token.ColorScheme = _colorScheme;
+				token.ColorScheme = ColorScheme;
 				token.OnDidTapToken = DidTapToken;
 				token.SetTitleText (title);
 				if (currentX + token.Frame.Width <= _scrollView.Frame.Width)
@@ -268,11 +308,11 @@ namespace Dojo
 
 		private void InputTextFieldBecomeFirstResponder()
 		{
-			if (_inputTextField.IsFirstResponder)
+			if (InputTextField.IsFirstResponder)
 			{
 				return;
 			}
-			_inputTextField.BecomeFirstResponder();
+			InputTextField.BecomeFirstResponder();
 			if (Delegate != null)
 			{
 			}
@@ -304,29 +344,6 @@ namespace Dojo
 				}
 			}
 			Frame = new RectangleF (Frame.X, Frame.Y, Frame.Width, height);
-		}
-
-		private VENBackspaceTextField InputTextField()
-		{
-			if (_inputTextField == null) 
-			{
-				_inputTextField = new VENBackspaceTextField ();
-				_inputTextField.KeyboardType = _inputTextFieldKeyboardType;
-				_inputTextField.TextColor = _inputTextFieldTextColor;
-				_inputTextField.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
-				_inputTextField.AccessibilityLabel = "Toeee";
-				_inputTextField.AutocorrectionType = UITextAutocorrectionType.No;
-				_inputTextField.TintColor = _colorScheme;
-				_inputTextField.Placeholder = PlaceholderText;
-				_inputTextField.AddTarget (InputTextFieldDidChange, UIControlEvent.EditingChanged);
-			}
-			return _inputTextField;
-		}
-
-		private void SetInputTextFieldKeyboardType(UIKeyboardType inputTextFieldKeyboardType)
-		{
-			_inputTextFieldKeyboardType = inputTextFieldKeyboardType;
-			_inputTextField.KeyboardType = _inputTextFieldKeyboardType;
 		}
 
 		private void InputTextFieldDidChange(object sender, EventArgs ea)
@@ -379,13 +396,13 @@ namespace Dojo
 
 		private void UpdateInputTextField()
 		{
-			_inputTextField.Placeholder = _tokens.Count != 0 ? string.Empty : PlaceholderText;
+			InputTextField.Placeholder = _tokens.Count != 0 ? string.Empty : PlaceholderText;
 		}
 
 		private void FocusInputTextField()
 		{
 			PointF contentOffset = _scrollView.ContentOffset;
-			float targetY = _inputTextField.Frame.Y + HeightForToken () - _maxHeight;
+			float targetY = InputTextField.Frame.Y + HeightForToken () - _maxHeight;
 			if (targetY > contentOffset.Y)
 			{
 				_scrollView.SetContentOffset (new PointF(contentOffset.X, targetY), false);
@@ -430,7 +447,7 @@ namespace Dojo
 
 		private void TextFieldDidBeginEditing(UITextField textField)
 		{
-			if (textField == _inputTextField)
+			if (textField == InputTextField)
 			{
 				UnhighlightAllTokens ();
 			}

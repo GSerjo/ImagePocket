@@ -42,8 +42,9 @@ namespace Dojo
 			tokenField.Delegate = this;
 			tokenField.DataSource = this;
 			tokenField.SetupInit ();
+
 			tokenField.PlaceholderText = "Enter Tag";
-			tokenField.SetColorScheme (new UIColor (61 / 255.0f, 149 / 255.0f, 206 / 255.0f, 1.0f));
+			tokenField.ColorScheme = new UIColor (61 / 255.0f, 149 / 255.0f, 206 / 255.0f, 1.0f);
 			tokenField.BecomeFirstResponder ();
 
 			allTags.Source = _tableSource;
