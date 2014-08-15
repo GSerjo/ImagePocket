@@ -165,7 +165,7 @@ namespace Dojo
 			_inputTextField.TintColor = color;
 			foreach (VENToken token in _tokens)
 			{
-				token.SetColorSheme (color);
+				token.ColorScheme = color;
 			}
 		}
 

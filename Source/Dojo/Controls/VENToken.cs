@@ -8,15 +8,45 @@ namespace Dojo
 	[Register("VENToken")]
 	public partial class VENToken : UIView
 	{
-		public UIColor ColorScheme { get; set; }
-		public bool Highlighted { get ; set; }
-		public Action<VENToken> OnDidTapToken { get; set; }
-		public Guid Id { get; private set; }
+		private bool _highlighted;
+		private UIColor _colorScheme;
 
 		public VENToken (IntPtr handle) : base(handle)
 		{
 			Id = Guid.NewGuid ();
 		}
+
+		public UIColor ColorScheme
+		{ 
+			get
+			{
+				return _colorScheme;
+			}
+			set 
+			{
+				_colorScheme = value;
+				titleLabel.TextColor = _colorScheme;
+				Highlighted = false;
+			}
+		}
+
+		public bool Highlighted
+		{
+			get
+			{
+				return _highlighted;
+			}
+			set
+			{
+				_highlighted = value;
+				var textColor = _highlighted ? UIColor.White : ColorScheme;
+				var backgroundColor = _highlighted ? ColorScheme : UIColor.Clear;
+				titleLabel.TextColor = textColor;
+				backgroundView.BackgroundColor = backgroundColor;
+			}
+		}
+		public Action<VENToken> OnDidTapToken { get; set; }
+		public Guid Id { get; private set; }
 
 		public void SetupInit()
 		{
@@ -33,22 +63,6 @@ namespace Dojo
 			titleLabel.TextColor = ColorScheme;
 			Frame = new RectangleF (Frame.X, Frame.Y, titleLabel.Frame.Right + 3, Frame.Height);
 			titleLabel.SizeToFit ();
-		}
-
-		private void SetHighlighted(bool highlighted)
-		{
-			Highlighted = highlighted;
-			var textColor = Highlighted ? UIColor.White : ColorScheme;
-			var backgroundColor = Highlighted ? ColorScheme : UIColor.Clear;
-			titleLabel.TextColor = textColor;
-			backgroundView.BackgroundColor = backgroundColor;
-		}
-
-		public void SetColorSheme(UIColor colorSheme)
-		{
-			ColorScheme = colorSheme;
-			titleLabel.TextColor = ColorScheme;
-			SetHighlighted (Highlighted);
 		}
 
 		private void DidTapToken(UITapGestureRecognizer gesture)
