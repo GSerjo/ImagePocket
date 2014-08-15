@@ -16,7 +16,6 @@ namespace Dojo
 		public VENToken (IntPtr handle) : base(handle)
 		{
 			Id = Guid.NewGuid ();
-			//SetupInit ();
 		}
 
 		public void SetupInit()

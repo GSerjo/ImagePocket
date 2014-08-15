@@ -52,7 +52,7 @@ namespace Dojo
 
 		public override bool BecomeFirstResponder ()
 		{
-			ReloadData ();
+			//ReloadData ();
 
 			InputTextFieldBecomeFirstResponder ();
 			return true;
@@ -262,7 +262,7 @@ namespace Dojo
 		private void LayoutInvisibleTextField()
 		{
 			_invisibleTextField = new VENBackspaceTextField ();
-			_invisibleTextField.Delgate = Delegate;
+			_invisibleTextField.Delegate = new DelegateTest();
 			AddSubview (_invisibleTextField);
 		}
 
@@ -445,6 +445,24 @@ namespace Dojo
 		private void TextFieldDidEnterBackspace(VENBackspaceTextField textField)
 		{
 			Console.WriteLine ("TextFieldDidEnterBackspace");
+		}
+	}
+
+	public class DelegateTest : UITextFieldDelegate
+	{
+		public override bool ShouldChangeCharacters (UITextField textField, NSRange range, string replacementString)
+		{
+			Console.WriteLine ("ShouldChangeCharacters");
+			return true;
+		}
+
+
+		 public override bool ShouldClear (UITextField textField)
+		{
+			Console.WriteLine ("ShouldClear");
+			// NOTE: Don't call the base implementation on a Model class
+			// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
+			return true;
 		}
 	}
 }

@@ -87,12 +87,12 @@ namespace Dojo
 
 		private void UpdateTagText()
 		{
-//			List<TagEntity> entities = GetCommonTags ();
-//			currentTags.Text = string.Join(" ", entities.Select (x => x.Name));
-			var t = new UILabel (new RectangleF (0, 0, 40, 40));
-			t.Text = "Test";
-			t.BackgroundColor = UIColor.Red;
-			currentTags.AddSubviews (t);
+			List<TagEntity> entities = GetCommonTags ();
+			currentTags.Text = string.Join(" ", entities.Select (x => x.Name));
+//			var t = new UILabel (new RectangleF (0, 0, 40, 40));
+//			t.Text = "Test";
+//			t.BackgroundColor = UIColor.Red;
+//			currentTags.AddSubviews (t);
 		}
 
 		private List<TagEntity> GetCommonTags()
