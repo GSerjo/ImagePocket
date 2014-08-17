@@ -50,7 +50,7 @@ namespace Dojo
 
 		public void SetupInit()
 		{
-			Layer.CornerRadius = 5;
+			backgroundView.Layer.CornerRadius = 5;
 			ColorScheme = UIColor.Blue;
 			titleLabel.TextColor = ColorScheme;
 			UITapGestureRecognizer gesture = new UITapGestureRecognizer (DidTapToken);

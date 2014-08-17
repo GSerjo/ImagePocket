@@ -1,21 +1,23 @@
 ﻿using System;
 using MonoTouch.UIKit;
 using MonoTouch.ObjCRuntime;
+using System.Drawing;
+using MonoTouch.Foundation;
 
 namespace Dojo
 {
-	public class VENBackspaceTextField : UITextField
+	public sealed class VENBackspaceTextField : UITextField
 	{
-		//public ITokenDelegate Delgate {	get; set; }
+		[Export("initWithFrame:")]
+		public VENBackspaceTextField(RectangleF frame) : base(frame)
+		{
+		}
 
 		public override void DeleteBackward ()
 		{
+			Console.WriteLine ("DeleteBackward");
 			if (Text.Length == 0)
 			{ 
-				if (RespondsToSelector (new Selector ("textFieldDidEnterBackspace:"))) 
-				{
-					Console.WriteLine ("Test");
-				}
 			}
 			base.DeleteBackward ();
 		}

@@ -18,7 +18,7 @@ namespace Dojo
 		private const float DefaultVerticalInset = 7.0f;
 		private const float DefaultHorizontalInset = 15.0f;
 		private const float DefaultToLabelPadding = 5.0f;
-		private const float DefaultTokenPadding = 2.0f;
+		private const float DefaultTokenPadding = 5.0f;
 		private const float DefaultMinImputWidth = 80.0f;
 		private const float DefaultMaxHeight = 150.0f;
 		private VENBackspaceTextField _invisibleTextField;
@@ -33,8 +33,8 @@ namespace Dojo
 		private UIColor _inputTextFieldTextColor;
 		private string _placeholderText;
 
-		public ITokenDataSource DataSource { get; set; }
-		public ITokenDelegate Delegate { get; set; }
+		public ITokenDataSource TokenDataSource { get; set; }
+		public ITokenDelegate TokenDelegate { get; set; }
 
 		public VENTokenField (IntPtr handle) : base(handle)
 		{
@@ -95,7 +95,7 @@ namespace Dojo
 			{
 				if (_inputTextField == null)
 				{
-					_inputTextField = new VENBackspaceTextField ();
+					_inputTextField = new VENBackspaceTextField (RectangleF.Empty);
 					_inputTextField.Delegate = new VENBackspaceDelegate(this);
 					_inputTextField.KeyboardType = InputTextFieldKeyboardType;
 					_inputTextField.TextColor = InputTextFieldTextColor;
@@ -112,7 +112,7 @@ namespace Dojo
 
 		public override bool BecomeFirstResponder ()
 		{
-			//ReloadData ();
+			ReloadData ();
 
 			InputTextFieldBecomeFirstResponder ();
 			return true;
@@ -254,7 +254,8 @@ namespace Dojo
 
 		private void LayoutInvisibleTextField()
 		{
-			_invisibleTextField = new VENBackspaceTextField ();
+			_invisibleTextField = new VENBackspaceTextField (RectangleF.Empty);
+			_invisibleTextField.Delegate = new VENBackspaceDelegate (this);
 			AddSubview (_invisibleTextField);
 		}
 
@@ -265,7 +266,7 @@ namespace Dojo
 				return;
 			}
 			InputTextField.BecomeFirstResponder();
-			if (Delegate != null)
+			if (TokenDelegate != null)
 			{
 			}
 		}
@@ -363,44 +364,20 @@ namespace Dojo
 
 		private string TitleForTokenAtIndex(int index)
 		{
-			if (DataSource != null)
+			if (TokenDataSource != null)
 			{
-				return DataSource.TokenField (this, index);
+				return TokenDataSource.TokenField (this, index);
 			}
 			return string.Empty;
 		}
 
 		private int NumberOfTokens()
 		{
-			if (DataSource != null)
+			if (TokenDataSource != null)
 			{
-				return DataSource.NumberOfTokensInTokenField (this);
+				return TokenDataSource.NumberOfTokensInTokenField (this);
 			}
 			return 0;
-		}
-
-		private string CollapsedText()
-		{
-			if (DataSource != null)
-			{
-				return DataSource.TokenFieldCollapsedText (this);
-			}
-			return string.Empty;
-		}
-
-		private bool TextFieldShouldReturn(UITextField textField)
-		{
-			if (Delegate != null && textField.Text.Length > 0)
-			{
-				Delegate.DidEnterText (this, textField.Text);
-			}
-			return false;
-		}
-
-		private bool TextField(UITextField textField, NSRange range, string replacementString)
-		{
-			UnhighlightAllTokens ();
-			return true;
 		}
 
 		private void TextFieldDidEnterBackspace(VENBackspaceTextField textField)
@@ -424,6 +401,12 @@ namespace Dojo
 				{
 					_tokenField.UnhighlightAllTokens ();
 				}
+			}
+
+			public override bool ShouldChangeCharacters (UITextField textField, NSRange range, string replacementString)
+			{
+				_tokenField.UnhighlightAllTokens ();
+				return true;
 			}
 		}
 	}
