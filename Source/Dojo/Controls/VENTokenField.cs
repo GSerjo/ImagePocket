@@ -33,8 +33,8 @@ namespace Dojo
 		private UIColor _inputTextFieldTextColor;
 		private string _placeholderText;
 
-		public ITokenDataSource TokenDataSource { get; set; }
-		public ITokenDelegate TokenDelegate { get; set; }
+		private TokenDataSource _tokenDataSource = new TokenDataSource();
+		private TokenDelegate _tokenDelegate = new TokenDelegate();
 
 		public VENTokenField (IntPtr handle) : base(handle)
 		{
@@ -43,6 +43,18 @@ namespace Dojo
 		[Export("initWithFrame:")]
 		public VENTokenField(RectangleF frame) : base(frame)
 		{
+		}
+
+		public TokenDelegate TokenDelegate
+		{
+			get { return _tokenDelegate; }
+			set { _tokenDelegate = value; }
+		}
+
+		public TokenDataSource TokenDataSource
+		{
+			get { return _tokenDataSource; }
+			set { _tokenDataSource = value; }
 		}
 
 		public UIColor ColorScheme
@@ -100,7 +112,6 @@ namespace Dojo
 					_inputTextField.KeyboardType = InputTextFieldKeyboardType;
 					_inputTextField.TextColor = InputTextFieldTextColor;
 					_inputTextField.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
-					_inputTextField.AccessibilityLabel = "Toeee";
 					_inputTextField.AutocorrectionType = UITextAutocorrectionType.No;
 					_inputTextField.TintColor = ColorScheme;
 					_inputTextField.Placeholder = PlaceholderText;
@@ -301,7 +312,7 @@ namespace Dojo
 
 		private void InputTextFieldDidChange(object sender, EventArgs ea)
 		{
-
+			TokenDelegate.FilterToken (this, InputText ());
 		}
 
 		private void HandleSingleTap(UITapGestureRecognizer gestureRecognizer)
@@ -366,7 +377,7 @@ namespace Dojo
 		{
 			if (TokenDataSource != null)
 			{
-				return TokenDataSource.TokenField (this, index);
+				return TokenDataSource.GetToken (this, index);
 			}
 			return string.Empty;
 		}
@@ -375,7 +386,7 @@ namespace Dojo
 		{
 			if (TokenDataSource != null)
 			{
-				return TokenDataSource.NumberOfTokensInTokenField (this);
+				return TokenDataSource.NumberOfTokens (this);
 			}
 			return 0;
 		}

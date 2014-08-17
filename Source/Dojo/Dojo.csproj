@@ -128,14 +128,14 @@
       <DependentUpon>TagSelectorViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewMode.cs" />
-    <Compile Include="Controls\ITokenDataSource.cs" />
-    <Compile Include="Controls\ITokenDelegate.cs" />
     <Compile Include="Controls\VENBackspaceTextField.cs" />
     <Compile Include="Controls\VENTokenField.cs" />
     <Compile Include="Controls\VENToken.cs" />
     <Compile Include="Controls\VENToken.designer.cs">
       <DependentUpon>VENToken.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TokenDataSource.cs" />
+    <Compile Include="Controls\TokenDelegate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

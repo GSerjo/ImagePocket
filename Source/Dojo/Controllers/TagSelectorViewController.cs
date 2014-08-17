@@ -10,7 +10,7 @@ using Core;
 
 namespace Dojo
 {
-	public partial class TagSelectorViewController : UIViewController, ITokenDelegate, ITokenDataSource
+	public partial class TagSelectorViewController : UIViewController
 	{
 		public event EventHandler<EventArgs> Cancel = delegate { };
 		public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
@@ -39,8 +39,8 @@ namespace Dojo
 		{
 			base.ViewDidLoad ();
 
-			tokenField.TokenDelegate = this;
-			tokenField.TokenDataSource = this;
+			tokenField.TokenDelegate = new TagTokenDelegate(_tableSource);
+			tokenField.TokenDataSource = new TagTokenDataSource (_tableSource);
 			tokenField.SetupInit ();
 
 			tokenField.PlaceholderText = "Enter Tag";
@@ -52,39 +52,6 @@ namespace Dojo
 			btDone.Clicked += OnDone;
 			UpdateTagText ();
 		}
-
-		#region ITokenDataSource implementation
-
-		public int NumberOfTokensInTokenField (VENTokenField tokenField)
-		{
-			return _tableSource.TagCount;
-		}
-		public string TokenField (VENTokenField tokenField, int index)
-		{
-			return _tableSource.GetTag (index).Name;
-		}
-		public string TokenFieldCollapsedText (VENTokenField tokenField)
-		{
-			return string.Format ("Tags count: {0}", _tableSource.TagCount);
-		}
-
-		#endregion
-
-		#region ITokenDelegate implementation
-
-		public void DidDeleteTokenAtIndex (VENTokenField tokenField, int index)
-		{
-			_tableSource.RemoveTag (index);
-			tokenField.ReloadData ();
-		}
-
-		public void DidEnterText (VENTokenField tokenField, string text)
-		{
-			Console.WriteLine (text);
-			tokenField.ReloadData ();
-		}
-
-		#endregion
 
 		private void UpdateTagText()
 		{
@@ -181,6 +148,56 @@ namespace Dojo
 				_controller.ReloadData ();
 				_controller._images.Iter (x => x.AddTag (tag));
 				_controller.UpdateTagText ();
+			}
+		}
+
+		private sealed class TagTokenDelegate : TokenDelegate
+		{
+			private readonly TableSource _source;
+
+			public TagTokenDelegate (TableSource source)
+			{
+				_source = source;
+			}
+
+			public override void DidDeleteTokenAtIndex (VENTokenField tokenField, int index)
+			{
+				_source.RemoveTag (index);
+				tokenField.ReloadData ();
+			}
+
+			public override void FilterToken (VENTokenField tokenField, string text)
+			{
+				if (string.IsNullOrWhiteSpace (text))
+				{
+					return;
+				}
+				Console.WriteLine ("FilterToken: {0}", text);
+			}
+
+			public override void AddToken (VENTokenField tokenField, string text)
+			{
+				Console.WriteLine ("AddToken");
+			}
+		}
+
+		private sealed class TagTokenDataSource : TokenDataSource
+		{
+			private TableSource _source;
+
+			public TagTokenDataSource (TableSource source)
+			{
+				_source = source;
+			}
+
+			public override string GetToken (VENTokenField tokenField, int index)
+			{
+				return _source.GetTag (index).Name;
+			}
+
+			public override int NumberOfTokens (VENTokenField tokenField)
+			{
+				return _source.TagCount;
 			}
 		}
 	}
