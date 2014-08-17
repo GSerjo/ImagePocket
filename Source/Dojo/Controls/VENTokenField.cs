@@ -100,6 +100,7 @@ namespace Dojo
 				if (_inputTextField == null)
 				{
 					_inputTextField = new VENBackspaceTextField ();
+					_inputTextField.Delegate = new VENBackspaceDelegate(this);
 					_inputTextField.KeyboardType = InputTextFieldKeyboardType;
 					_inputTextField.TextColor = InputTextFieldTextColor;
 					_inputTextField.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
@@ -302,7 +303,7 @@ namespace Dojo
 		private void LayoutInvisibleTextField()
 		{
 			_invisibleTextField = new VENBackspaceTextField ();
-			_invisibleTextField.Delegate = new DelegateTest();
+//			_invisibleTextField.Delegate = new VENBackspaceDelegate(this);
 			AddSubview (_invisibleTextField);
 		}
 
@@ -445,14 +446,6 @@ namespace Dojo
 			return false;
 		}
 
-		private void TextFieldDidBeginEditing(UITextField textField)
-		{
-			if (textField == InputTextField)
-			{
-				UnhighlightAllTokens ();
-			}
-		}
-
 		private bool TextField(UITextField textField, NSRange range, string replacementString)
 		{
 			UnhighlightAllTokens ();
@@ -463,23 +456,39 @@ namespace Dojo
 		{
 			Console.WriteLine ("TextFieldDidEnterBackspace");
 		}
-	}
 
-	public class DelegateTest : UITextFieldDelegate
-	{
-		public override bool ShouldChangeCharacters (UITextField textField, NSRange range, string replacementString)
+		private sealed class VENBackspaceDelegate : UITextFieldDelegate
 		{
-			Console.WriteLine ("ShouldChangeCharacters");
-			return true;
+
+			private VENTokenField _tokenField;
+
+			public VENBackspaceDelegate (VENTokenField tokenField)
+			{
+				_tokenField = tokenField;
+			}
+
+			public override bool ShouldChangeCharacters (UITextField textField, NSRange range, string replacementString)
+			{
+				Console.WriteLine ("ShouldChangeCharacters");
+				return true;
+			}
+				
+			public override void EditingStarted (UITextField textField)
+			{
+				if (textField == _tokenField.InputTextField)
+				{
+					_tokenField.UnhighlightAllTokens ();
+				}
+			}
+
+			public override bool ShouldClear (UITextField textField)
+			{
+				Console.WriteLine ("ShouldClear");
+				// NOTE: Don't call the base implementation on a Model class
+				// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
+				return true;
+			}
 		}
 
-
-		 public override bool ShouldClear (UITextField textField)
-		{
-			Console.WriteLine ("ShouldClear");
-			// NOTE: Don't call the base implementation on a Model class
-			// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
-			return true;
-		}
 	}
 }
