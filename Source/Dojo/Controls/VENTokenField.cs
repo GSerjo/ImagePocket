@@ -14,7 +14,6 @@ namespace Dojo
 		private UIScrollView _scrollView;
 		private List<VENToken> _tokens = new List<VENToken> ();
 		private float _orifinalHeight;
-		private UITapGestureRecognizer _tapGestureRecognizer;
 		private const float DefaultVerticalInset = 7.0f;
 		private const float DefaultHorizontalInset = 15.0f;
 		private const float DefaultToLabelPadding = 5.0f;
@@ -166,12 +165,6 @@ namespace Dojo
 			}
 
 			_scrollView.Hidden = false;
-				
-			if (_tapGestureRecognizer != null)
-			{
-				RemoveGestureRecognizer (_tapGestureRecognizer);
-			}
-
 			_tokens.Clear ();
 				
 			float currentX = 0;
