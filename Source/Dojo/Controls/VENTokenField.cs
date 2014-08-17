@@ -24,17 +24,14 @@ namespace Dojo
 		private VENBackspaceTextField _invisibleTextField;
 		private VENBackspaceTextField _inputTextField;
 		private UIColor _colorScheme;
-		private UILabel _collapsedLabel;
 		private float _maxHeight;
 		private float _verticalInset;
 		private float _horizontalInset;
 		private float _tokenPadding;
 		private float _minInputWidth;
 		private UIKeyboardType _inputTextFieldKeyboardType;
-		private UIColor _toLabelTextColor;
 		private UIColor _inputTextFieldTextColor;
 		private string _placeholderText;
-//		private UILabel _toLabel;
 
 		public ITokenDataSource DataSource { get; set; }
 		public ITokenDelegate Delegate { get; set; }
@@ -54,7 +51,6 @@ namespace Dojo
 			set
 			{
 				_colorScheme = value;
-				//_collapsedLabel.TextColor = color;
 				InputTextField.TintColor = _colorScheme;
 				foreach (VENToken token in _tokens)
 				{
@@ -135,7 +131,6 @@ namespace Dojo
 			_tokenPadding = DefaultTokenPadding;
 			_minInputWidth = DefaultMinImputWidth;
 			ColorScheme = UIColor.Blue;
-			_toLabelTextColor = new UIColor (112 / 255.0f, 124 / 255.0f, 124 / 255.0f, 1.0f);
 			InputTextFieldTextColor = new UIColor (38 / 255.0f, 39 / 255.0f, 41 / 255.0f, 1.0f);
 
 			_orifinalHeight = Frame.Height;
@@ -145,23 +140,9 @@ namespace Dojo
 			ReloadData ();
 		}
 
-//		private void Collapse()
-//		{
-//			_collapsedLabel.RemoveFromSuperview();
-//			_scrollView.Hidden = true;
-//			Frame = new RectangleF (Frame.X, Frame.Y, Frame.Width, _orifinalHeight);
-//			float currentX = 0;
-//			LayoutCollapsedLabelWithCurrentX (ref currentX);
-//			_tapGestureRecognizer = new UITapGestureRecognizer (HandleSingleTap);
-//			AddGestureRecognizer (_tapGestureRecognizer);
-//		}
-
 		public void ReloadData()
 		{
-
 			bool inputFieldShouldBecomeFirstResponder = InputTextField.IsFirstResponder;
-			//_collapsedLabel.RemoveFromSuperview ();
-
 			var removeSubviews = _scrollView.Subviews.ToList();
 			foreach (var view in removeSubviews)
 			{
@@ -185,7 +166,6 @@ namespace Dojo
 			float currentX = 0;
 			float currentY = 0;
 
-//			LayoutToLabelInView (_scrollView, new PointF (), ref currentX);
 			LayoutTokensWithCurrentX (ref currentX, ref currentY);
 			LayoutInputTextFieldWithCurrentX (ref currentX, ref currentY);
 
@@ -202,12 +182,6 @@ namespace Dojo
 				FocusInputTextField ();
 			}
 			InputTextFieldBecomeFirstResponder ();
-		}
-
-		private void SetToLabelTextColor(UIColor toLabelTextColor)
-		{
-			_toLabelTextColor = toLabelTextColor;
-//			_toLabel.TextColor = _toLabelTextColor;
 		}
 
 		private string InputText()
@@ -238,28 +212,6 @@ namespace Dojo
 			InputTextField.TintColor = ColorScheme;
 			_scrollView.AddSubview (InputTextField);
 		}
-
-		private void LayoutCollapsedLabelWithCurrentX(ref float currentX)
-		{
-			//var label = new UILabel(new RectangleF(currentX, _toLabel.Frame.Y, Frame.Width - currentX - _horizontalInset, _toLabel.Frame.Height));
-			var label = new UILabel(new RectangleF(currentX, Frame.Y, Frame.Width - currentX - _horizontalInset, Frame.Height));
-			label.Font = UIFont.FromName ("HelveticaNeue", 15.5f);
-			label.Text = CollapsedText ();
-			label.TextColor = ColorScheme;
-			label.MinimumScaleFactor = 5 / label.Font.PointSize;
-			label.AdjustsFontSizeToFitWidth = true;
-			AddSubview (label);
-			_collapsedLabel = label;
-		}
-//
-//		private void LayoutToLabelInView(UIView view, PointF originX, ref float currentX)
-//		{
-//			_toLabel.RemoveFromSuperview ();
-//			_toLabel = ToLabel ();
-//			//Origin
-//			view.AddSubview (_toLabel);
-//			currentX += _toLabel.Hidden ? _toLabel.Frame.X : _toLabel.Frame.X + DefaultToLabelPadding;
-//		}
 
 		private void LayoutTokensWithCurrentX(ref float currentX, ref float currentY)
 		{
@@ -303,7 +255,6 @@ namespace Dojo
 		private void LayoutInvisibleTextField()
 		{
 			_invisibleTextField = new VENBackspaceTextField ();
-//			_invisibleTextField.Delegate = new VENBackspaceDelegate(this);
 			AddSubview (_invisibleTextField);
 		}
 
@@ -466,12 +417,6 @@ namespace Dojo
 			{
 				_tokenField = tokenField;
 			}
-
-			public override bool ShouldChangeCharacters (UITextField textField, NSRange range, string replacementString)
-			{
-				Console.WriteLine ("ShouldChangeCharacters");
-				return true;
-			}
 				
 			public override void EditingStarted (UITextField textField)
 			{
@@ -480,15 +425,6 @@ namespace Dojo
 					_tokenField.UnhighlightAllTokens ();
 				}
 			}
-
-			public override bool ShouldClear (UITextField textField)
-			{
-				Console.WriteLine ("ShouldClear");
-				// NOTE: Don't call the base implementation on a Model class
-				// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
-				return true;
-			}
 		}
-
 	}
 }

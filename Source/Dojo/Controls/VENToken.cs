@@ -61,6 +61,7 @@ namespace Dojo
 		{
 			titleLabel.Text = title;
 			titleLabel.TextColor = ColorScheme;
+			titleLabel.SizeToFit ();
 			Frame = new RectangleF (Frame.X, Frame.Y, titleLabel.Frame.Width + 3, Frame.Height);
 			titleLabel.SizeToFit ();
 		}
