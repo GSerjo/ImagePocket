@@ -95,29 +95,38 @@ namespace Dojo
 		{
 			private string cellIdentifier = "TableCell";
 			private List<TagEntity> _tags;
+			private List<TagEntity> _initialTags;
 			private TagSelectorViewController _controller;
 
 			public int TagCount { get { return _tags.Count; } }
+
+			public TableSource (TagSelectorViewController controller)
+			{
+				_controller = controller;
+				var commonTags = _controller.GetCommonTags();
+				_initialTags = _tagRepository.GetAll()
+					.Where(x=>!x.IsAll && !x.IsUntagged)
+					.Except(commonTags, new FuncComparer<TagEntity>((x,y)=>x.EntityId == y.EntityId))
+					.ToList();
+				_tags = _initialTags;
+			}
 
 			public TagEntity GetTag(int index)
 			{
 				return _tags [index];
 			}
 
-			public void RemoveTag(int index)
+			public void Filter (string text)
 			{
-				TagEntity tag = _tags[index];
-				ReloadTags (tag);
-			}
-
-			public TableSource (TagSelectorViewController controller)
-			{
-				_controller = controller;
-				var commonTags = _controller.GetCommonTags();
-				_tags = _tagRepository.GetAll()
-					.Where(x=>!x.IsAll && !x.IsUntagged)
-					.Except(commonTags, new FuncComparer<TagEntity>((x,y)=>x.EntityId == y.EntityId))
-					.ToList();
+				if (string.IsNullOrWhiteSpace (text)) 
+				{
+					_tags = _initialTags;
+				}
+				else
+				{
+					_tags = _initialTags.Where (x => x.Name.Contains (text)).ToList ();
+				}
+				ReloadTags ();
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)
@@ -139,14 +148,14 @@ namespace Dojo
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				TagEntity tag = _tags[indexPath.Item];
-				ReloadTags (tag);
+				_controller._images.Iter (x => x.AddTag (tag));
+				_tags.Remove (tag);
+				ReloadTags ();
 			}
 
-			private void ReloadTags(TagEntity tag)
+			private void ReloadTags()
 			{
-				_tags.Remove (tag);
 				_controller.ReloadData ();
-				_controller._images.Iter (x => x.AddTag (tag));
 				_controller.UpdateTagText ();
 			}
 		}
@@ -162,16 +171,12 @@ namespace Dojo
 
 			public override void DidDeleteTokenAtIndex (VENTokenField tokenField, int index)
 			{
-				_source.RemoveTag (index);
-				tokenField.ReloadData ();
+				Console.WriteLine ("DidDeleteTokenAtIndex");
 			}
 
 			public override void FilterToken (VENTokenField tokenField, string text)
 			{
-				if (string.IsNullOrWhiteSpace (text))
-				{
-					return;
-				}
+				_source.Filter (text);
 				Console.WriteLine ("FilterToken: {0}", text);
 			}
 
