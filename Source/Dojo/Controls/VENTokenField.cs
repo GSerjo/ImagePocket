@@ -368,20 +368,12 @@ namespace Dojo
 
 		private string TitleForTokenAtIndex(int index)
 		{
-			if (TokenDataSource != null)
-			{
-				return TokenDataSource.GetToken (this, index);
-			}
-			return string.Empty;
+			return TokenDataSource.GetToken (this, index);
 		}
 
 		private int NumberOfTokens()
 		{
-			if (TokenDataSource != null)
-			{
-				return TokenDataSource.NumberOfTokens (this);
-			}
-			return 0;
+			return TokenDataSource.NumberOfTokens (this);
 		}
 
 		private void TextFieldDidEnterBackspace(VENBackspaceTextField textField)

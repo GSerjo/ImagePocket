@@ -6,11 +6,13 @@ using MonoTouch.Foundation;
 
 namespace Dojo
 {
-	public sealed class VENBackspaceTextField : UITextField
+	[Register ("VENBackspaceTextField")]
+	public class VENBackspaceTextField : UITextField
 	{
 		[Export("initWithFrame:")]
 		public VENBackspaceTextField(RectangleF frame) : base(frame)
 		{
+
 		}
 
 		public override void DeleteBackward ()

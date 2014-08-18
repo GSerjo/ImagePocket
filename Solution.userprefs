@@ -1,23 +1,37 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.0" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controls/VENToken.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controls/VENBackspaceTextField.cs">
     <Files>
-      <File FileName="Source/Dojo/Controls/VENTokenField.cs" Line="40" Column="40" />
-      <File FileName="Source/Dojo/Controls/VENToken.cs" Line="27" Column="27" />
-      <File FileName="Source/Dojo/Controls/VENToken.designer.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controls/VENTokenField.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="57" Column="57" />
+      <File FileName="Source/Dojo/Controls/VENBackspaceTextField.cs" Line="5" Column="5" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Core" expanded="True">
+            <Node name="DataStructures" expanded="True" />
+          </Node>
+          <Node name="Dojo" expanded="True">
+            <Node name="Controllers" expanded="True">
+              <Node name="TagSelectorViewController.cs" expanded="True" />
+            </Node>
+            <Node name="Controls" expanded="True">
+              <Node name="VENBackspaceTextField.cs" selected="True" />
+              <Node name="VENToken.cs" expanded="True" />
+            </Node>
+          </Node>
+          <Node name="Domain" expanded="True">
+            <Node name="Entities" expanded="True" />
+            <Node name="Repositories" expanded="True" />
+          </Node>
+          <Node name="MonoTouch.SlideoutNavigation" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENTokenField.cs" line="393" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENTokenField.cs" line="425" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENBackspaceTextField.cs" line="13" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENToken.cs" line="22" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENToken.cs" line="27" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENToken.cs" line="36" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENToken.cs" line="16" column="4" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Core/Controls/VENTokenField.cs" line="220" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>
