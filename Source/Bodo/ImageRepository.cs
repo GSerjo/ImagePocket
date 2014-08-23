@@ -20,7 +20,7 @@ namespace Bodo
 		public UIImage GetImage(int index)
 		{
 			UIImage result = null;
-			var asset = (PHAsset)_fetchResult [(uint)index];
+			var asset = (PHAsset)_fetchResult [index];
 			var options = new PHImageRequestOptions ();
 			_imageManager.RequestImageForAsset (asset, _smallImage, PHImageContentMode.Default,
 				options, (image, info) =>
@@ -32,13 +32,12 @@ namespace Bodo
 
 		public PHAsset GetAsset(int index)
 		{
-			return (PHAsset)_fetchResult [(uint)index];
+			return (PHAsset)_fetchResult [index];
 		}
 
 		public int ImageCount
 		{
 			get { return (int)_fetchResult.Count; }
 		}
-
 	}
 }
