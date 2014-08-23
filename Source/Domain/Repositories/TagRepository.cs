@@ -25,6 +25,13 @@ namespace Domain
 			return _tags.Values.OrderBy(x => x.Name).ToList();
 		}
 
+		public List<TagEntity> GetUserTags()
+		{
+			return _tags.Values
+				.Where (x => !x.IsAll && !x.IsUntagged)
+				.ToList ();
+		}
+
 		public TagEntity GetById(int id)
 		{
 			return _tags [id];

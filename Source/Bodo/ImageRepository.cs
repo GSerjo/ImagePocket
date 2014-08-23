@@ -37,7 +37,7 @@ namespace Bodo
 
 		public int ImageCount
 		{
-			get { return (int)_fetchResult.Count; }
+			get { return _fetchResult.Count; }
 		}
 	}
 }

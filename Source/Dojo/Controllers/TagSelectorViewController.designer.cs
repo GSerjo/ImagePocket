@@ -6,7 +6,6 @@
 //
 using MonoTouch.Foundation;
 using System.CodeDom.Compiler;
-using Core;
 
 namespace Dojo
 {
@@ -23,10 +22,7 @@ namespace Dojo
 		MonoTouch.UIKit.UIBarButtonItem btDone { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UITextField currentTags { get; set; }
-
-		[Outlet]
-		Dojo.VENTokenField tokenField { get; set; }
+		NSTokenView.TokenView tagTokenView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -45,14 +41,9 @@ namespace Dojo
 				btDone = null;
 			}
 
-			if (currentTags != null) {
-				currentTags.Dispose ();
-				currentTags = null;
-			}
-
-			if (tokenField != null) {
-				tokenField.Dispose ();
-				tokenField = null;
+			if (tagTokenView != null) {
+				tagTokenView.Dispose ();
+				tagTokenView = null;
 			}
 		}
 	}

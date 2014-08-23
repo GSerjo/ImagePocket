@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using MonoTouch.CoreFoundation;
 using System.Linq;
 using Core;
+using NSTokenView;
 
 namespace Dojo
 {
@@ -16,50 +17,44 @@ namespace Dojo
 		public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
 		private static TagRepository _tagRepository = TagRepository.Instance;
 		private List<ImageEntity> _images = new List<ImageEntity>();
-		private TableSource _tableSource;
+		private TagTableSource _tagTableSource;
+		private TagTokenDelegate _tagTokenDelegate;
+		private TagTokenSource _tagTokenSource;
 
 		public TagSelectorViewController (ImageEntity image) : base ("TagSelectorViewController", null)
 		{
 			_images.Add (image.CloneDeep());
-			_tableSource = new TableSource (this);
 		}
 
 		public TagSelectorViewController (List<ImageEntity> images) : base ("TagSelectorViewController", null)
 		{
 			_images.AddRange (images.Select (x => x.CloneDeep ()));
-			_tableSource = new TableSource (this);
 		}
 
-		public override void DidReceiveMemoryWarning ()
+		private void Initialise()
 		{
-			base.DidReceiveMemoryWarning ();
+			_tagTableSource = new TagTableSource (this);
+			_tagTokenDelegate = new TagTokenDelegate (this);
+			_tagTokenSource = new TagTokenSource (this);
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 
-			tokenField.TokenDelegate = new TagTokenDelegate(_tableSource);
-			tokenField.TokenDataSource = new TagTokenDataSource (_tableSource, tokenField, GetCommonTags());
-			tokenField.SetupInit ();
-			tokenField.Layer.CornerRadius = 5;
-			tokenField.Layer.BorderColor = UIColor.LightTextColor.CGColor;
-			tokenField.Layer.BorderWidth = 1;
+			tagTokenView.TokenDelegate = _tagTokenDelegate;
+			tagTokenView.TokenDataSource = _tagTokenSource;
+			tagTokenView.SetupInit ();
+			tagTokenView.Layer.CornerRadius = 5;
+			tagTokenView.Layer.BorderColor = UIColor.LightTextColor.CGColor;
+			tagTokenView.Layer.BorderWidth = 1;
 
-			tokenField.PlaceholderText = "Selet or Enter Tag";
-			tokenField.ColorScheme = new UIColor (61 / 255.0f, 149 / 255.0f, 206 / 255.0f, 1.0f);
-			tokenField.BecomeFirstResponder ();
+			tagTokenView.PlaceholderText = "Selet or Enter Tag";
+			tagTokenView.ColorScheme = new UIColor (61 / 255.0f, 149 / 255.0f, 206 / 255.0f, 1.0f);
 
-			allTags.Source = _tableSource;
+			allTags.Source = _tagTableSource;
 			btCancel.Clicked += OnCancel;
 			btDone.Clicked += OnDone;
-			UpdateTagText ();
-		}
-
-		private void UpdateTagText()
-		{
-			List<TagEntity> entities = GetCommonTags ();
-			currentTags.Text = string.Join(" ", entities.Select (x => x.Name));
 		}
 
 		private List<TagEntity> GetCommonTags()
@@ -71,6 +66,11 @@ namespace Dojo
 				tagIds = tagIds.Intersect (tags).ToList();
 			}
 			return _tagRepository.GetById (tagIds);
+		}
+
+		private void AddTagToImages(TagEntity tag)
+		{
+			_images.Iter (x => x.AddTag (tag));
 		}
 
 		private void OnCancel(object sender, EventArgs ea)
@@ -94,16 +94,15 @@ namespace Dojo
 			DispatchQueue.MainQueue.DispatchAsync (() => allTags.ReloadData());
 		}
 
-		private sealed class TableSource : UITableViewSource
+		private sealed class TagTableSource : UITableViewSource
 		{
 			private string cellIdentifier = "TableCell";
 			private List<TagEntity> _tags;
 			private TagSelectorViewController _controller;
-			public event EventHandler<EventArgsOf<TagEntity>> TagAdded = delegate{};
 
 			public int TagCount { get { return _tags.Count; } }
 
-			public TableSource (TagSelectorViewController controller)
+			public TagTableSource (TagSelectorViewController controller)
 			{
 				_controller = controller;
 				_tags = GetTags();
@@ -146,9 +145,8 @@ namespace Dojo
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				TagEntity tag = _tags[indexPath.Item];
-				_controller._images.Iter (x => x.AddTag (tag));
-				_tags.Remove (tag);
-				TagAdded (this, new EventArgsOf<TagEntity> { Data = tag });
+				AddTagToImages (tag);
+				_controller._tagTokenSource.AddTag (tag);
 				ReloadTags ();
 			}
 
@@ -156,67 +154,70 @@ namespace Dojo
 			{
 				var commparer = new FuncComparer<TagEntity> ((x, y) => x.EntityId == y.EntityId);
 				var commonTags = _controller.GetCommonTags();
-				return _tagRepository.GetAll()
-					.Where(x=>!x.IsAll && !x.IsUntagged)
+				return _tagRepository.GetUserTags()
 					.Except(commonTags, commparer)
 					.ToList();
+			}
+
+			private void AddTagToImages(TagEntity tag)
+			{
+				_controller.AddTagToImages(tag);
+				_tags.Remove (tag);
 			}
 
 			private void ReloadTags()
 			{
 				_controller.ReloadData ();
-				_controller.UpdateTagText ();
 			}
 		}
 
-		private sealed class TagTokenDelegate : TokenDelegate
+		private sealed class TagTokenDelegate : TokenViewDelegate
 		{
-			private readonly TableSource _source;
+			private readonly TagSelectorViewController _controller;
 
-			public TagTokenDelegate (TableSource source)
+			public TagTokenDelegate (TagSelectorViewController controller)
 			{
-				_source = source;
+				_controller = controller;
 			}
 
-			public override void DidDeleteTokenAtIndex (VENTokenField tokenField, int index)
+			public override void DidDeleteTokenAtIndex (TokenView tokenView, int index)
 			{
 				Console.WriteLine ("DidDeleteTokenAtIndex");
 			}
 
-			public override void FilterToken (VENTokenField tokenField, string text)
+			public override void FilterToken (TokenView tokenView, string text)
 			{
-				_source.Filter (text);
+				_controller._tagTableSource.Filter (text);
 				Console.WriteLine ("FilterToken: {0}", text);
 			}
 		}
 
-		private sealed class TagTokenDataSource : TokenDataSource
+		private sealed class TagTokenSource : TokenViewSource
 		{
-			private readonly VENTokenField _tokenField;
+			private readonly TokenView _tokenView;
 			private List<TagEntity> _source;
 
-			public TagTokenDataSource (TableSource tableSource, VENTokenField tokenField, List<TagEntity> source)
+			public TagTokenSource (TagSelectorViewController controller)
 			{
-				_source = source.OrderBy(x => x.Name).ToList();
-				_tokenField = tokenField;
-				tableSource.TagAdded += OnTagAdded;
+				_source = controller.GetCommonTags()
+										.OrderBy(x=>x.Name).ToList();
+				_tokenView = controller.tagTokenView;
 			}
 
-			public override string GetToken (VENTokenField tokenField, int index)
+			public override string GetToken (TokenView tokenView, int index)
 			{
 				return _source[index].Name;
 			}
 
-			public override int NumberOfTokens (VENTokenField tokenField)
+			public override int NumberOfTokens (TokenView tokenView)
 			{
 				return _source.Count;
 			}
 
-			private void OnTagAdded (object sender, EventArgsOf<TagEntity> ea)
+			public void AddTag(TagEntity tag)
 			{
-				_source.Add (ea.Data);
-				_tokenField.ReloadData ();
-				Console.WriteLine (ea.Data.Name);
+				_source.Add (tag);
+				_tokenView.ReloadData ();
 			}
 		}
 	}
