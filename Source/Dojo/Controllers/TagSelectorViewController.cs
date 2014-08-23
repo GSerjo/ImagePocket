@@ -42,6 +42,8 @@ namespace Dojo
 		{
 			base.ViewDidLoad ();
 
+			Initialise ();
+
 			tagTokenView.TokenDelegate = _tagTokenDelegate;
 			tagTokenView.TokenDataSource = _tagTokenSource;
 			tagTokenView.SetupInit ();
@@ -71,6 +73,11 @@ namespace Dojo
 		private void AddTagToImages(TagEntity tag)
 		{
 			_images.Iter (x => x.AddTag (tag));
+		}
+
+		private void RemoveTagFormImages(TagEntity tag)
+		{
+			_images.Iter (x => x.RemoveTag (tag));
 		}
 
 		private void OnCancel(object sender, EventArgs ea)
@@ -182,26 +189,26 @@ namespace Dojo
 
 			public override void DidDeleteTokenAtIndex (TokenView tokenView, int index)
 			{
-				Console.WriteLine ("DidDeleteTokenAtIndex");
+				_controller._tagTokenSource.RemoveTagAtIndex (index);
+				tokenView.ReloadData ();
 			}
 
 			public override void FilterToken (TokenView tokenView, string text)
 			{
 				_controller._tagTableSource.Filter (text);
-				Console.WriteLine ("FilterToken: {0}", text);
 			}
 		}
 
 		private sealed class TagTokenSource : TokenViewSource
 		{
-			private readonly TokenView _tokenView;
 			private List<TagEntity> _source;
+			private readonly TagSelectorViewController _controller;
 
 			public TagTokenSource (TagSelectorViewController controller)
 			{
+				_controller = controller;
 				_source = controller.GetCommonTags()
 										.OrderBy(x=>x.Name).ToList();
-				_tokenView = controller.tagTokenView;
 			}
 
 			public override string GetToken (TokenView tokenView, int index)
@@ -214,10 +221,17 @@ namespace Dojo
 				return _source.Count;
 			}
 
+			public void RemoveTagAtIndex(int index)
+			{
+				TagEntity tag = _source [index];
+				_controller.RemoveTagFormImages (tag);
+				_source.RemoveAt (index);
+			}
+
 			public void AddTag(TagEntity tag)
 			{
 				_source.Add (tag);
-				_tokenView.ReloadData ();
+				_controller.tagTokenView.ReloadData ();
 			}
 		}
 	}

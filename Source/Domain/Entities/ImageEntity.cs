@@ -69,6 +69,15 @@ namespace Domain
 			_tags.Add (tag.EntityId);
 		}
 
+		public void RemoveTag (TagEntity tag)
+		{
+			if (!_tags.Contains (tag.EntityId))
+			{
+				return;
+			}
+			_tags.Remove (tag.EntityId);
+		}
+
 		public override int GetHashCode ()
 		{
 			return ((LocalIdentifier != null ? LocalIdentifier.GetHashCode () : 0) * 397) ^ EntityId;
