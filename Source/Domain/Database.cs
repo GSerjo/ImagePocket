@@ -32,9 +32,7 @@ namespace Domain
 			{
 				return;
 			}
-			AddOrUpdate (TagEntity.All)
-				.ContinueWith (x => AddOrUpdate (TagEntity.Untagged))
-				.ContinueWith(x => 5.Times(y => AddOrUpdate(new TagEntity { Name = "MyTag" + y})));
+			5.Times(y => AddOrUpdate(new TagEntity { Name = "MyTag" + y}));
 		}
 
 		public static List<T> GetAll<T>()
@@ -56,16 +54,16 @@ namespace Domain
 		public static Task AddOrUpdateAll<T>(IList<T> values)
 			where T : Entity
 		{
-			IEnumerable<IGrouping<bool, T>> groups = values.GroupBy (x => x.New);
+			List<IGrouping<bool, T>> groups = values.GroupBy (x => x.New).ToList();
 			foreach (IGrouping<bool, T> group in groups)
 			{
 				if (group.Key)
 				{
-					_database.InsertAllAsync (values.ToList ()).Wait();
+					_database.InsertAllAsync (group.ToList ()).Wait();
 				}
 				else
 				{
-					_database.UpdateAllAsync (values.ToList ()).Wait();
+					_database.UpdateAllAsync (group.ToList ()).Wait();
 				}
 			}
 			return Task.FromResult (true);

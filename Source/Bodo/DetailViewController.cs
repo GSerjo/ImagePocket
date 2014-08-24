@@ -90,7 +90,6 @@ namespace Bodo
 				// NOTE: Don't call the base implementation on a Model class
 				// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
 				var asset = _imageRepository.GetAsset (indexPath.Item);
-				Console.WriteLine (indexPath.Item);
 				var photoController = new PhotoViewController (asset);
 				_controller.NavigationController.PushViewController (photoController, true);
 			}

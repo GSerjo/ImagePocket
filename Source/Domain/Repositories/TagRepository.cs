@@ -22,7 +22,10 @@ namespace Domain
 
 		public List<TagEntity> GetAll()
 		{
-			return _tags.Values.OrderBy(x => x.Name).ToList();
+			var result = _tags.Values.OrderBy(x => x.Name).ToList();
+			result.Insert (0, TagEntity.All);
+			result.Insert (1, TagEntity.Untagged);
+			return result;
 		}
 
 		public List<TagEntity> GetUserTags()

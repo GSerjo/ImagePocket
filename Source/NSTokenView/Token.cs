@@ -70,7 +70,6 @@ namespace NSTokenView
 			{
 				OnDidTapToken (this);
 			}
-			Console.WriteLine ("DidTapToken");
 		}
 	}
 }

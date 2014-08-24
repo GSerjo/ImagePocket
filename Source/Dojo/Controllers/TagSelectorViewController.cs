@@ -128,7 +128,12 @@ namespace Dojo
 				}
 				else
 				{
-					_tags = GetTags().Where (x => x.Name.Contains (text)).ToList ();
+					_tags = GetTags()
+						.Where (x => x.Name.Contains (text))
+						.ToList ();
+					var addTagRequest = TagEntity.AddTagRequest;
+					addTagRequest.Name = text;
+					_tags.Insert (_tags.Count, addTagRequest);
 				}
 				ReloadTags ();
 			}
@@ -138,21 +143,35 @@ namespace Dojo
 				return _tags.Count;
 			}
 
-			public override UITableViewCell GetCell (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 			{
 				UITableViewCell cell = tableView.DequeueReusableCell (cellIdentifier);
 				if (cell == null)
 				{
 					cell = new UITableViewCell (UITableViewCellStyle.Default, cellIdentifier);
 				}
-				cell.TextLabel.Text = _tags[indexPath.Row].Name;
+				var tag = _tags [indexPath.Row];
+				if (tag.IsAddTagRequest)
+				{
+					cell.TextLabel.Text = string.Format("Add new tag \"{0}\"", tag.Name);
+					cell.TextLabel.TextColor = UIColor.DarkTextColor;
+				}
+				else 
+				{
+					cell.TextLabel.Text = tag.Name;
+				}
 				return cell;
 			}
 
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				TagEntity tag = _tags[indexPath.Item];
-				AddTagToImages (tag);
+				_tags.Remove (tag);
+				if (tag.IsAddTagRequest)
+				{
+					tag.EntityId = 0;
+				}
+				_controller.AddTagToImages(tag);
 				_controller._tagTokenSource.AddTag (tag);
 				ReloadTags ();
 			}
@@ -164,12 +183,6 @@ namespace Dojo
 				return _tagRepository.GetUserTags()
 					.Except(commonTags, commparer)
 					.ToList();
-			}
-
-			private void AddTagToImages(TagEntity tag)
-			{
-				_controller.AddTagToImages(tag);
-				_tags.Remove (tag);
 			}
 
 			private void ReloadTags()
