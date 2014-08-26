@@ -38,7 +38,7 @@ namespace Dojo
 			{
 				return GetUntagged ();
 			}
-			return _taggedImages.Values.Where (x => x.Tags.Contains (tag.EntityId)).ToList ();
+			return _taggedImages.Values.Where (x => x.ContainsTag (tag)).ToList ();
 		}
 
 		public void SaveOrUpdate(List<ImageEntity> images)

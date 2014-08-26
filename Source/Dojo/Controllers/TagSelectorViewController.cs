@@ -61,13 +61,15 @@ namespace Dojo
 
 		private List<TagEntity> GetCommonTags()
 		{
-			var tagIds = _images.First ().Tags;
-			IEnumerable<List<int>> imageTags = _images.Select (x => x.Tags);
+			List<TagEntity> result = _images.First ().Tags;
+			IEnumerable<List<TagEntity>> imageTags = _images.Select (x => x.Tags);
+			var comparer = new FuncComparer<TagEntity> ((x, y) => x.EntityId == y.EntityId);
+
 			foreach (var tags in imageTags)
 			{
-				tagIds = tagIds.Intersect (tags).ToList();
+				result = result.Intersect(tags, comparer).ToList();
 			}
-			return _tagRepository.GetById (tagIds);
+			return result;
 		}
 
 		private void AddTagToImages(TagEntity tag)
@@ -221,7 +223,7 @@ namespace Dojo
 			{
 				_controller = controller;
 				_source = controller.GetCommonTags()
-										.OrderBy(x=>x.Name).ToList();
+									.OrderBy(x=>x.Name).ToList();
 			}
 
 			public override string GetToken (TokenView tokenView, int index)
