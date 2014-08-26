@@ -12,7 +12,7 @@ namespace Domain
 
 		private TagRepository()
 		{
-			_tags = Database.GetAll<TagEntity> ().ToDictionary (x => x.EntityId);
+//			_tags = Database.GetAll<TagEntity> ().ToDictionary (x => x.EntityId);
 		}
 
 		public static TagRepository Instance
@@ -22,6 +22,7 @@ namespace Domain
 
 		public List<TagEntity> GetAll()
 		{
+			_tags = Database.GetAll<TagEntity> ().ToDictionary (x => x.EntityId);
 			var result = _tags.Values.OrderBy(x => x.Name).ToList();
 			result.Insert (0, TagEntity.All);
 			result.Insert (1, TagEntity.Untagged);

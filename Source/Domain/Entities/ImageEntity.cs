@@ -76,7 +76,7 @@ namespace Domain
 			{
 				return;
 			}
-			_tags.RemoveAll (x => x.EntityId == tag.EntityId);
+			Tags.RemoveAll (x => x.EntityId == tag.EntityId);
 		}
 
 		public bool ContainsTag(TagEntity tag)
@@ -91,7 +91,7 @@ namespace Domain
 
 		private bool TagExists(TagEntity tag)
 		{
-			return _tags.SingleOrDefault (x => x.EntityId == tag.EntityId) != null;
+			return Tags.Exists (x => x.EntityId == tag.EntityId);
 		}
 	}
 }

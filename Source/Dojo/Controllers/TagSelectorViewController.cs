@@ -172,6 +172,7 @@ namespace Dojo
 				if (tag.IsAddTagRequest)
 				{
 					tag.EntityId = 0;
+					_tags = GetTags();
 				}
 				_controller.AddTagToImages(tag);
 				_controller._tagTokenSource.AddTag (tag);

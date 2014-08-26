@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core;
+using System.Linq;
 
 namespace Domain
 {
@@ -25,7 +27,16 @@ namespace Domain
 
 		public Task SaveOrUpdate(List<ImageEntity> images)
 		{
-			return Database.AddOrUpdateAll (images);
+			foreach (ImageEntity image in images)
+			{
+				if (image.Tags.IsEmpty ())
+				{
+					continue;
+				}
+				Database.AddOrUpdateAll (image.Tags).Wait ();
+			}
+			var saveImages = images.Where (x => x.Tags.IsNotEmpty ()).ToList ();
+			return Database.AddOrUpdateAll (saveImages);
 		}
 	}
 }
