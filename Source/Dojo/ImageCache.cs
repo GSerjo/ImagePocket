@@ -12,7 +12,7 @@ namespace Dojo
 		private AssetRepository _assetRepository = AssetRepository.Instance;
 		private ImageRepository _imageRepository = ImageRepository.Instance;
 		private Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity> ();
-		private readonly List<ImageEntity> _actualImages;
+		private readonly Dictionary<string, ImageEntity> _actualImages = new Dictionary<string, ImageEntity> ();
 		private static ImageCache _instance = new ImageCache();
 
 		private ImageCache()
@@ -20,7 +20,7 @@ namespace Dojo
 			_taggedImages = _imageRepository.GetAll ().ToDictionary (x => x.LocalIdentifier);
 			_actualImages =  _assetRepository.GetAll ()
 				.Select (x => new ImageEntity { LocalIdentifier = x.LocalIdentifier })
-				.ToList();
+				.ToDictionary (x => x.LocalIdentifier);
 		}
 
 		public static ImageCache Instance
@@ -63,17 +63,22 @@ namespace Dojo
 
 		private List<ImageEntity> GetAll()
 		{
-			var result = new List<ImageEntity> ();
-			result.AddRange (_taggedImages.Values.ToList ());
-			result.AddRange (GetUntagged ());
-			return result;
+			foreach (ImageEntity image in _taggedImages.Values)
+			{
+				if (!_actualImages.ContainsKey (image.LocalIdentifier))
+				{
+					continue;
+				}
+				_actualImages [image.LocalIdentifier] = image;
+			}
+			return _actualImages.Values.ToList();
 		}
 
 		private List<ImageEntity> GetUntagged()
 		{
 			var result = new List<ImageEntity> ();
 			var comparer = new FuncComparer<ImageEntity> ((x, y) => string.Equals (x.LocalIdentifier, y.LocalIdentifier, StringComparison.OrdinalIgnoreCase));
-			var untaggedImages = _actualImages.Except (_taggedImages.Values.ToList(), comparer).ToList();
+			var untaggedImages = _actualImages.Values.Except (_taggedImages.Values.ToList(), comparer).ToList();
 			result.AddRange (untaggedImages);
 			return result;
 		}

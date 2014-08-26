@@ -14,5 +14,6 @@
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>
     <String>Source/ImagePocket/Bodo.csproj</String>
+    <String>Source/Bodo/Bodo.csproj</String>
   </DisabledProjects>
 </Properties>
