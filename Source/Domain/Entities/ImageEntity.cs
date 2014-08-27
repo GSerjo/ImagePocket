@@ -76,7 +76,7 @@ namespace Domain
 			{
 				return;
 			}
-			Tags.RemoveAll (x => x.EntityId == tag.EntityId);
+			_tags.RemoveAll (x => x.EntityId == tag.EntityId);
 		}
 
 		public bool ContainsTag(TagEntity tag)
