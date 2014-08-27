@@ -25,7 +25,7 @@ namespace Domain
 			get { return _instance; }
 		}
 
-		public Task SaveOrUpdate(List<ImageEntity> images)
+		public void SaveOrUpdate(List<ImageEntity> images)
 		{
 			foreach (ImageEntity image in images)
 			{
@@ -33,10 +33,10 @@ namespace Domain
 				{
 					continue;
 				}
-				Database.AddOrUpdateAll (image.Tags).Wait ();
+				TagRepository.Instance.SaveOrUpdate (image.Tags);
 			}
 			var saveImages = images.Where (x => x.Tags.IsNotEmpty ()).ToList ();
-			return Database.AddOrUpdateAll (saveImages);
+			Database.AddOrUpdateAll (saveImages);
 		}
 	}
 }

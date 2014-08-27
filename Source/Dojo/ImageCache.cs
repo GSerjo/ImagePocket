@@ -43,9 +43,8 @@ namespace Dojo
 
 		public void SaveOrUpdate(List<ImageEntity> images)
 		{
-			_imageRepository.SaveOrUpdate (images)
-				.ContinueWith(x => UpdateTaggedImages (images))
-				.Wait();
+			_imageRepository.SaveOrUpdate (images);
+			UpdateTaggedImages (images);
 		}
 
 		public UIImage GetSmallImage(string localId)

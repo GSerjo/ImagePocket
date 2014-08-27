@@ -167,15 +167,20 @@ namespace Dojo
 
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
-				TagEntity tag = _tags[indexPath.Item];
-				_tags.Remove (tag);
-				if (tag.IsAddTagRequest)
+				TagEntity addTag;
+				TagEntity selectedTag = _tags[indexPath.Item];
+				_tags.Remove (selectedTag);
+				if (selectedTag.IsAddTagRequest)
 				{
-					tag.EntityId = 0;
-					_tags = GetTags();
+					_tags = GetTags ();
+					addTag = new TagEntity { Name = selectedTag.Name };
 				}
-				_controller.AddTagToImages(tag);
-				_controller._tagTokenSource.AddTag (tag);
+				else
+				{
+					addTag = selectedTag;
+				}
+				_controller.AddTagToImages(addTag);
+				_controller._tagTokenSource.AddTag (addTag);
 				ReloadTags ();
 			}
 

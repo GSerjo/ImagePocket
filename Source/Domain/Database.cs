@@ -2,16 +2,16 @@
 using SQLite;
 using System.IO;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Core;
 using System.Collections;
 using System.Linq;
 
 namespace Domain
 {
-	public sealed class Database : SQLiteAsyncConnection
+	public sealed class Database : SQLiteConnection
 	{
 		private static readonly Database _database;
+		private static readonly object _locker = new object();
 
 		static Database()
 		{
@@ -21,64 +21,73 @@ namespace Domain
 
 		private Database(string databasePath) : base(databasePath)
 		{
-			CreateTablesAsync<TagEntity,ImageEntity> ()
-				.Wait();
-		}
-
-		private static void InitialiseTables ()
-		{
-			var count = _database.Table<TagEntity> ().CountAsync ().Result;
-			if (count > 0)
-			{
-				return;
-			}
-			5.Times(y => AddOrUpdate(new TagEntity { Name = "MyTag" + y}));
+			CreateTable<TagEntity> ();
+			CreateTable<ImageEntity> ();
 		}
 
 		public static List<T> GetAll<T>()
 			where T: new()
 		{
-			return _database.Table<T> ().ToListAsync ().Result;
+			lock (_locker)
+			{
+				return _database.Table<T> ().ToList ();
+			}
 		}
 
-		public static Task<int> AddOrUpdate<T>(T value)
+		public static int AddOrUpdate<T>(T value)
 			where T: Entity
 		{
-			if (value.New)
+			lock (_locker)
 			{
-				return _database.InsertAsync (value);
+				if (value.New) {
+					return _database.Insert (value);
+				}
+				return _database.Update (value);
 			}
-			return _database.UpdateAsync (value);
 		}
 
-		public static Task AddOrUpdateAll<T>(IList<T> values)
+		public static void AddOrUpdateAll<T>(IList<T> values)
 			where T : Entity
 		{
-			List<IGrouping<bool, T>> groups = values.GroupBy (x => x.New).ToList();
-			foreach (IGrouping<bool, T> group in groups)
+			lock (_locker)
 			{
-				if (group.Key)
+				List<IGrouping<bool, T>> groups = values.GroupBy (x => x.New).ToList ();
+				foreach (IGrouping<bool, T> group in groups)
 				{
-					_database.InsertAllAsync (group.ToList ()).Wait();
-				}
-				else
-				{
-					_database.UpdateAllAsync (group.ToList ()).Wait();
+					if (group.Key)
+					{
+						_database.InsertAll (group.ToList ());
+					}
+					else
+					{
+						_database.UpdateAll (group.ToList ());
+					}
 				}
 			}
-			return Task.FromResult (true);
 		}
 
-		public static Task<List<T>> GetAllAsync<T>()
+		public static List<T> GetAllAsync<T>()
 			where T: new()
 		{
-			return _database.Table<T> ().ToListAsync ();
+			lock (_locker)
+			{
+				return _database.Table<T> ().ToList ();
+			}
 		}
 
 		private static string GetDatabasePath()
 		{
 			var documentPath = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 			return Path.Combine (documentPath, "NeliburPocket.db");
+		}
+
+		private static void InitialiseTables ()
+		{
+			var count = _database.Table<TagEntity> ().Count ();
+			if (count > 0) {
+				return;
+			}
+			5.Times (y => AddOrUpdate (new TagEntity { Name = "MyTag" + y }));
 		}
 	}
 }
