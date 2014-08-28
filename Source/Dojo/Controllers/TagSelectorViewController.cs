@@ -133,9 +133,12 @@ namespace Dojo
 					_tags = GetTags()
 						.Where (x => x.Name.Contains (text))
 						.ToList ();
-					var addTagRequest = TagEntity.AddTagRequest;
-					addTagRequest.Name = text;
-					_tags.Insert (_tags.Count, addTagRequest);
+					if (_tags.IsEmpty ())
+					{
+						var addTagRequest = TagEntity.AddTagRequest;
+						addTagRequest.Name = text;
+						_tags.Insert (_tags.Count, addTagRequest);
+					}
 				}
 				ReloadTags ();
 			}

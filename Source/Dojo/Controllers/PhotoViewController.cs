@@ -5,6 +5,7 @@ using System.Drawing;
 using Domain;
 using Core;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Dojo
 {
@@ -61,6 +62,7 @@ namespace Dojo
 		private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
 		{
 			_imageCache.SaveOrUpdate (ea.Data);
+			_image = ea.Data.First();
 		}
 	}
 }

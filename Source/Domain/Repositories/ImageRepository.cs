@@ -27,13 +27,14 @@ namespace Domain
 
 		public void SaveOrUpdate(List<ImageEntity> images)
 		{
+
 			foreach (ImageEntity image in images)
 			{
 				if (image.Tags.IsEmpty ())
 				{
 					continue;
 				}
-				TagRepository.Instance.SaveOrUpdate (image.Tags);
+				TagCache.Instance.SaveOrUpdate (image.Tags);
 			}
 			var saveImages = images.Where (x => x.Tags.IsNotEmpty ()).ToList ();
 			Database.AddOrUpdateAll (saveImages);
