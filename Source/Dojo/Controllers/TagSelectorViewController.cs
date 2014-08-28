@@ -15,7 +15,7 @@ namespace Dojo
 	{
 		public event EventHandler<EventArgs> Cancel = delegate { };
 		public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
-		private static TagRepository _tagRepository = TagRepository.Instance;
+		private static TagCache _tagRepository = TagCache.Instance;
 		private List<ImageEntity> _images = new List<ImageEntity>();
 		private TagTableSource _tagTableSource;
 		private TagTokenDelegate _tagTokenDelegate;

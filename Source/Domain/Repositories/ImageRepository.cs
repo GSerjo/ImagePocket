@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Domain
 {
-	public sealed class ImageRepository
+	internal sealed class ImageRepository
 	{
 
 		private static ImageRepository _instance = new ImageRepository();

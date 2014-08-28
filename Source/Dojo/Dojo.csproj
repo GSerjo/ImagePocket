@@ -118,11 +118,7 @@
     <Compile Include="Controllers\HomeViewController.cs" />
     <Compile Include="Controllers\TagViewController.cs" />
     <Compile Include="Controllers\PhotoViewController.cs" />
-    <Compile Include="AssetRepository.cs" />
-    <Compile Include="ImageCache.cs" />
     <Compile Include="ImagePreviewCell.cs" />
-    <Compile Include="Controllers\TagSelectorViewController1.cs" />
-    <Compile Include="Controllers\TagSelectorViewController2.cs" />
     <Compile Include="Controllers\TagSelectorViewController.cs" />
     <Compile Include="Controllers\TagSelectorViewController.designer.cs">
       <DependentUpon>TagSelectorViewController.cs</DependentUpon>

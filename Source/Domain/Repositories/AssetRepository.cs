@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 
-namespace Dojo
+namespace Domain
 {
 	public sealed class AssetRepository
 	{

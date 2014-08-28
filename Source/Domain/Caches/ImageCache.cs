@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonoTouch.UIKit;
 
-namespace Dojo
+namespace Domain
 {
 	public sealed class ImageCache
 	{

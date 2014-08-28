@@ -11,7 +11,7 @@ namespace Domain
 		private List<TagEntity> _tags = new List<TagEntity>();
 		private string _tagInternal = string.Empty;
 		private const string Separator = ",";
-		private TagRepository _tagRepository = TagRepository.Instance;
+		private TagCache _tagRepository = TagCache.Instance;
 
 		[Indexed]
 		public string LocalIdentifier { get; set; }
