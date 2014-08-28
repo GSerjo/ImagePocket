@@ -1,15 +1,38 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPad.7.1" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Bodo/ImageRepository.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.iSerjoAir" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/TagViewController.cs">
     <Files>
-      <File FileName="Source/Dojo/Controls/VENTokenField.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controls/VENBackspaceTextField.cs" Line="1" Column="1" />
-      <File FileName="Source/Bodo/ImageRepository.cs" Line="1" Column="1" />
+      <File FileName="Source/Domain/Repositories/TagRepository.cs" Line="10" Column="10" />
+      <File FileName="Source/Domain/Repositories/ImageRepository.cs" Line="2" Column="2" />
+      <File FileName="Source/Domain/Caches/ImageCache.cs" Line="33" Column="33" />
+      <File FileName="Source/Domain/Caches/TagCache.cs" Line="17" Column="17" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="6" Column="6" />
+      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="35" Column="35" />
+      <File FileName="Source/Domain/Database.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Dojo" expanded="True">
+            <Node name="Controllers" expanded="True">
+              <Node name="TagViewController.cs" selected="True" />
+            </Node>
+          </Node>
+          <Node name="Domain" expanded="True">
+            <Node name="Caches" expanded="True" />
+            <Node name="Entities" expanded="True" />
+            <Node name="Repositories" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/TagViewController.cs" line="36" column="34" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/TagSelectorViewController.cs" line="43" column="35" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>

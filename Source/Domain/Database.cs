@@ -16,7 +16,6 @@ namespace Domain
 		static Database()
 		{
 			_database = new Database(GetDatabasePath());
-			InitialiseTables ();
 		}
 
 		private Database(string databasePath) : base(databasePath)
@@ -79,15 +78,6 @@ namespace Domain
 		{
 			var documentPath = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 			return Path.Combine (documentPath, "NeliburPocket.db");
-		}
-
-		private static void InitialiseTables ()
-		{
-			var count = _database.Table<TagEntity> ().Count ();
-			if (count > 0) {
-				return;
-			}
-			5.Times (y => AddOrUpdate (new TagEntity { Name = "MyTag" + y }));
 		}
 	}
 }
