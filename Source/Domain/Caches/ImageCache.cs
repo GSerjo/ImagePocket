@@ -52,6 +52,11 @@ namespace Domain
 			return _assetRepository.GetSmallImage (localId);
 		}
 
+		public UIImage GetOrigianlImage(string localId)
+		{
+			return _assetRepository.GetOrigianlImage(localId);
+		}
+
 		private void UpdateTaggedImages(List<ImageEntity> images)
 		{
 			foreach (ImageEntity image in images)
