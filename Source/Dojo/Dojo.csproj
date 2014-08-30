@@ -124,6 +124,10 @@
       <DependentUpon>TagSelectorViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewMode.cs" />
+    <Compile Include="ThumbnailCell.cs" />
+    <Compile Include="ThumbnailCell.designer.cs">
+      <DependentUpon>ThumbnailCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
@@ -213,5 +217,6 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Controllers\TagSelectorViewController.xib" />
+    <InterfaceDefinition Include="ThumbnailCell.xib" />
   </ItemGroup>
 </Project>
