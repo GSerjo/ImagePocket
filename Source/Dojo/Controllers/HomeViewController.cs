@@ -62,7 +62,7 @@ namespace Dojo
 		private void ConfigureView ()
 		{
 			CollectionView.BackgroundColor = UIColor.White;
-			CollectionView.RegisterClassForCell (typeof(ImagePreviewCell), _cellId);
+			CollectionView.RegisterClassForCell (typeof(ThumbnailCell), _cellId);
 		}
 
 		private void ConfigureToolbar ()
@@ -124,7 +124,7 @@ namespace Dojo
 
 		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 		{
-			var cell = (ImagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
+			var cell = (ThumbnailCell)collectionView.DequeueReusableCell (_cellId, indexPath);
 			ImageEntity entity = _images [indexPath.Item];
 			UIImage image = _imageCache.GetSmallImage (entity.LocalIdentifier);
 			cell.Image = image;
@@ -141,13 +141,13 @@ namespace Dojo
 				NavigationController.PushViewController (photoController, true);
 				return;
 			}
-			var cell = (ImagePreviewCell)collectionView.CellForItem (indexPath);
+			var cell = (ThumbnailCell)collectionView.CellForItem (indexPath);
 			ImageEntity entity = _images [indexPath.Item];
 			UpdateSelectCellStatus (cell, entity);
 			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
 		}
 
-		private void UpdateSelectCellStatus(ImagePreviewCell cell, ImageEntity entity)
+		private void UpdateSelectCellStatus(ThumbnailCell cell, ImageEntity entity)
 		{
 			if (_viewMode == ViewMode.Read)
 			{

@@ -4,6 +4,7 @@ using System.Drawing;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using MonoTouch.CoreGraphics;
 
 namespace Dojo
 {
@@ -23,6 +24,8 @@ namespace Dojo
 			_imageView = new UIImageView(frame);
 			_imageView.Center = ContentView.Center;
 			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+			_imageView.Transform = CGAffineTransform.MakeScale (0.8f, 0.8f);
+
 			ContentView.AddSubview(_imageView);
 		}
 

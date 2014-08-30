@@ -51,13 +51,12 @@ namespace Dojo
 		{
 			var layout = new UICollectionViewFlowLayout
 			{
-				MinimumInteritemSpacing = 10.0f,
-				SectionInset = new UIEdgeInsets (10, 15, 10, 15),
-				ItemSize = new SizeF(120, 120)
+				//MinimumInteritemSpacing = 10.0f,
+				//SectionInset = new UIEdgeInsets (10, 15, 10, 15),
+				ItemSize = new SizeF(320, 320)
 			};
 			var controller = new HomeViewController (layout);
 			return controller;
 		}
 	}
 }
-

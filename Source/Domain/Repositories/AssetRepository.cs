@@ -12,7 +12,7 @@ namespace Domain
 	public sealed class AssetRepository
 	{
 		private readonly PHImageManager _imageManager = new PHImageManager();
-		private readonly SizeF _smallImage = new SizeF(240, 240);
+		private readonly SizeF _smallImage = new SizeF(320, 320);
 		private Dictionary<string, PHAsset> _assets = new Dictionary<string, PHAsset>();
 		private static AssetRepository _instance = new AssetRepository();
 
