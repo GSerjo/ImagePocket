@@ -1,22 +1,35 @@
 ﻿using System;
 using MonoTouch.UIKit;
+using Core;
+using MonoTouch.Foundation;
+using System.Drawing;
 
 namespace Dojo
 {
 	public class CollectionViewDelegateWaterfallLayout : UICollectionViewDelegate
 	{
-		public virtual float ColletionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+		public virtual Bag<float> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
 			int minimumInteritemSpacingForSectionAtIndex)
 		{
-			return 0;
+			return Bag<float>.Empty;
 		}
 
-		public virtual UIEdgeInsets ColletionView1(UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+		public virtual Bag<UIEdgeInsets> CollectionView1(UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
 			int insetForSectionAtIndex)
 		{
-			return UIEdgeInsets.Zero;
+			return Bag<UIEdgeInsets>.Empty;
 		}
 
+		public virtual Bag<float> CollectionView2 (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+			int heightForHeaderInSection)
+		{
+			return Bag<float>.Empty;
+		}
+
+		public virtual Bag<SizeF> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+			NSIndexPath sizeForItemAtIndexPath)
+		{
+			return Bag<SizeF>.Empty; 
+		}
 	}
 }
-

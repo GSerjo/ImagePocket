@@ -2,6 +2,8 @@
 using MonoTouch.UIKit;
 using System.Collections.Generic;
 using System.Drawing;
+using Core;
+using MonoTouch.Foundation;
 
 namespace Dojo
 {
@@ -15,12 +17,13 @@ namespace Dojo
 		private float _headerHeight;
 		private float _footerHeight;
 		private UIEdgeInsets _sectionInset;
+		private CollectionViewWaterfallLayoutItemRenderDirection _itemRenderDirection;
 		private List<float> _columnHeights = new List<float>();
 		private Dictionary<int, UICollectionViewLayoutAttributes> _headerAtributes = new Dictionary<int, UICollectionViewLayoutAttributes> ();
 		private Dictionary<int, UICollectionViewLayoutAttributes> _footersAtributes = new Dictionary<int, UICollectionViewLayoutAttributes> ();
 		private List<RectangleF> _unionRects = new List<RectangleF>();
-		private List<RectangleF> _allItemAttributes = new List<RectangleF>();
-		private List<int> _sectionItemAttributes = new List<int>();
+		private List<UICollectionViewLayoutAttributes> _allItemAttributes = new List<UICollectionViewLayoutAttributes>();
+		private List<List<UICollectionViewLayoutAttributes> > _sectionItemAttributes = new List<List<UICollectionViewLayoutAttributes> >();
 
 		public CollectionViewWaterfallLayout ()
 		{
@@ -97,19 +100,29 @@ namespace Dojo
 			}
 		}
 
+		public CollectionViewWaterfallLayoutItemRenderDirection ItemRenderDirection
+		{
+			get { return _itemRenderDirection; }
+			set
+			{
+				_itemRenderDirection = value;
+				InvalidateLayout ();
+			}
+		}
+
 		private float ItemwidthInSectionAtIndex(int section)
 		{
 			UIEdgeInsets insets;
-			UIEdgeInsets sectionInset = Delegate.ColletionView1 (CollectionView,this, section);
-			if (!sectionInset.Equals(UIEdgeInsets.Zero))
+			Bag<UIEdgeInsets> sectionInsets = Delegate.CollectionView1 (CollectionView,this, section);
+			if (sectionInsets.HasValue)
 			{
-				insets = sectionInset;
+				insets = sectionInsets.Value;
 			}
 			else
 			{
 				insets = SectionInset;
 			}
-			var width = CollectionView.Frame.Size.Width - sectionInset.Right;
+			var width = CollectionView.Frame.Size.Width - _sectionInset.Right;
 			var spaceColumnCount = (double)(ColumnCount - 1);
 			return (float)(Math.Floor (width - (spaceColumnCount * MinimumColumnSpacing) / ((double)ColumnCount)));
 		}
@@ -146,12 +159,119 @@ namespace Dojo
 			{
 				// 1. Get section - specific metrics (minimumInteritemSpacing, sectionInset)
 				float minimumInteritemSpacing;
+				var minimumSpacing = Delegate.CollectionView (CollectionView, this, section);
+				if (minimumSpacing.HasValue)
+				{
+					minimumInteritemSpacing = minimumSpacing.Value;
+				}
+				else
+				{
+					minimumInteritemSpacing = MinimumColumnSpacing;
+				}
+				UIEdgeInsets sectionInsets;
+				var insets = Delegate.CollectionView1 (CollectionView, this, section);
+				if (insets.HasValue)
+				{
+					sectionInsets = insets.Value;
+				}
+				else
+				{
+					sectionInsets = SectionInset;
+				}
+				var width = CollectionView.Frame.Size.Width - _sectionInset.Left - _sectionInset.Right;
+				var spaceColumnCount = ((float)ColumnCount - 1);
+				var itemWidth = ((float)Math.Floor ((width - (spaceColumnCount * MinimumColumnSpacing)) / ColumnCount));
 
+				//2. Section header
+				float heightHeader;
+				var height = Delegate.CollectionView2 (CollectionView, this, section);
+				if (height.HasValue)
+				{
+					heightHeader = height.Value;
+				} 
+				else
+				{
+					heightHeader = HeaderHeight;
+				}
+				if (heightHeader > 0)
+				{
+					attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView (UICollectionElementKindSection.Header, NSIndexPath.FromRowSection (0, section));
+					attributes.Frame = new RectangleF (0, top, CollectionView.Frame.Size.Width, heightHeader);
+					_headerAtributes [section] = attributes;
+					_allItemAttributes.Add (attributes);
+					top = attributes.Frame.X;
+				}
+				top += _sectionInset.Top;
+				for (int i = 0; i < ColumnCount; i++)
+				{
+					_columnHeights [i] = top;
+				}
+
+				//3. Section items
+				var itemCount = CollectionView.NumberOfItemsInSection (section);
+				var itemAttributes = new List<UICollectionViewLayoutAttributes> (itemCount);
+
+				for (int i = 0; i < itemCount; i++)
+				{
+					NSIndexPath indexPath = NSIndexPath.FromItemSection (i, section);
+					int columnIndex = NextColumnIndexForItem (i);
+					float xOffset = SectionInset.Left + (itemWidth + MinimumColumnSpacing) * (float)columnIndex;
+					var yOffset = _columnHeights [columnIndex];
+					var itemSize = Delegate.CollectionView (CollectionView, this, indexPath).Value;
+					float itemHeight = 0;
+					if (itemSize.Height > 0 && itemSize.Width > 0)
+					{
+						itemHeight = (float)Math.Floor (itemSize.Height * itemWidth / itemSize.Width);
+					}
+					attributes = UICollectionViewLayoutAttributes.CreateForCell (indexPath);
+					attributes.Frame = new RectangleF (xOffset, yOffset, itemWidth, itemHeight);
+					itemAttributes.Add (attributes);
+					_allItemAttributes.Add (attributes);
+					_columnHeights [columnIndex] = attributes.Frame.Y + MinimumInteritemSpacing;
+				}
+				_sectionItemAttributes.Add (itemAttributes);
+
+				//4. Section footer
 			}
 
 		}
 
+		private int ShortestColumnIndex()
+		{
+			var index = 0;
+			var shortestHeight = float.MaxValue;
+			float height = 0;
+			for (int i = 0; i < _columnHeights.Count; i++)
+			{
+				height = _columnHeights [i];
+				if (height < shortestHeight)
+				{
+					shortestHeight = height;
+					index = i;
+				}
+			}
+			return index;
+		}
 
+		private int NextColumnIndexForItem(int item)
+		{
+			var index = 0;
+			switch (ItemRenderDirection)
+			{
+			case CollectionViewWaterfallLayoutItemRenderDirection.ShortestFirst:
+				index = ShortestColumnIndex ();
+				break;
+			case CollectionViewWaterfallLayoutItemRenderDirection.LeftToRight:
+				index = item % ColumnCount;
+				break;
+			case CollectionViewWaterfallLayoutItemRenderDirection.RightToLeft:
+				index = (ColumnCount - 1) - (item % ColumnCount);
+				break;
+			default:
+				index = ShortestColumnIndex ();
+				break;
+			}
+			return index;
+		}
 	}
 }
-
