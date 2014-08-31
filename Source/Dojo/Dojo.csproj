@@ -107,6 +107,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Layouts\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -128,6 +129,8 @@
     <Compile Include="ThumbnailCell.designer.cs">
       <DependentUpon>ThumbnailCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Layouts\CollectionViewWaterfallLayout.cs" />
+    <Compile Include="Layouts\CollectionViewWaterfallLayoutItemRenderDirection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
