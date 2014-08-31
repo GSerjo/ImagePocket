@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="Layouts\CollectionViewWaterfallLayout.cs" />
     <Compile Include="Layouts\CollectionViewWaterfallLayoutItemRenderDirection.cs" />
+    <Compile Include="Layouts\CollectionViewDelegateWaterfallLayout.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

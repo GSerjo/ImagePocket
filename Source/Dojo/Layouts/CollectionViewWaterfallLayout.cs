@@ -1,6 +1,7 @@
 ﻿using System;
 using MonoTouch.UIKit;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Dojo
 {
@@ -15,6 +16,11 @@ namespace Dojo
 		private float _footerHeight;
 		private UIEdgeInsets _sectionInset;
 		private List<float> _columnHeights = new List<float>();
+		private Dictionary<int, UICollectionViewLayoutAttributes> _headerAtributes = new Dictionary<int, UICollectionViewLayoutAttributes> ();
+		private Dictionary<int, UICollectionViewLayoutAttributes> _footersAtributes = new Dictionary<int, UICollectionViewLayoutAttributes> ();
+		private List<RectangleF> _unionRects = new List<RectangleF>();
+		private List<RectangleF> _allItemAttributes = new List<RectangleF>();
+		private List<int> _sectionItemAttributes = new List<int>();
 
 		public CollectionViewWaterfallLayout ()
 		{
@@ -66,6 +72,11 @@ namespace Dojo
 			}
 		}
 
+		private CollectionViewDelegateWaterfallLayout Delegate
+		{
+			get { return CollectionView.Delegate as CollectionViewDelegateWaterfallLayout; }
+		}
+
 		public float FooterHeight
 		{
 			get { return _footerHeight; }
@@ -85,6 +96,62 @@ namespace Dojo
 				InvalidateLayout ();
 			}
 		}
+
+		private float ItemwidthInSectionAtIndex(int section)
+		{
+			UIEdgeInsets insets;
+			UIEdgeInsets sectionInset = Delegate.ColletionView1 (CollectionView,this, section);
+			if (!sectionInset.Equals(UIEdgeInsets.Zero))
+			{
+				insets = sectionInset;
+			}
+			else
+			{
+				insets = SectionInset;
+			}
+			var width = CollectionView.Frame.Size.Width - sectionInset.Right;
+			var spaceColumnCount = (double)(ColumnCount - 1);
+			return (float)(Math.Floor (width - (spaceColumnCount * MinimumColumnSpacing) / ((double)ColumnCount)));
+		}
+
+		public override void PrepareLayout ()
+		{
+			base.PrepareLayout ();
+
+			var numberOfSections = CollectionView.NumberOfSections();
+			if (numberOfSections == 0)
+			{
+				return;
+			}
+
+			_headerAtributes.Clear ();
+			_footersAtributes.Clear ();
+			_unionRects.Clear ();
+			_columnHeights.Clear ();
+			_allItemAttributes.Clear ();
+			_sectionItemAttributes.Clear ();
+
+			var idx = 0;
+
+			while (idx < ColumnCount)
+			{
+				_columnHeights.Add (0);
+				idx++;
+			}
+
+			float top = 0;
+
+			var attributes = new UICollectionViewLayoutAttributes ();
+			for (int section = 0; section < numberOfSections; ++section)
+			{
+				// 1. Get section - specific metrics (minimumInteritemSpacing, sectionInset)
+				float minimumInteritemSpacing;
+
+			}
+
+		}
+
+
 	}
 }
 
