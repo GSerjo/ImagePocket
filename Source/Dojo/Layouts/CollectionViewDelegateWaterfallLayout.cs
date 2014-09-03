@@ -31,5 +31,11 @@ namespace Dojo
 		{
 			return Bag<SizeF>.Empty; 
 		}
+
+		public virtual Bag<float> ColletionView3 (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+			int heightForFooterInSection)
+		{
+			return Bag<float>.Empty;
+		}
 	}
 }

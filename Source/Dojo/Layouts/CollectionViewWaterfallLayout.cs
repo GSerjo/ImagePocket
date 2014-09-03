@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Core;
 using MonoTouch.Foundation;
+using System.Linq;
 
 namespace Dojo
 {
@@ -24,6 +25,7 @@ namespace Dojo
 		private List<RectangleF> _unionRects = new List<RectangleF>();
 		private List<UICollectionViewLayoutAttributes> _allItemAttributes = new List<UICollectionViewLayoutAttributes>();
 		private List<List<UICollectionViewLayoutAttributes> > _sectionItemAttributes = new List<List<UICollectionViewLayoutAttributes> >();
+		private readonly int _unionSize = 20;
 
 		public CollectionViewWaterfallLayout ()
 		{
@@ -184,10 +186,10 @@ namespace Dojo
 
 				//2. Section header
 				float heightHeader;
-				var height = Delegate.CollectionView2 (CollectionView, this, section);
-				if (height.HasValue)
+				var heightHeaderCustom = Delegate.CollectionView2 (CollectionView, this, section);
+				if (heightHeaderCustom.HasValue)
 				{
-					heightHeader = height.Value;
+					heightHeader = heightHeaderCustom.Value;
 				} 
 				else
 				{
@@ -232,8 +234,74 @@ namespace Dojo
 				_sectionItemAttributes.Add (itemAttributes);
 
 				//4. Section footer
-			}
+				float footerHeight = 0;
+				var longestColumnIndex = LongestColumnIndex();
+				top = _columnHeights[longestColumnIndex] - minimumInteritemSpacing + SectionInset.Bottom;
+				var heightFooterCustom = Delegate.ColletionView3(CollectionView, this, section);
+				if(heightFooterCustom.HasValue)
+				{
+					footerHeight = heightFooterCustom.Value;
+				}
+				else
+				{
+					footerHeight = FooterHeight;
+				}
+				if (footerHeight > 0)
+				{
+					NSIndexPath indexPath = NSIndexPath.FromItemSection (0, section);
+					attributes = UICollectionViewLayoutAttributes.CreateForCell (indexPath);
+					attributes.Frame = new RectangleF (0, top, CollectionView.Frame.Size.Width, footerHeight);
+					_footersAtributes [section] = attributes;
+					_allItemAttributes.Add (attributes);
+					top = attributes.Frame.Y;
+				}
 
+				for (int i = 0; i < ColumnCount; i++)
+				{
+					_columnHeights [i] = top;
+				}
+
+				idx = 0;
+				var itemCounts = _allItemAttributes.Count;
+				while (idx < itemCounts)
+				{
+					var rect1 = _allItemAttributes [idx].Frame;
+					idx = Math.Min (idx + _unionSize, itemCounts) - 1;
+					var rect2 = _allItemAttributes [idx].Frame;
+					_unionRects.Add(RectangleF.Union(rect1, rect2));
+					idx++;
+				}
+			}
+		}
+
+		public override SizeF CollectionViewContentSize
+		{
+			get
+			{
+				var numberOfSections = CollectionView.NumberOfSections ();
+				if (numberOfSections == 0)
+				{
+					return SizeF.Empty;
+				}
+				var contentSize = CollectionView.Bounds.Size;
+				var height = _columnHeights.First();
+				contentSize.Height = height;
+				return contentSize;
+			}
+		}
+
+		public override UICollectionViewLayoutAttributes LayoutAttributesForItem (NSIndexPath indexPath)
+		{
+			if (indexPath.Section >= _sectionItemAttributes.Count)
+			{
+				return null;
+			}
+			if (indexPath.Item >= _sectionItemAttributes [indexPath.Section].Count)
+			{
+				return null;
+			}
+			List<UICollectionViewLayoutAttributes> list = _sectionItemAttributes [indexPath.Section];
+			return list [indexPath.Item];
 		}
 
 		private int ShortestColumnIndex()
@@ -247,6 +315,23 @@ namespace Dojo
 				if (height < shortestHeight)
 				{
 					shortestHeight = height;
+					index = i;
+				}
+			}
+			return index;
+		}
+
+		private int LongestColumnIndex()
+		{
+			var index = 0;
+			float longestHeight = 0;
+			float height = 0;
+			for (int i = 0; i < _columnHeights.Count; i++)
+			{
+				height = _columnHeights [i];
+				if (height > longestHeight)
+				{
+					longestHeight = height;
 					index = i;
 				}
 			}
