@@ -349,6 +349,16 @@ namespace Dojo
 			return attrs.ToArray();
 		}
 
+		public override bool ShouldInvalidateLayoutForBoundsChange (RectangleF newBounds)
+		{
+			var oldBounds = CollectionView.Bounds;
+			if (newBounds.Width != oldBounds.Width)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		private int ShortestColumnIndex()
 		{
 			var index = 0;
