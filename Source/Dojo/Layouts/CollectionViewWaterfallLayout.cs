@@ -304,6 +304,28 @@ namespace Dojo
 			return list [indexPath.Item];
 		}
 
+		public override UICollectionViewLayoutAttributes LayoutAttributesForSupplementaryView (NSString kind, NSIndexPath indexPath)
+		{
+			var attribute = new UICollectionViewLayoutAttributes ();
+			if (kind == CHTCollectionElementKindSectionHeader)
+			{
+				attribute = _headerAtributes [indexPath.Section];
+			}
+			else if (kind == CHTCollectionElementKindSectionFooter)
+			{
+				attribute = _footersAtributes [indexPath.Section];
+			}
+			return base.LayoutAttributesForSupplementaryView(kind, indexPath); 
+		}
+
+		public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect (RectangleF rect)
+		{
+			var i = 0;
+			int begin = 0, end = _unionRects.Count;
+			var attrs = 
+
+		}
+
 		private int ShortestColumnIndex()
 		{
 			var index = 0;
