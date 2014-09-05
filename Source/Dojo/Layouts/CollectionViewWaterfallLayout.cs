@@ -320,10 +320,33 @@ namespace Dojo
 
 		public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect (RectangleF rect)
 		{
-			var i = 0;
 			int begin = 0, end = _unionRects.Count;
-			var attrs = 
+			var attrs = new List<UICollectionViewLayoutAttributes> ();
 
+			for (int i = 0; i < end; i++)
+			{
+				if (rect.IntersectsWith (_unionRects [i]))
+				{
+					begin = i * _unionSize;
+					break;
+				}
+			}
+			for (int i = _unionRects.Count - 1; i >= 0; i--)
+			{
+				if (rect.IntersectsWith (_unionRects [i]))
+				{
+					end = Math.Min ((i + 1) * _unionSize, _allItemAttributes.Count);
+				}
+			}
+			for (int i = begin; i < end; i++)
+			{
+				UICollectionViewLayoutAttributes attr = _allItemAttributes [i];
+				if (rect.IntersectsWith (attr.Frame))
+				{
+					attrs.Add (attr);
+				}
+			}
+			return attrs.ToArray();
 		}
 
 		private int ShortestColumnIndex()
