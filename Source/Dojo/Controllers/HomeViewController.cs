@@ -34,6 +34,8 @@ namespace Dojo
 			ConfigureView ();
 			ConfigureToolbar ();
 			FilterImages ();
+
+			CollectionView.Delegate = new CollectionViewDelegate (this);
 		}
 
 		public override void ViewWillAppear (bool animated)
@@ -185,6 +187,24 @@ namespace Dojo
 		private bool IsCellSelected(ImageEntity entity)
 		{
 			return _selectedImages.ContainsKey (entity.LocalIdentifier);
+		}
+
+		private sealed class CollectionViewDelegate : CollectionViewDelegateWaterfallLayout
+		{
+
+			private HomeViewController _controller;
+
+			public CollectionViewDelegate (HomeViewController controller)
+			{
+				_controller = controller;
+			}
+
+			public override Bag<SizeF> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout, NSIndexPath sizeForItemAtIndexPath)
+			{
+				ImageEntity entity = _controller._images [sizeForItemAtIndexPath.Item];
+				UIImage image = _controller._imageCache.GetSmallImage (entity.LocalIdentifier);
+				return image.Size.ToBag ();
+			}
 		}
 	}
 }

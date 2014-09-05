@@ -49,11 +49,17 @@ namespace Dojo
 
 		private HomeViewController CreateHomeController()
 		{
-			var layout = new UICollectionViewFlowLayout
+			var layout = new CollectionViewWaterfallLayout//UICollectionViewFlowLayout
 			{
 				//MinimumInteritemSpacing = 10.0f,
 				//SectionInset = new UIEdgeInsets (10, 15, 10, 15),
-				ItemSize = new SizeF(320, 320)
+				//ItemSize = new SizeF(320, 320)
+
+				SectionInset = new UIEdgeInsets (10, 10, 10, 10),
+//				HeaderHeight = 15,
+//				FooterHeight = 10,
+				MinimumColumnSpacing = 20,
+				MinimumInteritemSpacing = 30
 			};
 			var controller = new HomeViewController (layout);
 			return controller;

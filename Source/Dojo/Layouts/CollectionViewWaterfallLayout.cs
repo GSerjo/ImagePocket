@@ -220,7 +220,7 @@ namespace Dojo
 					float xOffset = SectionInset.Left + (itemWidth + MinimumColumnSpacing) * (float)columnIndex;
 					var yOffset = _columnHeights [columnIndex];
 					var itemSize = Delegate.CollectionView (CollectionView, this, indexPath).Value;
-					float itemHeight = 0;
+					float itemHeight = 10;
 					if (itemSize.Height > 0 && itemSize.Width > 0)
 					{
 						itemHeight = (float)Math.Floor (itemSize.Height * itemWidth / itemSize.Width);
@@ -229,7 +229,7 @@ namespace Dojo
 					attributes.Frame = new RectangleF (xOffset, yOffset, itemWidth, itemHeight);
 					itemAttributes.Add (attributes);
 					_allItemAttributes.Add (attributes);
-					_columnHeights [columnIndex] = attributes.Frame.Y + MinimumInteritemSpacing;
+					_columnHeights [columnIndex] = attributes.Frame.Bottom + MinimumInteritemSpacing;
 				}
 				_sectionItemAttributes.Add (itemAttributes);
 

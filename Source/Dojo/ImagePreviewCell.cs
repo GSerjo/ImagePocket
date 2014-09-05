@@ -13,14 +13,23 @@ namespace Dojo
 		public ImagePreviewCell(RectangleF frame) : base(frame)
 		{
 			_imageView = new UIImageView(frame);
-			_imageView.Center = ContentView.Center;
-			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+//			_imageView.Center = ContentView.Center;
+//			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+
+
+			_imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+			_imageView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
+			_imageView.ClipsToBounds = true;
 			ContentView.AddSubview(_imageView);
 		}
 
 		public UIImage Image
 		{
-			set { _imageView.Image = value; }
+			set
+			{
+				_imageView.Frame = new RectangleF (0, 0, ContentView.Bounds.Width, ContentView.Bounds.Height);
+				_imageView.Image = value;
+			}
 		}
 
 		public new void Select()
