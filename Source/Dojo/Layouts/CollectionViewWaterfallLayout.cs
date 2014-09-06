@@ -129,6 +129,35 @@ namespace Dojo
 			return (float)(Math.Floor (width - (spaceColumnCount * MinimumColumnSpacing) / ((double)ColumnCount)));
 		}
 
+		private float CalculateHeaderHeight (int section)
+		{
+			float top = 0;
+			float heightHeader;
+			Bag<float> heightHeaderCustom = Delegate.CollectionView2 (CollectionView, this, section);
+			if (heightHeaderCustom.HasValue)
+			{
+				heightHeader = heightHeaderCustom.Value;
+			}
+			else
+			{
+				heightHeader = HeaderHeight;
+			}
+			if (heightHeader > 0)
+			{
+				var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView (UICollectionElementKindSection.Header, NSIndexPath.FromRowSection (0, section));
+				attributes.Frame = new RectangleF (0, top, CollectionView.Frame.Size.Width, heightHeader);
+				_headerAtributes [section] = attributes;
+				_allItemAttributes.Add (attributes);
+				top = attributes.Frame.X;
+			}
+			top += _sectionInset.Top;
+			for (int i = 0; i < ColumnCount; i++)
+			{
+				_columnHeights [i] = top;
+			}
+			return top;
+		}
+
 		public override void PrepareLayout ()
 		{
 			base.PrepareLayout ();
@@ -185,29 +214,7 @@ namespace Dojo
 				var itemWidth = ((float)Math.Floor ((width - (spaceColumnCount * MinimumColumnSpacing)) / ColumnCount));
 
 				//2. Section header
-				float heightHeader;
-				var heightHeaderCustom = Delegate.CollectionView2 (CollectionView, this, section);
-				if (heightHeaderCustom.HasValue)
-				{
-					heightHeader = heightHeaderCustom.Value;
-				} 
-				else
-				{
-					heightHeader = HeaderHeight;
-				}
-				if (heightHeader > 0)
-				{
-					attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView (UICollectionElementKindSection.Header, NSIndexPath.FromRowSection (0, section));
-					attributes.Frame = new RectangleF (0, top, CollectionView.Frame.Size.Width, heightHeader);
-					_headerAtributes [section] = attributes;
-					_allItemAttributes.Add (attributes);
-					top = attributes.Frame.X;
-				}
-				top += _sectionInset.Top;
-				for (int i = 0; i < ColumnCount; i++)
-				{
-					_columnHeights [i] = top;
-				}
+				top = CalculateHeaderHeight (section);
 
 				//3. Section items
 				var itemCount = CollectionView.NumberOfItemsInSection (section);

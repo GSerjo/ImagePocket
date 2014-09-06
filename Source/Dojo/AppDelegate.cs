@@ -58,8 +58,8 @@ namespace Dojo
 				SectionInset = new UIEdgeInsets (10, 10, 10, 10),
 //				HeaderHeight = 15,
 //				FooterHeight = 10,
-				MinimumColumnSpacing = 20,
-				MinimumInteritemSpacing = 30
+				MinimumColumnSpacing = 10,
+				MinimumInteritemSpacing = 10
 			};
 			var controller = new HomeViewController (layout);
 			return controller;

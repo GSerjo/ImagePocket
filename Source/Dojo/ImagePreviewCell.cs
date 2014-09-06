@@ -21,6 +21,8 @@ namespace Dojo
 			_imageView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
 			_imageView.ClipsToBounds = true;
 			ContentView.AddSubview(_imageView);
+			Selected = true;
+			BackgroundColor = UIColor.Black;
 		}
 
 		public UIImage Image

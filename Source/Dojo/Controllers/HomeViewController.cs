@@ -44,6 +44,43 @@ namespace Dojo
 			FilterImages ();
 		}
 
+		public override int GetItemsCount (UICollectionView collectionView, int section)
+		{
+			return _images.Count;
+		}
+
+		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			var cell = (ThumbnailCell)collectionView.DequeueReusableCell (_cellId, indexPath);
+			ImageEntity entity = _images [indexPath.Item];
+			UIImage image = _imageCache.GetSmallImage (entity.LocalIdentifier);
+			cell.Image = image;
+			UpdateSelectCellStatus (cell, entity);
+			return cell;
+		}
+
+		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			if (_viewMode == ViewMode.Read)
+			{
+				ImageEntity image = _images [indexPath.Item];
+				var photoController = new PhotoViewController (image);
+				NavigationController.PushViewController (photoController, true);
+				return;
+			}
+			var cell = (ThumbnailCell)collectionView.CellForItem (indexPath);
+			ImageEntity entity = _images [indexPath.Item];
+			UpdateSelectCellStatus (cell, entity);
+			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
+		}
+
+		public override void WillAnimateRotation (UIInterfaceOrientation toInterfaceOrientation, double duration)
+		{
+			base.WillAnimateRotation (toInterfaceOrientation, duration);
+			var layout = ((CollectionViewWaterfallLayout)CollectionView.CollectionViewLayout);
+			layout.ColumnCount = toInterfaceOrientation == UIInterfaceOrientation.Portrait ? 2 : 3;
+		}
+
 		public void SetTag (TagEntity entity)
 		{
 			_currentTag = entity;
@@ -119,36 +156,6 @@ namespace Dojo
 			ReloadData ();
 		}
 
-		public override int GetItemsCount (UICollectionView collectionView, int section)
-		{
-			return _images.Count;
-		}
-
-		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
-		{
-			var cell = (ThumbnailCell)collectionView.DequeueReusableCell (_cellId, indexPath);
-			ImageEntity entity = _images [indexPath.Item];
-			UIImage image = _imageCache.GetSmallImage (entity.LocalIdentifier);
-			cell.Image = image;
-			UpdateSelectCellStatus (cell, entity);
-			return cell;
-		}
-
-		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
-		{
-			if (_viewMode == ViewMode.Read)
-			{
-				ImageEntity image = _images [indexPath.Item];
-				var photoController = new PhotoViewController (image);
-				NavigationController.PushViewController (photoController, true);
-				return;
-			}
-			var cell = (ThumbnailCell)collectionView.CellForItem (indexPath);
-			ImageEntity entity = _images [indexPath.Item];
-			UpdateSelectCellStatus (cell, entity);
-			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
-		}
-
 		private void UpdateSelectCellStatus(ThumbnailCell cell, ImageEntity entity)
 		{
 			if (_viewMode == ViewMode.Read)
@@ -191,7 +198,7 @@ namespace Dojo
 
 		private sealed class CollectionViewDelegate : CollectionViewDelegateWaterfallLayout
 		{
-
+			private Dictionary<int, Bag<SizeF>> _sizes = new Dictionary<int, Bag<SizeF>> ();
 			private HomeViewController _controller;
 
 			public CollectionViewDelegate (HomeViewController controller)
@@ -201,9 +208,15 @@ namespace Dojo
 
 			public override Bag<SizeF> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout, NSIndexPath sizeForItemAtIndexPath)
 			{
+				int itemKey = sizeForItemAtIndexPath.Item;
+				if (_sizes.ContainsKey (itemKey))
+				{
+					return _sizes [itemKey];
+				}
 				ImageEntity entity = _controller._images [sizeForItemAtIndexPath.Item];
 				UIImage image = _controller._imageCache.GetSmallImage (entity.LocalIdentifier);
-				return image.Size.ToBag ();
+				_sizes[itemKey] = image.Size.ToBag ();
+				return _sizes [itemKey];
 			}
 		}
 	}
