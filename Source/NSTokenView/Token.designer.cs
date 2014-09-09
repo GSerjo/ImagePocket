@@ -19,14 +19,14 @@ namespace NSTokenView
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (titleLabel != null) {
-				titleLabel.Dispose ();
-				titleLabel = null;
-			}
-
 			if (backgroundView != null) {
 				backgroundView.Dispose ();
 				backgroundView = null;
+			}
+
+			if (titleLabel != null) {
+				titleLabel.Dispose ();
+				titleLabel = null;
 			}
 		}
 	}
