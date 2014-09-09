@@ -4,6 +4,7 @@ using Core;
 using System.Collections.Generic;
 using System.Linq;
 using MonoTouch.UIKit;
+using System.Drawing;
 
 namespace Domain
 {
@@ -50,6 +51,11 @@ namespace Domain
 		public UIImage GetSmallImage(string localId)
 		{
 			return _assetRepository.GetSmallImage (localId);
+		}
+
+		public SizeF GetImageSize(string localId)
+		{
+			return _assetRepository.GetSize (localId);
 		}
 
 		public UIImage GetOrigianlImage(string localId)

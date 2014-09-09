@@ -2,6 +2,8 @@
 using MonoTouch.UIKit;
 using System.Drawing;
 using MonoTouch.Foundation;
+using MonoTouch.Photos;
+using Domain;
 
 namespace Dojo
 {
@@ -13,25 +15,23 @@ namespace Dojo
 		public ImagePreviewCell(RectangleF frame) : base(frame)
 		{
 			_imageView = new UIImageView(frame);
-//			_imageView.Center = ContentView.Center;
-//			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+			_imageView.Center = ContentView.Center;
+			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
 
 
-			_imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+//			_imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
 			_imageView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
 			_imageView.ClipsToBounds = true;
 			ContentView.AddSubview(_imageView);
-			Selected = true;
-			BackgroundColor = UIColor.Black;
 		}
 
-		public UIImage Image
+		public void SetImage(string localId, PHCachingImageManager manager)
 		{
-			set
-			{
-				_imageView.Frame = new RectangleF (0, 0, ContentView.Bounds.Width, ContentView.Bounds.Height);
-				_imageView.Image = value;
-			}
+			var asset = AssetRepository.Instance.GetAsset (localId);
+			manager.RequestImageForAsset (asset, _imageView.Frame.Size, 
+				PHImageContentMode.AspectFit, null, (img, info) => {
+				_imageView.Image = img;
+			});
 		}
 
 		public new void Select()

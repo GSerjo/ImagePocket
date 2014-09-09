@@ -52,7 +52,9 @@
     <Compile Include="Repositories\ImageRepository.cs" />
     <Compile Include="Caches\ImageCache.cs" />
     <Compile Include="Caches\TagCache.cs" />
-    <Compile Include="Repositories\AssetRepository.cs" />
+    <Compile Include="Repositories\AssetRepository.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
@@ -96,5 +98,8 @@
       <Project>{6D39D05E-6C52-457E-AA26-9AC2E3691D01}</Project>
       <Name>Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Image.JPG" />
   </ItemGroup>
 </Project>

@@ -5,6 +5,8 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
+using Domain;
+using MonoTouch.Photos;
 
 namespace Dojo
 {
@@ -21,16 +23,12 @@ namespace Dojo
 		[Export("initWithFrame:")]
 		public ThumbnailCell(RectangleF frame) : base(frame)
 		{
+			frame = new RectangleF (0, 0, ContentView.Bounds.Width, ContentView.Bounds.Height);
 			_imageView = new UIImageView(frame);
-//			_imageView.Center = ContentView.Center;
-//			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-//			_imageView.Transform = CGAffineTransform.MakeScale (0.8f, 0.8f);
-
-			_imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
 			_imageView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
 			_imageView.ClipsToBounds = true;
-
-			ContentView.AddSubview(_imageView);
+			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+			ContentView.AddSubview (_imageView);
 		}
 
 		public static ThumbnailCell Create ()
@@ -38,13 +36,13 @@ namespace Dojo
 			return (ThumbnailCell)Nib.Instantiate (null, null) [0];
 		}
 
-		public UIImage Image
+		public void SetImage(string localId, PHCachingImageManager manager)
 		{
-			set
-			{
-				_imageView.Frame = new RectangleF (0, 0, ContentView.Bounds.Width, ContentView.Bounds.Height);
-				_imageView.Image = value;
-			}
+			var asset = AssetRepository.Instance.GetAsset (localId);
+			manager.RequestImageForAsset (asset, _imageView.Frame.Size, 
+				PHImageContentMode.AspectFit, null, (img, info) => {
+				_imageView.Image = img;
+			});
 		}
 
 		public new void Select()

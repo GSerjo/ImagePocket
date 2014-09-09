@@ -12,6 +12,7 @@ namespace Domain
 	public sealed class AssetRepository
 	{
 		private readonly PHImageManager _imageManager = new PHImageManager();
+		private readonly PHCachingImageManager _cachingImageManager = new PHCachingImageManager ();
 		private readonly SizeF _smallImage = new SizeF(320, 320);
 		private Dictionary<string, PHAsset> _assets = new Dictionary<string, PHAsset>();
 		private static AssetRepository _instance = new AssetRepository();
@@ -45,21 +46,52 @@ namespace Domain
 			return _assets.Values.ToList();
 		}
 
-		public UIImage GetSmallImage(string localId)
+		public SizeF GetSize(string localId)
 		{
 			PHAsset asset = GetAsset (localId);
-			return CreateImage (asset, _smallImage);
+			return new SizeF (asset.PixelWidth, asset.PixelHeight);
+		}
+
+		public UIImage GetCachedImage(string localId, SizeF targetSize)
+		{
+			PHAsset asset = GetAsset (localId);
+			UIImage result = null;
+			_cachingImageManager.RequestImageForAsset (asset, targetSize, PHImageContentMode.AspectFit,
+				null, (image, info) =>
+			{
+				result = image;
+			});
+			Console.WriteLine ("Asset1: W {0}, H: {1}", asset.PixelWidth, asset.PixelHeight);
+			Console.WriteLine ("Image1: W {0}, H: {1}, S: {2}", result.Size.Width, result.Size.Height, result.CurrentScale);
+			return result;
+		}
+
+		public UIImage GetSmallImage(string localId)
+		{
+//			var t = UIImage.FromFile ("Image.jpg");
+			PHAsset asset = GetAsset (localId);
+			var result = CreateImage (asset, _smallImage);
+//			var t = CreateImage (asset, new SizeF (asset.PixelWidth, asset.PixelHeight));
+			return result;
 		}
 
 		private UIImage CreateImage(PHAsset asset, SizeF imageSize)
 		{
 			UIImage result = null;
-			var options = new PHImageRequestOptions ();
-			_imageManager.RequestImageForAsset (asset, imageSize, PHImageContentMode.Default,
-				options, (image, info) =>
-				{
-					result = image;
-				});
+			var options = new PHImageRequestOptions
+			{
+			};
+//			_imageManager.RequestImageForAsset (asset, imageSize, PHImageContentMode.AspectFill,
+//				null, (image, info) =>
+//				{
+//					result = image;
+//				});
+			PHImageManager.DefaultManager.RequestImageForAsset (asset, imageSize, PHImageContentMode.AspectFill,
+				null, (image, info) =>
+			{
+				result = image;
+			});
+			Console.WriteLine ("Image: W {0}, H: {1}, S: {2}", result.Size.Width, result.Size.Height, result.CurrentScale);
 			return result;
 		}
 	}
