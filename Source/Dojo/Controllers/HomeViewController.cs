@@ -74,12 +74,10 @@ namespace Dojo
 			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
 		}
 
-//		public override void WillAnimateRotation (UIInterfaceOrientation toInterfaceOrientation, double duration)
-//		{
-//			base.WillAnimateRotation (toInterfaceOrientation, duration);
-//			var layout = ((CollectionViewWaterfallLayout)CollectionView.CollectionViewLayout);
-//			layout.ColumnCount = toInterfaceOrientation == UIInterfaceOrientation.Portrait ? 2 : 3;
-//		}
+		public override void WillAnimateRotation (UIInterfaceOrientation toInterfaceOrientation, double duration)
+		{
+			base.WillAnimateRotation (toInterfaceOrientation, duration);
+		}
 
 		public void SetTag (TagEntity entity)
 		{
