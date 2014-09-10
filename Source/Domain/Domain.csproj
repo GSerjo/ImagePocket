@@ -52,9 +52,6 @@
     <Compile Include="Repositories\ImageRepository.cs" />
     <Compile Include="Caches\ImageCache.cs" />
     <Compile Include="Caches\TagCache.cs" />
-    <Compile Include="Repositories\AssetRepository.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

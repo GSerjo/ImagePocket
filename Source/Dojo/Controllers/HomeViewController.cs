@@ -21,7 +21,6 @@ namespace Dojo
 		private List<ImageEntity> _images = new List<ImageEntity> ();
 		private readonly ImageCache _imageCache = ImageCache.Instance;
 		private ViewMode _viewMode = ViewMode.Read;
-		private readonly PHCachingImageManager _imageManager = new PHCachingImageManager();
 		private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity> ();
 
 		public HomeViewController (UICollectionViewLayout layout) : base(layout)
@@ -52,9 +51,7 @@ namespace Dojo
 		{
 			var cell = (ImagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
 			ImageEntity entity = _images [indexPath.Item];
-//			UIImage image = _imageCache.GetSmallImage (entity.LocalIdentifier);
-//			cell.Image = image;
-			cell.SetImage (entity.LocalIdentifier, _imageManager);
+			cell.SetImage (entity.LocalIdentifier);
 			UpdateSelectCellStatus (cell, entity);
 			return cell;
 		}

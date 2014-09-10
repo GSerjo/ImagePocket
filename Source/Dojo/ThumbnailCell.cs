@@ -15,6 +15,7 @@ namespace Dojo
 		private UIImageView _imageView;
 		public static readonly UINib Nib = UINib.FromName ("ThumbnailCell", NSBundle.MainBundle);
 		public static readonly NSString Key = new NSString ("ThumbnailCell");
+		private readonly ImageCache _imageCache = ImageCache.Instance;
 
 		public ThumbnailCell (IntPtr handle) : base (handle)
 		{
@@ -36,10 +37,10 @@ namespace Dojo
 			return (ThumbnailCell)Nib.Instantiate (null, null) [0];
 		}
 
-		public void SetImage(string localId, PHCachingImageManager manager)
+		public void SetImage(string localId)
 		{
-			var asset = AssetRepository.Instance.GetAsset (localId);
-			manager.RequestImageForAsset (asset, _imageView.Frame.Size, 
+			var asset = _imageCache.GetAsset (localId);
+			_imageCache.ImageManager.RequestImageForAsset (asset, _imageView.Frame.Size, 
 				PHImageContentMode.AspectFit, null, (img, info) => {
 				_imageView.Image = img;
 			});

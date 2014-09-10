@@ -16,14 +16,13 @@ namespace Dojo
 		private UIImageView _imageView;
 		private bool _fullScreen;
 		private ImageEntity _image;
-		private AssetRepository _assetRepository = AssetRepository.Instance;
 		private readonly ImageCache _imageCache = ImageCache.Instance;
 
 		public PhotoViewController (ImageEntity image)
 		{
 			Title = "Image";
 			_image = image;
-			_asset = _assetRepository.GetAsset (image.LocalIdentifier);
+			_asset = _imageCache.GetAsset (image.LocalIdentifier);
 			_tabButton = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
 			NavigationItem.RightBarButtonItem = _tabButton;
 		}

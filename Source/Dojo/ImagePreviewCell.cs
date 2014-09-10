@@ -10,6 +10,7 @@ namespace Dojo
 	public sealed class ImagePreviewCell : UICollectionViewCell
 	{
 		private UIImageView _imageView;
+		private readonly ImageCache _imageCache = ImageCache.Instance;
 
 		[Export("initWithFrame:")]
 		public ImagePreviewCell(RectangleF frame) : base(frame)
@@ -25,10 +26,10 @@ namespace Dojo
 			ContentView.AddSubview(_imageView);
 		}
 
-		public void SetImage(string localId, PHCachingImageManager manager)
+		public void SetImage(string localId)
 		{
-			var asset = AssetRepository.Instance.GetAsset (localId);
-			manager.RequestImageForAsset (asset, _imageView.Frame.Size, 
+			var asset = _imageCache.GetAsset (localId);
+			_imageCache.ImageManager.RequestImageForAsset (asset, _imageView.Frame.Size, 
 				PHImageContentMode.AspectFit, null, (img, info) => {
 				_imageView.Image = img;
 			});
