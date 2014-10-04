@@ -13,7 +13,7 @@ namespace Domain
 	{
 		private ImageRepository _imageRepository = ImageRepository.Instance;
 		private Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity> ();
-		private readonly Dictionary<string, ImageEntity> _actualImages = new Dictionary<string, ImageEntity> ();
+		private Dictionary<string, ImageEntity> _actualImages = new Dictionary<string, ImageEntity> ();
 
 		private Dictionary<string, PHAsset> _assets = new Dictionary<string, PHAsset>();
 		private readonly PHCachingImageManager _imageManager = new PHCachingImageManager ();
@@ -22,16 +22,8 @@ namespace Domain
 
 		private ImageCache()
 		{
-
-			PHFetchResult fetchResult = PHAsset.FetchAssets (PHAssetMediaType.Image, null);
-			_assets = fetchResult.Cast<PHAsset>()
-				.Where(x => x.PixelWidth > 0 && x.PixelHeight > 0)
-				.ToDictionary (x => x.LocalIdentifier);
-
-			_taggedImages = _imageRepository.GetAll ().ToDictionary (x => x.LocalIdentifier);
-			_actualImages =  GetAssets ()
-				.Select (x => new ImageEntity { LocalIdentifier = x.LocalIdentifier })
-				.ToDictionary (x => x.LocalIdentifier);
+			InitialiseAssets ();
+			InitialiseImages ();
 		}
 
 		public static ImageCache Instance
@@ -48,7 +40,7 @@ namespace Domain
 		{
 			if (tag.IsAll)
 			{
-				return GetAll ();
+				return GetImages ();
 			} 
 			else if (tag.IsUntagged)
 			{
@@ -73,6 +65,22 @@ namespace Domain
 			return _assets [localId];
 		}
 
+		private void InitialiseAssets()
+		{
+			PHFetchResult fetchResult = PHAsset.FetchAssets (PHAssetMediaType.Image, null);
+			_assets = fetchResult.Cast<PHAsset>()
+				.Where(x => x.PixelWidth > 0 && x.PixelHeight > 0)
+				.ToDictionary (x => x.LocalIdentifier);
+		}
+
+		private void InitialiseImages()
+		{
+			_taggedImages = _imageRepository.GetAll ().ToDictionary (x => x.LocalIdentifier);
+			_actualImages =  _assets.Values
+				.Select (x => new ImageEntity { LocalIdentifier = x.LocalIdentifier })
+				.ToDictionary (x => x.LocalIdentifier);
+		}
+
 		private void UpdateTaggedImages(List<ImageEntity> images)
 		{
 			foreach (ImageEntity image in images)
@@ -81,7 +89,7 @@ namespace Domain
 			}
 		}
 
-		private List<ImageEntity> GetAll()
+		private List<ImageEntity> GetImages()
 		{
 			foreach (ImageEntity image in _taggedImages.Values)
 			{
@@ -101,11 +109,6 @@ namespace Domain
 			var untaggedImages = _actualImages.Values.Except (_taggedImages.Values.ToList(), comparer).ToList();
 			result.AddRange (untaggedImages);
 			return result;
-		}
-
-		private List<PHAsset> GetAssets()
-		{
-			return _assets.Values.ToList();
 		}
 
 		private SizeF GetSize(string localId)

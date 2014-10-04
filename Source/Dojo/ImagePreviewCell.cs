@@ -19,7 +19,6 @@ namespace Dojo
 			_imageView.Center = ContentView.Center;
 			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
 
-
 //			_imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
 			_imageView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
 			_imageView.ClipsToBounds = true;
