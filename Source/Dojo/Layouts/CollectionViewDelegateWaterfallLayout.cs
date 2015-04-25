@@ -8,34 +8,34 @@ namespace Dojo
 {
 	public class CollectionViewDelegateWaterfallLayout : UICollectionViewDelegate
 	{
-		public virtual Bag<float> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+		public virtual Option<float> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
 			int minimumInteritemSpacingForSectionAtIndex)
 		{
-			return Bag<float>.Empty;
+			return Option<float>.Empty;
 		}
 
-		public virtual Bag<UIEdgeInsets> CollectionView1(UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+		public virtual Option<UIEdgeInsets> CollectionView1(UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
 			int insetForSectionAtIndex)
 		{
-			return Bag<UIEdgeInsets>.Empty;
+			return Option<UIEdgeInsets>.Empty;
 		}
 
-		public virtual Bag<float> CollectionView2 (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+		public virtual Option<float> CollectionView2 (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
 			int heightForHeaderInSection)
 		{
-			return Bag<float>.Empty;
+			return Option<float>.Empty;
 		}
 
-		public virtual Bag<SizeF> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+		public virtual Option<SizeF> CollectionView (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
 			NSIndexPath sizeForItemAtIndexPath)
 		{
-			return Bag<SizeF>.Empty; 
+			return Option<SizeF>.Empty; 
 		}
 
-		public virtual Bag<float> ColletionView3 (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
+		public virtual Option<float> ColletionView3 (UICollectionView collectionView, UICollectionViewLayout collectionViewLayout,
 			int heightForFooterInSection)
 		{
-			return Bag<float>.Empty;
+			return Option<float>.Empty;
 		}
 	}
 }

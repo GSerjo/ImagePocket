@@ -1,9 +1,8 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadAir.8.1" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/ImagePreviewCell.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.1" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Layouts/CollectionViewWaterfallLayoutItemRenderDirection.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/ImagePreviewCell.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Layouts/CollectionViewWaterfallLayoutItemRenderDirection.cs" Line="11" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

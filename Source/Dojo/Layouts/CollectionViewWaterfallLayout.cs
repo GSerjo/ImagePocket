@@ -115,7 +115,7 @@ namespace Dojo
 		private float ItemwidthInSectionAtIndex(int section)
 		{
 			UIEdgeInsets insets;
-			Bag<UIEdgeInsets> sectionInsets = Delegate.CollectionView1 (CollectionView,this, section);
+			Option<UIEdgeInsets> sectionInsets = Delegate.CollectionView1 (CollectionView,this, section);
 			if (sectionInsets.HasValue)
 			{
 				insets = sectionInsets.Value;
@@ -133,7 +133,7 @@ namespace Dojo
 		{
 			float top = 0;
 			float heightHeader;
-			Bag<float> heightHeaderCustom = Delegate.CollectionView2 (CollectionView, this, section);
+			Option<float> heightHeaderCustom = Delegate.CollectionView2 (CollectionView, this, section);
 			if (heightHeaderCustom.HasValue)
 			{
 				heightHeader = heightHeaderCustom.Value;
