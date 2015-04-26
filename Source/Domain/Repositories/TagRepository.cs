@@ -27,5 +27,10 @@ namespace Domain
 		{
 			Database.AddOrUpdateAll (values);
 		}
+
+		public void Remove(List<TagEntity> tags)
+		{
+			Database.Remove(tags);
+		}
 	}
 }

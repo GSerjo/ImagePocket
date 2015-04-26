@@ -33,13 +33,13 @@ namespace Dojo
 			base.ViewDidLoad ();
 			ConfigureView ();
 			ConfigureToolbar ();
-			FilterImages ();
 		}
 
 		public override void ViewWillAppear (bool animated)
 		{
-			base.ViewWillAppear (animated);
 			FilterImages ();
+			base.ViewWillAppear (animated);
+			ReloadData ();
 		}
 
 		public override int GetItemsCount (UICollectionView collectionView, int section)

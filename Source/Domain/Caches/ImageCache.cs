@@ -95,8 +95,28 @@ namespace Domain
 		{
 			foreach (ImageEntity image in images)
 			{
+				ImageEntity previousImage = _taggedImages [image.LocalIdentifier];
+				var removedTags = previousImage.GetRemovedTags (image);
 				_taggedImages [image.LocalIdentifier] = image;
+				CheckRemovedTags(removedTags);
 			}
+		}
+
+		private void CheckRemovedTags(List<TagEntity> tags)
+		{
+			if (tags.IsNullOrEmpty ())
+			{
+				return;
+			}
+			var emptyTags = new List<TagEntity> ();
+			foreach (var tag in tags)
+			{
+				if (_taggedImages.Values.Any (x => x.ContainsTag (tag)) == false)
+				{
+					emptyTags.Add (tag);
+				}
+			}
+			TagCache.Instance.Remove(emptyTags);
 		}
 
 		private List<ImageEntity> GetImages()

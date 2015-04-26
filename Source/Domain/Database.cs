@@ -67,6 +67,14 @@ namespace Domain
 			}
 		}
 
+		public static void Remove<T>(IList<T> values)
+		{
+			lock (_locker)
+			{
+				values.Iter (x => _database.Delete (x));
+			}
+		}
+
 		public static List<T> GetAllAsync<T>()
 			where T: new()
 		{

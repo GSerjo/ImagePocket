@@ -36,8 +36,7 @@ namespace Domain
 				}
 				TagCache.Instance.SaveOrUpdate (image.Tags);
 			}
-			var saveImages = images.Where (x => x.Tags.IsNotEmpty ()).ToList ();
-			Database.AddOrUpdateAll (saveImages);
+			Database.AddOrUpdateAll (images);
 		}
 	}
 }

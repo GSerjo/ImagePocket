@@ -46,6 +46,12 @@ namespace Domain
 			}
 		}
 
+		public List<TagEntity> GetRemovedTags(ImageEntity entity)
+		{
+			var result = Tags.Except (entity.Tags, new FuncComparer<TagEntity> ((x, y) => x.Equals(y)));
+			return result.ToList();
+		}
+
 		public ImageEntity CloneDeep()
 		{
 			var result = new ImageEntity

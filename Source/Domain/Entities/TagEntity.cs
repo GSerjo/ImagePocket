@@ -47,5 +47,18 @@ namespace Domain
 		{
 			get { return _untagged; }
 		}
+
+		public bool Equals(TagEntity value)
+		{
+			if (ReferenceEquals (null, value))
+			{
+				return false;
+			}
+			if(ReferenceEquals(this, value))
+			{
+				return true;
+			}
+			return value.EntityId == EntityId;		
+		}
 	}
 }

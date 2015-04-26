@@ -63,6 +63,16 @@ namespace Domain
 			return _tags.Values.Where (x => x.Name.Contains (name)).ToList ();
 		}
 
+		public void Remove(List<TagEntity> tags)
+		{
+			if (tags.IsNullOrEmpty ())
+			{
+				return;
+			}
+			tags.Iter (x => _tags.Remove (x.EntityId));
+			_tagRepository.Remove (tags);
+		}
+
 		public void SaveOrUpdate(List<TagEntity> values)
 		{
 			_tagRepository.SaveOrUpdate (values);
