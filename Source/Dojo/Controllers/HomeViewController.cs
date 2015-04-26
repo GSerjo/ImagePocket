@@ -15,7 +15,7 @@ namespace Dojo
 	{
 		private static NSString _cellId = new NSString ("ImageCell");
 		private UIBarButtonItem _btSelect, _btCancel, _btOpenMenu, _btTag;
-		private const string RootTitle = "Bodo Title";
+		private const string RootTitle = "Image Pocket";
 		private const string SelectImagesTitle = "Select images";
 		private TagEntity _currentTag = TagEntity.All;
 		private List<ImageEntity> _images = new List<ImageEntity> ();

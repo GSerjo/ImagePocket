@@ -77,8 +77,18 @@ namespace Domain
 		{
 			_taggedImages = _imageRepository.GetAll ().ToDictionary (x => x.LocalIdentifier);
 			_actualImages =  _assets.Values
-				.Select (x => new ImageEntity { LocalIdentifier = x.LocalIdentifier })
+				.Select (x => CreateImage(x))
 				.ToDictionary (x => x.LocalIdentifier);
+		}
+
+		private ImageEntity CreateImage(PHAsset asset)
+		{
+			var result = new ImageEntity
+			{
+				LocalIdentifier = asset.LocalIdentifier,
+				CreateTime = (DateTime)asset.CreationDate
+			};
+			return result;
 		}
 
 		private void UpdateTaggedImages(List<ImageEntity> images)
@@ -91,15 +101,19 @@ namespace Domain
 
 		private List<ImageEntity> GetImages()
 		{
-			foreach (ImageEntity image in _taggedImages.Values)
+			foreach (ImageEntity taggedImage in _taggedImages.Values)
 			{
-				if (!_actualImages.ContainsKey (image.LocalIdentifier))
+				if (!_actualImages.ContainsKey (taggedImage.LocalIdentifier))
 				{
 					continue;
 				}
-				_actualImages [image.LocalIdentifier] = image;
+				if (taggedImage.Equals (_actualImages [taggedImage.LocalIdentifier]))
+				{
+					continue;
+				}
+				_actualImages [taggedImage.LocalIdentifier] = taggedImage;
 			}
-			return _actualImages.Values.ToList();
+			return _actualImages.Values.OrderByDescending(x=>x.CreateTime).ToList();
 		}
 
 		private List<ImageEntity> GetUntagged()

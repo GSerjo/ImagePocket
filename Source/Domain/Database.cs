@@ -8,6 +8,7 @@ using System.Linq;
 
 namespace Domain
 {
+	///Users/Serjo/Library/Developer/CoreSimulator/Devices/DDEF529C-DC65-4447-8317-FE1F42CE3EEE/data/Containers/Data/Application/2AD180F3-A827-49A5-BA04-0C8289E6F9FC/Documents/NeliburPocket.db
 	public sealed class Database : SQLiteConnection
 	{
 		private static readonly Database _database;
@@ -15,7 +16,8 @@ namespace Domain
 
 		static Database()
 		{
-			_database = new Database(GetDatabasePath());
+			var databasePath = GetDatabasePath ();
+			_database = new Database(databasePath);
 		}
 
 		private Database(string databasePath) : base(databasePath)

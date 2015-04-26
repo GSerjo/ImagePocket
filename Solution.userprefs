@@ -1,8 +1,14 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.1" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Layouts/CollectionViewWaterfallLayoutItemRenderDirection.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadAir.8.4" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Domain/Caches/ImageCache.cs">
     <Files>
-      <File FileName="Source/Dojo/Layouts/CollectionViewWaterfallLayoutItemRenderDirection.cs" Line="11" Column="2" />
+      <File FileName="Source/Dojo/Layouts/CollectionViewDelegateWaterfallLayout.cs" Line="24" Column="29" />
+      <File FileName="Source/Dojo/AppDelegate.cs" Line="57" Column="8" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="10" Column="24" />
+      <File FileName="Source/Domain/Caches/ImageCache.cs" Line="7" Column="22" />
+      <File FileName="Source/Domain/Caches/TagCache.cs" Line="32" Column="20" />
+      <File FileName="Source/Domain/Entities/TagEntity.cs" Line="8" Column="52" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="21" Column="23" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
