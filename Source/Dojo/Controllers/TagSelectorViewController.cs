@@ -189,7 +189,7 @@ namespace Dojo
 
 			private List<TagEntity> GetTags()
 			{
-				var commparer = new FuncComparer<TagEntity> ((x, y) => x.EntityId == y.EntityId);
+				var commparer = new FuncComparer<TagEntity> ((x, y) => x.Equals(y));
 				var commonTags = _controller.GetCommonTags();
 				return _tagRepository.GetUserTags()
 					.Except(commonTags, commparer)

@@ -95,10 +95,17 @@ namespace Domain
 		{
 			foreach (ImageEntity image in images)
 			{
-				ImageEntity previousImage = _taggedImages [image.LocalIdentifier];
-				var removedTags = previousImage.GetRemovedTags (image);
-				_taggedImages [image.LocalIdentifier] = image;
-				CheckRemovedTags(removedTags);
+				ImageEntity previousImage;
+				if (_taggedImages.TryGetValue (image.LocalIdentifier, out previousImage))
+				{
+					var removedTags = previousImage.GetRemovedTags (image);
+					_taggedImages [image.LocalIdentifier] = image;
+					CheckRemovedTags (removedTags);
+				}
+				else
+				{
+					_taggedImages [image.LocalIdentifier] = image;
+				}
 			}
 		}
 

@@ -11,17 +11,28 @@ namespace Domain
 		private List<TagEntity> _tags = new List<TagEntity>();
 		private const string Separator = ",";
 		private TagCache _tagRepository = TagCache.Instance;
+		private string _tagsInternal;
 
 		public ImageEntity ()
 		{
 			CreateTime = DateTime.MinValue;
-			TagsInternal = string.Empty;
 		}
 
 		[Indexed]
 		public string LocalIdentifier { get; set; }
 
-		public string TagsInternal { get; set; }
+		public string TagsInternal
+		{
+			get
+			{
+				_tagsInternal = TagsToString ();
+				return _tagsInternal;
+			}
+			set
+			{
+				_tagsInternal = value;
+			}
+		}
 
 		public DateTime CreateTime { get; set; }
 
@@ -34,11 +45,11 @@ namespace Domain
 				{
 					return _tags;
 				}
-				if (string.IsNullOrEmpty (TagsInternal)) 
+				if (string.IsNullOrEmpty (_tagsInternal)) 
 				{
 					return new List<TagEntity> ();
 				}
-				_tags = TagsInternal.Split(Separator[0])
+				_tags = _tagsInternal.Split(Separator[0])
 					.Select (x => int.Parse (x))
 					.Select(x => _tagRepository.GetById(x))
 					.ToList ();
@@ -71,13 +82,13 @@ namespace Domain
 				return;
 			}
 			_tags.Add (tag);
-			TagsInternal = TagsToString ();
+			_tagsInternal = TagsToString ();
 		}
 
 		public void RemoveTag (TagEntity tag)
 		{
 			_tags.RemoveAll(x => x.EntityId == tag.EntityId);
-			TagsInternal = TagsToString ();
+			_tagsInternal = TagsToString ();
 		}
 
 		public bool ContainsTag(TagEntity tag)

@@ -86,6 +86,10 @@ namespace Dojo
 		private void FilterImages()
 		{
 			_images = _imageCache.GetImages (_currentTag);
+			if (_images.IsNullOrEmpty ())
+			{
+				_images = _imageCache.GetImages (TagEntity.All);
+			}
 		}
 
 		private void ReloadData()

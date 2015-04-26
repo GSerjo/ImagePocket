@@ -25,7 +25,6 @@ namespace Dojo
 			_asset = _imageCache.GetAsset (image.LocalIdentifier);
 			_tabButton = new UIBarButtonItem ("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
 			NavigationItem.RightBarButtonItem = _tabButton;
-
 		}
 
 		public override void ViewDidLoad ()
