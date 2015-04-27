@@ -27,16 +27,24 @@ namespace Domain
 
 		public void SaveOrUpdate(List<ImageEntity> images)
 		{
-
+			if (images.IsNullOrEmpty ())
+			{
+				return;
+			}
 			foreach (ImageEntity image in images)
 			{
-				if (image.Tags.IsEmpty ())
+				if (image.Tags.IsEmpty () && image.New)
 				{
 					continue;
 				}
 				TagCache.Instance.SaveOrUpdate (image.Tags);
 			}
-			Database.AddOrUpdateAll (images);
+
+			var removeImages = images.Where (x => x.Tags.IsEmpty () && x.New == false).ToList ();
+			var addOrUpdate = images.Where (x => x.Tags.IsNotEmpty ()).ToList ();
+
+			Database.Remove (removeImages);
+			Database.AddOrUpdateAll (addOrUpdate);
 		}
 	}
 }
