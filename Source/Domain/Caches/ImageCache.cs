@@ -99,7 +99,15 @@ namespace Domain
 				if (_taggedImages.TryGetValue (image.LocalIdentifier, out previousImage))
 				{
 					var removedTags = previousImage.GetRemovedTags (image);
-					_taggedImages [image.LocalIdentifier] = image;
+
+					if (image.Tags.IsEmpty ())
+					{
+						_taggedImages.Remove (image.LocalIdentifier);
+					}
+					else
+					{
+						_taggedImages [image.LocalIdentifier] = image;
+					}
 					CheckRemovedTags (removedTags);
 				}
 				else
