@@ -42,10 +42,6 @@ namespace Dojo
 
         public void Unselect()
         {
-            if (Selected == false)
-            {
-                return;
-            }
             BackgroundColor = UIColor.White;
             Selected = false;
         }

@@ -16,6 +16,7 @@ namespace Dojo
         private bool _fullScreen;
         private ImageEntity _image;
         private UIImageView _imageView;
+        private PHAsset _asset;
 
         public PhotoViewController(ImageEntity image, List<ImageEntity> images)
         {
@@ -23,6 +24,7 @@ namespace Dojo
             _image = image;
             _images = images;
             _currentImageIndex = _images.FindIndex(x => x.Equals(image));
+            _asset = _imageCache.GetAsset(_image.LocalIdentifier);
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
@@ -33,7 +35,7 @@ namespace Dojo
             View.BackgroundColor = UIColor.White;
             View.UserInteractionEnabled = true;
 
-            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+            
             _imageView = CreateImageView(asset);
 
             View.AddSubview(_imageView);
@@ -53,10 +55,10 @@ namespace Dojo
             View.AddGestureRecognizer(leftSwipe);
         }
 
-        private UIImageView CreateImageView(PHAsset asset)
+        private UIImageView CreateImageView()
         {
             var imageView = new UIImageView(View.Frame);
-            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
+            PHImageManager.DefaultManager.RequestImageForAsset(_asset, View.Frame.Size,
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
                     imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
@@ -76,9 +78,9 @@ namespace Dojo
 
             _currentImageIndex++;
             _image = _images[_currentImageIndex];
-            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+            _asset = _imageCache.GetAsset(_image.LocalIdentifier);
 
-            var imageView = CreateImageView(asset);
+            var imageView = CreateImageView();
             _imageView.RemoveFromSuperview();
             _imageView = imageView;
             View.AddSubview(_imageView);
