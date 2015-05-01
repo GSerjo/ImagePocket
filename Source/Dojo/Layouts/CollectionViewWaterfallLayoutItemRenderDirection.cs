@@ -2,10 +2,10 @@
 
 namespace Dojo
 {
-	public enum CollectionViewWaterfallLayoutItemRenderDirection
-	{
-		ShortestFirst,
-		LeftToRight,
-		RightToLeft
-	}
+    public enum CollectionViewWaterfallLayoutItemRenderDirection
+    {
+        ShortestFirst,
+        LeftToRight,
+        RightToLeft
+    }
 }
