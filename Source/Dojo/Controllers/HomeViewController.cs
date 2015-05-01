@@ -73,7 +73,7 @@ namespace Dojo
             if (_viewMode == ViewMode.Read)
             {
                 ImageEntity image = _images[indexPath.Item];
-                var photoController = new PhotoViewController(image);
+				var photoController = new PhotoViewController(image, _images);
                 NavigationController.PushViewController(photoController, true);
                 return;
             }
