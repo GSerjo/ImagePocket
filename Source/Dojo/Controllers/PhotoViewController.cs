@@ -35,8 +35,7 @@ namespace Dojo
             View.BackgroundColor = UIColor.White;
             View.UserInteractionEnabled = true;
 
-            
-            _imageView = CreateImageView(asset);
+            _imageView = CreateImageView();
 
             View.AddSubview(_imageView);
             AddGestures();
