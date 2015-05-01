@@ -49,25 +49,6 @@ namespace Dojo
             return cell;
         }
 
-        //		private void UpdateSelectCellStatus(ImagePreviewCell cell, ImageEntity entity)
-        //		{
-        //			if (_viewMode == ViewMode.Read)
-        //			{
-        //				cell.Unselect ();
-        //				return;
-        //			}
-        //			if (IsCellSelected(entity))
-        //			{
-        //				_selectedImages.Remove(entity.LocalIdentifier);
-        //				cell.Unselect ();
-        //			} 
-        //			else
-        //			{
-        //				_selectedImages [entity.LocalIdentifier] = entity;
-        //				cell.Select ();
-        //			}
-        //		}
-
         public override int GetItemsCount(UICollectionView collectionView, int section)
         {
             return _images.Count;
