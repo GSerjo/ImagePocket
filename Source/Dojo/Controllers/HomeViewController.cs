@@ -47,46 +47,54 @@ namespace Dojo
 			return _images.Count;
 		}
 
-		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
-		{
-			Console.WriteLine ("GetCell Section: {0}, Row: {1}", indexPath.Section, indexPath.Row);
+        public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            var cell = (ImagePreviewCell)collectionView.DequeueReusableCell(_cellId, indexPath);
+            ImageEntity entity = _images[indexPath.Item];
+            cell.SetImage(entity.LocalIdentifier);
 
-			var cell = (ImagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
-			ImageEntity entity = _images [indexPath.Item];
-			cell.SetImage (entity.LocalIdentifier);
-			UpdateSelectCellStatus (cell, entity);
-			return cell;
-		}
+            if (_viewMode == ViewMode.Read)
+            {
+                cell.Unselect();
+            }
+            else if (_selectedImages.ContainsKey(entity.LocalIdentifier))
+            {
+                cell.SelectCell();
+            }
+            else
+            {
+                cell.Unselect();
+            }
+            return cell;
+        }
 
-		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
-		{
+        public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            if (_viewMode == ViewMode.Read)
+            {
+                ImageEntity image = _images[indexPath.Item];
+                var photoController = new PhotoViewController(image);
+                NavigationController.PushViewController(photoController, true);
+                return;
+            }
+            var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);
+            ImageEntity entity = _images[indexPath.Item];
 
-			Console.WriteLine ("Selected Section: {0}, Row: {1}", indexPath.Section, indexPath.Row);
+            ImageEntity selectedImage;
+            if (_selectedImages.TryGetValue(entity.LocalIdentifier, out selectedImage))
+            {
+                _selectedImages.Remove(entity.LocalIdentifier);
+                cell.Unselect();
+            }
+            else
+            {
+                _selectedImages[entity.LocalIdentifier] = entity;
+                cell.SelectCell();
+            }
 
-			if (_viewMode == ViewMode.Read)
-			{
-				ImageEntity image = _images [indexPath.Item];
-				var photoController = new PhotoViewController (image);
-				NavigationController.PushViewController (photoController, true);
-				return;
-			}
-			var cell = (ImagePreviewCell)collectionView.CellForItem (indexPath);
-			ImageEntity entity = _images [indexPath.Item];
+            NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty();
+        }
 
-			ImageEntity selectedImage;
-			if (_selectedImages.TryGetValue (entity.LocalIdentifier, out selectedImage))
-			{
-				_selectedImages.Remove (entity.LocalIdentifier);
-				cell.Unselect ();
-			}
-			else
-			{
-				_selectedImages [entity.LocalIdentifier] = entity;
-				cell.Select ();
-			}
-
-			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
-		}
 
 		public override void WillAnimateRotation (UIInterfaceOrientation toInterfaceOrientation, double duration)
 		{

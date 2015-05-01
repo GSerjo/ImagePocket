@@ -34,7 +34,7 @@ namespace Dojo
 			});
 		}
 
-		public new void Select()
+		public void SelectCell()
 		{
 			BackgroundColor = UIColor.Black;
 			Selected = true;
