@@ -1,36 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Core;
 
 namespace Domain
 {
-	internal sealed class TagRepository
-	{
-		private static TagRepository _instance = new TagRepository();
+    internal sealed class TagRepository
+    {
+        private static readonly TagRepository _instance = new TagRepository();
 
-		private TagRepository()
-		{
-		}
+        private TagRepository()
+        {
+        }
 
-		public static TagRepository Instance
-		{
-			get { return _instance; }
-		}
+        public static TagRepository Instance
+        {
+            get { return _instance; }
+        }
 
-		public List<TagEntity> GetAll()
-		{
-			return Database.GetAll<TagEntity> ();
-		}
+        public List<TagEntity> GetAll()
+        {
+            return Database.GetAll<TagEntity>();
+        }
 
-		public void SaveOrUpdate(List<TagEntity> values)
-		{
-			Database.AddOrUpdateAll (values);
-		}
+        public void Remove(List<TagEntity> tags)
+        {
+            Database.Remove(tags);
+        }
 
-		public void Remove(List<TagEntity> tags)
-		{
-			Database.Remove(tags);
-		}
-	}
+        public void SaveOrUpdate(List<TagEntity> values)
+        {
+            Database.AddOrUpdateAll(values);
+        }
+    }
 }
