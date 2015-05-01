@@ -49,6 +49,8 @@ namespace Dojo
 
 		public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath)
 		{
+			Console.WriteLine ("GetCell Section: {0}, Row: {1}", indexPath.Section, indexPath.Row);
+
 			var cell = (ImagePreviewCell)collectionView.DequeueReusableCell (_cellId, indexPath);
 			ImageEntity entity = _images [indexPath.Item];
 			cell.SetImage (entity.LocalIdentifier);
@@ -58,6 +60,9 @@ namespace Dojo
 
 		public override void ItemSelected (UICollectionView collectionView, NSIndexPath indexPath)
 		{
+
+			Console.WriteLine ("Selected Section: {0}, Row: {1}", indexPath.Section, indexPath.Row);
+
 			if (_viewMode == ViewMode.Read)
 			{
 				ImageEntity image = _images [indexPath.Item];
@@ -67,7 +72,19 @@ namespace Dojo
 			}
 			var cell = (ImagePreviewCell)collectionView.CellForItem (indexPath);
 			ImageEntity entity = _images [indexPath.Item];
-			UpdateSelectCellStatus (cell, entity);
+
+			ImageEntity selectedImage;
+			if (_selectedImages.TryGetValue (entity.LocalIdentifier, out selectedImage))
+			{
+				_selectedImages.Remove (entity.LocalIdentifier);
+				cell.Unselect ();
+			}
+			else
+			{
+				_selectedImages [entity.LocalIdentifier] = entity;
+				cell.Select ();
+			}
+
 			NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty ();
 		}
 
@@ -155,24 +172,24 @@ namespace Dojo
 			ReloadData ();
 		}
 
-		private void UpdateSelectCellStatus(ImagePreviewCell cell, ImageEntity entity)
-		{
-			if (_viewMode == ViewMode.Read)
-			{
-				cell.Unselect ();
-				return;
-			}
-			if (IsCellSelected(entity))
-			{
-				_selectedImages.Remove(entity.LocalIdentifier);
-				cell.Unselect ();
-			} 
-			else
-			{
-				_selectedImages [entity.LocalIdentifier] = entity;
-				cell.Select ();
-			}
-		}
+//		private void UpdateSelectCellStatus(ImagePreviewCell cell, ImageEntity entity)
+//		{
+//			if (_viewMode == ViewMode.Read)
+//			{
+//				cell.Unselect ();
+//				return;
+//			}
+//			if (IsCellSelected(entity))
+//			{
+//				_selectedImages.Remove(entity.LocalIdentifier);
+//				cell.Unselect ();
+//			} 
+//			else
+//			{
+//				_selectedImages [entity.LocalIdentifier] = entity;
+//				cell.Select ();
+//			}
+//		}
 
 		private void OnTagSelectorCancel(object sender, EventArgs ea)
 		{
