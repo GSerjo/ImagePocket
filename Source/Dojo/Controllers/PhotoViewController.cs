@@ -36,8 +36,26 @@ namespace Dojo
                     _imageView.Image = img;
                 });
             View.AddSubview(_imageView);
+
+            AddGestures();
+        }
+
+        private void AddGestures()
+        {
             var tapGesture = new UITapGestureRecognizer(OnViewTap);
             View.AddGestureRecognizer(tapGesture);
+
+            var rightSwipe = new UISwipeGestureRecognizer(OnRightSwipe)
+            {
+                NumberOfTouchesRequired = 1,
+                Direction = UISwipeGestureRecognizerDirection.Right
+            };
+            View.AddGestureRecognizer(rightSwipe);
+        }
+
+        private void OnRightSwipe(UISwipeGestureRecognizer gesture)
+        {
+            Console.WriteLine("Swipe to the right");
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
