@@ -11,8 +11,8 @@ namespace MonoTouch.SlideoutNavigation
 
         private UIViewController _mainViewController;
         private UIViewController _menuViewController;
-        private UITapGestureRecognizer _tapGesture;
-        private UIPanGestureRecognizer _panGesture;
+//        private UITapGestureRecognizer _tapGesture;
+//        private UIPanGestureRecognizer _panGesture;
         private float _panTranslationX;
         private float _slideHandleHeight;
         private float _menuWidth;
@@ -120,17 +120,17 @@ namespace MonoTouch.SlideoutNavigation
 
             View.BackgroundColor = UIColor.White;
 
-            _tapGesture = new UITapGestureRecognizer();
-            _tapGesture.AddTarget (() => Close(true));
-            _tapGesture.NumberOfTapsRequired = 1;
+//            _tapGesture = new UITapGestureRecognizer();
+//            _tapGesture.AddTarget (() => Close(true));
+//            _tapGesture.NumberOfTapsRequired = 1;
 
-            _panGesture = new UIPanGestureRecognizer {
-                Delegate = new PanDelegate(this),
-                MaximumNumberOfTouches = 1,
-                MinimumNumberOfTouches = 1
-            };
-            _panGesture.AddTarget (() => Pan (ContainerView));
-            ContainerView.AddGestureRecognizer(_panGesture);
+//            _panGesture = new UIPanGestureRecognizer {
+//                Delegate = new PanDelegate(this),
+//                MaximumNumberOfTouches = 1,
+//                MinimumNumberOfTouches = 1
+//            };
+//            _panGesture.AddTarget (() => Pan (ContainerView));
+//            ContainerView.AddGestureRecognizer(_panGesture);
 
             if (_menuViewController != null)
                 SetMenuViewController(_menuViewController, false);
@@ -146,58 +146,58 @@ namespace MonoTouch.SlideoutNavigation
         /// <param name="percentage">The floating point number (0-1) of how far to animate.</param>
         protected abstract void Animate(UIView menuView, UIView mainView, float percentage);
 
-        private void Pan (UIView view)
-        {
-            if (_panGesture.State == UIGestureRecognizerState.Began)
-            {
-                if (!IsOpen)
-                {
-                    if (_menuViewController != null)
-                        _menuViewController.ViewWillAppear(true);
-                }
-            }
-            else if (_panGesture.State == UIGestureRecognizerState.Changed)
-            {
-                _panTranslationX = _panGesture.TranslationInView(View).X;
-                float total = MenuWidth;
-                float numerator = IsOpen ? MenuWidth + _panTranslationX : _panTranslationX;
-                float percentage = numerator / total;
-                if (percentage < 0)
-                    percentage = 0;
-
-                NSAction animation = () => Animate(_menuViewController.View, ContainerView, percentage);
-                UIView.Animate(0.01f, 0, UIViewAnimationOptions.BeginFromCurrentState | UIViewAnimationOptions.AllowUserInteraction, animation, EmptyAction);
-            }
-            else if (_panGesture.State == UIGestureRecognizerState.Ended || _panGesture.State == UIGestureRecognizerState.Cancelled)
-            {
-                float velocity = _panGesture.VelocityInView(View).X;
-                float total = MenuWidth;
-                float numerator = IsOpen ? MenuWidth + _panTranslationX : _panTranslationX;
-                float percentage = numerator / total;
-                var animationTime = Math.Min(1 / (Math.Abs(velocity) / 100), OpenAnimationDuration);
-
-                if (IsOpen)
-                {
-                    if (percentage > .66f && velocity > -VelocityTrigger)
-                    {
-                        NSAction animation = () => Animate(_menuViewController.View, ContainerView, 1);
-                        UIView.Animate(OpenAnimationDuration, 0, AnimationOption, animation, EmptyAction);
-                    }
-                    else
-                        Close(true, animationTime);
-                }
-                else
-                {
-                    if (percentage < .33f && velocity < VelocityTrigger)
-                    {
-                        NSAction animation = () => Animate(_menuViewController.View, ContainerView, 0);
-                        UIView.Animate(OpenAnimationDuration, 0, AnimationOption, animation, EmptyAction);
-                    }
-                    else
-                        Open(true, animationTime);
-                }
-            }
-        }
+//        private void Pan (UIView view)
+//        {
+//            if (_panGesture.State == UIGestureRecognizerState.Began)
+//            {
+//                if (!IsOpen)
+//                {
+//                    if (_menuViewController != null)
+//                        _menuViewController.ViewWillAppear(true);
+//                }
+//            }
+//            else if (_panGesture.State == UIGestureRecognizerState.Changed)
+//            {
+//                _panTranslationX = _panGesture.TranslationInView(View).X;
+//                float total = MenuWidth;
+//                float numerator = IsOpen ? MenuWidth + _panTranslationX : _panTranslationX;
+//                float percentage = numerator / total;
+//                if (percentage < 0)
+//                    percentage = 0;
+//
+//                NSAction animation = () => Animate(_menuViewController.View, ContainerView, percentage);
+//                UIView.Animate(0.01f, 0, UIViewAnimationOptions.BeginFromCurrentState | UIViewAnimationOptions.AllowUserInteraction, animation, EmptyAction);
+//            }
+//            else if (_panGesture.State == UIGestureRecognizerState.Ended || _panGesture.State == UIGestureRecognizerState.Cancelled)
+//            {
+//                float velocity = _panGesture.VelocityInView(View).X;
+//                float total = MenuWidth;
+//                float numerator = IsOpen ? MenuWidth + _panTranslationX : _panTranslationX;
+//                float percentage = numerator / total;
+//                var animationTime = Math.Min(1 / (Math.Abs(velocity) / 100), OpenAnimationDuration);
+//
+//                if (IsOpen)
+//                {
+//                    if (percentage > .66f && velocity > -VelocityTrigger)
+//                    {
+//                        NSAction animation = () => Animate(_menuViewController.View, ContainerView, 1);
+//                        UIView.Animate(OpenAnimationDuration, 0, AnimationOption, animation, EmptyAction);
+//                    }
+//                    else
+//                        Close(true, animationTime);
+//                }
+//                else
+//                {
+//                    if (percentage < .33f && velocity < VelocityTrigger)
+//                    {
+//                        NSAction animation = () => Animate(_menuViewController.View, ContainerView, 0);
+//                        UIView.Animate(OpenAnimationDuration, 0, AnimationOption, animation, EmptyAction);
+//                    }
+//                    else
+//                        Open(true, animationTime);
+//                }
+//            }
+//        }
 
         public void Open(bool animated)
         {
@@ -216,7 +216,7 @@ namespace MonoTouch.SlideoutNavigation
             NSAction completion = () =>
             {
                 IsOpen = true;
-                ContainerView.AddGestureRecognizer(_tapGesture);
+//                ContainerView.AddGestureRecognizer(_tapGesture);
 
                 if (_menuViewController != null)
                     _menuViewController.ViewDidAppear(animated);
@@ -256,7 +256,7 @@ namespace MonoTouch.SlideoutNavigation
 
                 if (ContainerView.Subviews.Length > 0)
                     ContainerView.Subviews[0].UserInteractionEnabled = true;
-                ContainerView.RemoveGestureRecognizer(_tapGesture);
+//                ContainerView.RemoveGestureRecognizer(_tapGesture);
 
                 if (_menuViewController != null)
                     _menuViewController.ViewDidDisappear(animated);

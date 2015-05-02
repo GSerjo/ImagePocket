@@ -1,8 +1,8 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.iSerjoAir" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/HomeViewController.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="21" Column="55" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="18" Column="56" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -16,7 +16,6 @@ namespace Dojo
         private bool _fullScreen;
         private ImageEntity _image;
         private UIImageView _imageView;
-        private PHAsset _asset;
 
         public PhotoViewController(ImageEntity image, List<ImageEntity> images)
         {
@@ -24,8 +23,7 @@ namespace Dojo
             _image = image;
             _images = images;
             _currentImageIndex = _images.FindIndex(x => x.Equals(image));
-            _asset = _imageCache.GetAsset(_image.LocalIdentifier);
-
+            
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
         }
@@ -33,56 +31,56 @@ namespace Dojo
         public override void ViewDidLoad()
         {
             View.BackgroundColor = UIColor.White;
-            View.UserInteractionEnabled = true;
 
-            _imageView = CreateImageView();
+			_imageView = new UIImageView (View.Frame)
+			{
+				MultipleTouchEnabled = true,
+				UserInteractionEnabled = true
+			};
 
+			var tapGesture = new UITapGestureRecognizer(OnImageTap);
+			_imageView.AddGestureRecognizer(tapGesture);
+
+			var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
+			{
+				NumberOfTouchesRequired = 1,
+				Direction = UISwipeGestureRecognizerDirection.Left
+			};
+			_imageView.AddGestureRecognizer(leftSwipe);
             View.AddSubview(_imageView);
-            AddGestures();
+
+			var asset = _imageCache.GetAsset(_image.LocalIdentifier);
+			UpdateImage (asset);
         }
 
-        private void AddGestures()
+		private void UpdateImage(PHAsset asset)
         {
-            var tapGesture = new UITapGestureRecognizer(OnViewTap);
-            View.AddGestureRecognizer(tapGesture);
-
-            var leftSwipe = new UISwipeGestureRecognizer(OnLeftSwipe)
-            {
-                NumberOfTouchesRequired = 1,
-                Direction = UISwipeGestureRecognizerDirection.Left
-            };
-            View.AddGestureRecognizer(leftSwipe);
-        }
-
-        private UIImageView CreateImageView()
-        {
-            var imageView = new UIImageView(View.Frame);
-            PHImageManager.DefaultManager.RequestImageForAsset(_asset, View.Frame.Size,
+            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
-                    imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-                    imageView.Image = img;
+                    _imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+                    _imageView.Image = img;
                 });
-            return imageView;
         }
 
-        private void OnLeftSwipe(UISwipeGestureRecognizer gesture)
+        private void OnImageSwipe(UISwipeGestureRecognizer gesture)
         {
             Console.WriteLine("Swipe to the left");
 
-            if (_currentImageIndex >= _images.Count)
-            {
-                return;
-            }
+			if (gesture.Direction == UISwipeGestureRecognizerDirection.Left)
+			{
 
-            _currentImageIndex++;
-            _image = _images[_currentImageIndex];
-            _asset = _imageCache.GetAsset(_image.LocalIdentifier);
+				if (_currentImageIndex >= _images.Count)
+				{
+					return;
+				}
 
-            var imageView = CreateImageView();
-            _imageView.RemoveFromSuperview();
-            _imageView = imageView;
-            View.AddSubview(_imageView);
+				_currentImageIndex++;
+				_image = _images [_currentImageIndex];
+				var asset = _imageCache.GetAsset (_image.LocalIdentifier);
+
+				UpdateImage (asset);
+			}
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
@@ -101,7 +99,7 @@ namespace Dojo
             _image = ea.Data.First();
         }
 
-        private void OnViewTap(UITapGestureRecognizer gesture)
+        private void OnImageTap(UITapGestureRecognizer gesture)
         {
             _fullScreen = !_fullScreen;
             NavigationController.SetNavigationBarHidden(_fullScreen, false);
