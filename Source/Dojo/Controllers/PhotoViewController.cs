@@ -65,9 +65,8 @@ namespace Dojo
             switch (gesture.Direction)
             {
                 case UISwipeGestureRecognizerDirection.Left:
-                    if (_currentImageIndex >= _images.Count)
+                    if (_currentImageIndex >= _images.Count - 1)
                     {
-                        Console.WriteLine("Left {0}", _currentImageIndex);
                         return;
                     }
                     _currentImageIndex++;
@@ -76,7 +75,6 @@ namespace Dojo
                 case UISwipeGestureRecognizerDirection.Right:
                     if (_currentImageIndex <= 0)
                     {
-                        Console.WriteLine("Right {0}", _currentImageIndex);
                         return;
                     }
                     _currentImageIndex--;
@@ -119,7 +117,7 @@ namespace Dojo
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
                     _imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-                    _imageView.Image = img;
+					UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.TransitionCrossDissolve ,()=> _imageView.Image = img, null);
                 });
         }
     }
