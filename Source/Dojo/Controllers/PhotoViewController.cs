@@ -23,7 +23,7 @@ namespace Dojo
             _image = image;
             _images = images;
             _currentImageIndex = _images.FindIndex(x => x.Equals(image));
-            
+
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
         }
@@ -32,55 +32,69 @@ namespace Dojo
         {
             View.BackgroundColor = UIColor.White;
 
-			_imageView = new UIImageView (View.Frame)
-			{
-				MultipleTouchEnabled = true,
-				UserInteractionEnabled = true
-			};
+            _imageView = new UIImageView(View.Frame)
+            {
+                MultipleTouchEnabled = true,
+                UserInteractionEnabled = true
+            };
 
-			var tapGesture = new UITapGestureRecognizer(OnImageTap);
-			_imageView.AddGestureRecognizer(tapGesture);
+            var tapGesture = new UITapGestureRecognizer(OnImageTap);
+            _imageView.AddGestureRecognizer(tapGesture);
 
-			var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
-			{
-				NumberOfTouchesRequired = 1,
-				Direction = UISwipeGestureRecognizerDirection.Left
-			};
-			_imageView.AddGestureRecognizer(leftSwipe);
+            var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
+            {
+                NumberOfTouchesRequired = 1,
+                Direction = UISwipeGestureRecognizerDirection.Left
+            };
+            _imageView.AddGestureRecognizer(leftSwipe);
+
+            var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
+            {
+                NumberOfTouchesRequired = 1,
+                Direction = UISwipeGestureRecognizerDirection.Right
+            };
+            _imageView.AddGestureRecognizer(rigthSwipe);
             View.AddSubview(_imageView);
 
-			var asset = _imageCache.GetAsset(_image.LocalIdentifier);
-			UpdateImage (asset);
-        }
-
-		private void UpdateImage(PHAsset asset)
-        {
-            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
-                PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
-                {
-                    _imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-                    _imageView.Image = img;
-                });
+            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+            UpdateImage(asset);
         }
 
         private void OnImageSwipe(UISwipeGestureRecognizer gesture)
         {
-            Console.WriteLine("Swipe to the left");
+            switch (gesture.Direction)
+            {
+                case UISwipeGestureRecognizerDirection.Left:
+                    if (_currentImageIndex >= _images.Count)
+                    {
+                        Console.WriteLine("Left {0}", _currentImageIndex);
+                        return;
+                    }
+                    _currentImageIndex++;
 
-			if (gesture.Direction == UISwipeGestureRecognizerDirection.Left)
-			{
+                    break;
+                case UISwipeGestureRecognizerDirection.Right:
+                    if (_currentImageIndex <= 0)
+                    {
+                        Console.WriteLine("Right {0}", _currentImageIndex);
+                        return;
+                    }
+                    _currentImageIndex--;
+                    break;
+                default:
+                    return;
+            }
 
-				if (_currentImageIndex >= _images.Count)
-				{
-					return;
-				}
+            _image = _images[_currentImageIndex];
+            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+            UpdateImage(asset);
+        }
 
-				_currentImageIndex++;
-				_image = _images [_currentImageIndex];
-				var asset = _imageCache.GetAsset (_image.LocalIdentifier);
-
-				UpdateImage (asset);
-			}
+        private void OnImageTap(UITapGestureRecognizer gesture)
+        {
+            _fullScreen = !_fullScreen;
+            NavigationController.SetNavigationBarHidden(_fullScreen, false);
+            View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
@@ -99,11 +113,14 @@ namespace Dojo
             _image = ea.Data.First();
         }
 
-        private void OnImageTap(UITapGestureRecognizer gesture)
+        private void UpdateImage(PHAsset asset)
         {
-            _fullScreen = !_fullScreen;
-            NavigationController.SetNavigationBarHidden(_fullScreen, false);
-            View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
+            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
+                PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
+                {
+                    _imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+                    _imageView.Image = img;
+                });
         }
     }
 }

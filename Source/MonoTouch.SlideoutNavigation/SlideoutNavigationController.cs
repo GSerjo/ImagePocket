@@ -7,13 +7,13 @@ namespace MonoTouch.SlideoutNavigation
 {
     public abstract class SlideoutNavigationController : UIViewController
     {
-        private readonly static NSAction EmptyAction = () => { };
+//        private readonly static NSAction EmptyAction = () => { };
 
         private UIViewController _mainViewController;
         private UIViewController _menuViewController;
         private UITapGestureRecognizer _tapGesture;
 //        private UIPanGestureRecognizer _panGesture;
-        private float _panTranslationX;
+//        private float _panTranslationX;
         private float _slideHandleHeight;
         private float _menuWidth;
         private SlideHandle _slideHandle;
@@ -146,8 +146,8 @@ namespace MonoTouch.SlideoutNavigation
         /// <param name="percentage">The floating point number (0-1) of how far to animate.</param>
         protected abstract void Animate(UIView menuView, UIView mainView, float percentage);
 
-        private void Pan (UIView view)
-        {
+//        private void Pan (UIView view)
+//        {
 //            if (_panGesture.State == UIGestureRecognizerState.Began)
 //            {
 //                if (!IsOpen)
@@ -197,7 +197,7 @@ namespace MonoTouch.SlideoutNavigation
 //                        Open(true, animationTime);
 //                }
 //            }
-        }
+//        }
 
         public void Open(bool animated)
         {

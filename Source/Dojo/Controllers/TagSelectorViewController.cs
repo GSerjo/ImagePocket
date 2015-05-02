@@ -116,11 +116,6 @@ namespace Dojo
                 _tags = GetTags();
             }
 
-            public int TagCount
-            {
-                get { return _tags.Count; }
-            }
-
             public void Filter(string text)
             {
                 if (string.IsNullOrWhiteSpace(text))
