@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Drawing;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
-using Domain;
 using System.Collections.Generic;
-using MonoTouch.CoreFoundation;
 using System.Linq;
 using Core;
+using Domain;
+using MonoTouch.CoreFoundation;
+using MonoTouch.Foundation;
+using MonoTouch.UIKit;
 using NSTokenView;
 
 namespace Dojo
 {
     public partial class TagSelectorViewController : UIViewController
     {
-        public event EventHandler<EventArgs> Cancel = delegate { };
-        public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
-        private static TagCache _tagRepository = TagCache.Instance;
-        private List<ImageEntity> _images = new List<ImageEntity>();
+        private static readonly TagCache _tagRepository = TagCache.Instance;
+        private readonly List<ImageEntity> _images = new List<ImageEntity>();
         private TagTableSource _tagTableSource;
         private TagTokenDelegate _tagTokenDelegate;
         private TagTokenSource _tagTokenSource;
@@ -31,12 +28,8 @@ namespace Dojo
             _images.AddRange(images.Select(x => x.CloneDeep()));
         }
 
-        private void Initialise()
-        {
-            _tagTableSource = new TagTableSource(this);
-            _tagTokenDelegate = new TagTokenDelegate(this);
-            _tagTokenSource = new TagTokenSource(this);
-        }
+        public event EventHandler<EventArgs> Cancel = delegate { };
+        public event EventHandler<EventArgsOf<List<ImageEntity>>> Done = delegate { };
 
         public override void ViewDidLoad()
         {
@@ -59,27 +52,29 @@ namespace Dojo
             btDone.Clicked += OnDone;
         }
 
+        private void AddTagToImages(TagEntity tag)
+        {
+            _images.Iter(x => x.AddTag(tag));
+        }
+
         private List<TagEntity> GetCommonTags()
         {
             List<TagEntity> result = _images.First().Tags;
             IEnumerable<List<TagEntity>> imageTags = _images.Select(x => x.Tags);
             var comparer = new FuncComparer<TagEntity>((x, y) => x.EntityId == y.EntityId);
 
-            foreach (var tags in imageTags)
+            foreach (List<TagEntity> tags in imageTags)
             {
                 result = result.Intersect(tags, comparer).ToList();
             }
             return result;
         }
 
-        private void AddTagToImages(TagEntity tag)
+        private void Initialise()
         {
-            _images.Iter(x => x.AddTag(tag));
-        }
-
-        private void RemoveTagFormImages(TagEntity tag)
-        {
-            _images.Iter(x => x.RemoveTag(tag));
+            _tagTableSource = new TagTableSource(this);
+            _tagTokenDelegate = new TagTokenDelegate(this);
+            _tagTokenSource = new TagTokenSource(this);
         }
 
         private void OnCancel(object sender, EventArgs ea)
@@ -103,17 +98,17 @@ namespace Dojo
             DispatchQueue.MainQueue.DispatchAsync(() => allTags.ReloadData());
         }
 
+        private void RemoveTagFormImages(TagEntity tag)
+        {
+            _images.Iter(x => x.RemoveTag(tag));
+        }
+
 
         private sealed class TagTableSource : UITableViewSource
         {
-            private string cellIdentifier = "TableCell";
+            private readonly TagSelectorViewController _controller;
+            private readonly string cellIdentifier = "TableCell";
             private List<TagEntity> _tags;
-            private TagSelectorViewController _controller;
-
-            public int TagCount
-            {
-                get { return _tags.Count; }
-            }
 
             public TagTableSource(TagSelectorViewController controller)
             {
@@ -121,9 +116,9 @@ namespace Dojo
                 _tags = GetTags();
             }
 
-            public TagEntity GetTag(int index)
+            public int TagCount
             {
-                return _tags[index];
+                get { return _tags.Count; }
             }
 
             public void Filter(string text)
@@ -139,17 +134,12 @@ namespace Dojo
                         .ToList();
                     if (_tags.IsEmpty())
                     {
-                        var addTagRequest = TagEntity.AddTagRequest;
+                        TagEntity addTagRequest = TagEntity.AddTagRequest;
                         addTagRequest.Name = text;
                         _tags.Insert(_tags.Count, addTagRequest);
                     }
                 }
                 ReloadTags();
-            }
-
-            public override int RowsInSection(UITableView tableview, int section)
-            {
-                return _tags.Count;
             }
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -159,7 +149,7 @@ namespace Dojo
                 {
                     cell = new UITableViewCell(UITableViewCellStyle.Default, cellIdentifier);
                 }
-                var tag = _tags[indexPath.Row];
+                TagEntity tag = _tags[indexPath.Row];
                 if (tag.IsAddTagRequest)
                 {
                     cell.TextLabel.Text = string.Format("Add new tag \"{0}\"", tag.Name);
@@ -191,10 +181,15 @@ namespace Dojo
                 ReloadTags();
             }
 
+            public override int RowsInSection(UITableView tableview, int section)
+            {
+                return _tags.Count;
+            }
+
             private List<TagEntity> GetTags()
             {
                 var commparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
-                var commonTags = _controller.GetCommonTags();
+                List<TagEntity> commonTags = _controller.GetCommonTags();
                 return _tagRepository.GetUserTags()
                                      .Except(commonTags, commparer)
                                      .ToList();
@@ -231,14 +226,20 @@ namespace Dojo
 
         private sealed class TagTokenSource : TokenViewSource
         {
-            private List<TagEntity> _source;
             private readonly TagSelectorViewController _controller;
+            private readonly List<TagEntity> _source;
 
             public TagTokenSource(TagSelectorViewController controller)
             {
                 _controller = controller;
                 _source = controller.GetCommonTags()
                                     .OrderBy(x => x.Name).ToList();
+            }
+
+            public void AddTag(TagEntity tag)
+            {
+                _source.Add(tag);
+                _controller.tagTokenView.ReloadData();
             }
 
             public override string GetToken(TokenView tokenView, int index)
@@ -256,12 +257,6 @@ namespace Dojo
                 TagEntity tag = _source[index];
                 _controller.RemoveTagFormImages(tag);
                 _source.RemoveAt(index);
-            }
-
-            public void AddTag(TagEntity tag)
-            {
-                _source.Add(tag);
-                _controller.tagTokenView.ReloadData();
             }
         }
     }
