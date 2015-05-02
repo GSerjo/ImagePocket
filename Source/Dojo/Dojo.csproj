@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -107,8 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Layouts\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -125,7 +123,6 @@
     <Compile Include="Controllers\TagSelectorViewController.designer.cs">
       <DependentUpon>TagSelectorViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewMode.cs" />
     <Compile Include="ThumbnailCell.cs" />
     <Compile Include="ThumbnailCell.designer.cs">
       <DependentUpon>ThumbnailCell.cs</DependentUpon>

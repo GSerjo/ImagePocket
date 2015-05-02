@@ -43,14 +43,12 @@ namespace Dojo
 
             var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
             {
-                NumberOfTouchesRequired = 1,
                 Direction = UISwipeGestureRecognizerDirection.Left
             };
             _imageView.AddGestureRecognizer(leftSwipe);
 
             var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
             {
-                NumberOfTouchesRequired = 1,
                 Direction = UISwipeGestureRecognizerDirection.Right
             };
             _imageView.AddGestureRecognizer(rigthSwipe);
@@ -117,7 +115,7 @@ namespace Dojo
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
                     _imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-					UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.TransitionCrossDissolve ,()=> _imageView.Image = img, null);
+                    UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.TransitionCrossDissolve, () => _imageView.Image = img, null);
                 });
         }
     }

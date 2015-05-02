@@ -28,6 +28,14 @@ namespace Dojo
             Title = RootTitle;
         }
 
+
+        private enum ViewMode
+        {
+            Read,
+            Select
+        }
+
+
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var cell = (ImagePreviewCell)collectionView.DequeueReusableCell(_cellId, indexPath);
