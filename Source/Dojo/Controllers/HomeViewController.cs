@@ -146,11 +146,6 @@ namespace Dojo
             }
         }
 
-        private bool IsCellSelected(ImageEntity entity)
-        {
-            return _selectedImages.ContainsKey(entity.LocalIdentifier);
-        }
-
         private void OnBatchSelect(object sender, EventArgs ea)
         {
             SetSelectMode();

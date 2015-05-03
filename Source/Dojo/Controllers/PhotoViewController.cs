@@ -27,9 +27,9 @@ namespace Dojo
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
 
-			var deleteButton = new UIBarButtonItem (UIBarButtonSystemItem.Trash, OnTrashClicked);
-			var deleteSpace = new UIBarButtonItem (UIBarButtonSystemItem.FlexibleSpace);
-			ToolbarItems = new []{deleteSpace,  deleteButton };
+            var deleteButton = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
+            var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
+            ToolbarItems = new[] { deleteSpace, deleteButton };
         }
 
         public override void ViewDidLoad()
@@ -62,17 +62,17 @@ namespace Dojo
             UpdateImage(asset);
         }
 
-		public override void ViewWillAppear (bool animated)
-		{
-			base.ViewWillAppear (animated);
-			NavigationController.SetToolbarHidden (false, true);
-		}
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+            NavigationController.SetToolbarHidden(false, true);
+        }
 
-		public override void ViewWillDisappear (bool animated)
-		{
-			base.ViewWillDisappear (animated);
-			NavigationController.SetToolbarHidden (true, true);
-		}
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+            NavigationController.SetToolbarHidden(true, true);
+        }
 
         private void OnImageSwipe(UISwipeGestureRecognizer gesture)
         {
@@ -106,13 +106,9 @@ namespace Dojo
         {
             _fullScreen = !_fullScreen;
             NavigationController.SetNavigationBarHidden(_fullScreen, false);
-			NavigationController.SetToolbarHidden (_fullScreen, false);
+            NavigationController.SetToolbarHidden(_fullScreen, false);
             View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
         }
-
-		private void OnTrashClicked(object sender, EventArgs ea)
-		{
-		}
 
         private void OnTagClicked(object sender, EventArgs ea)
         {
@@ -128,6 +124,16 @@ namespace Dojo
         {
             _imageCache.SaveOrUpdate(ea.Data);
             _image = ea.Data.First();
+        }
+
+        private void OnTrashClicked(object sender, EventArgs ea)
+        {
+            PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+            {
+                PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+                PHAssetChangeRequest.DeleteAssets(new[]{asset});
+            },
+            (result, message) => Console.WriteLine(message));
         }
 
         private void UpdateImage(PHAsset asset)
