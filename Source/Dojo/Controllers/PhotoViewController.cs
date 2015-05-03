@@ -27,9 +27,9 @@ namespace Dojo
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
 
-            var deleteButton = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
+            var btTrash = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
-            ToolbarItems = new[] { deleteSpace, deleteButton };
+            ToolbarItems = new[] { deleteSpace, btTrash };
         }
 
         public override void ViewDidLoad()

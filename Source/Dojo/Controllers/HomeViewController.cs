@@ -5,6 +5,7 @@ using Core;
 using Domain;
 using MonoTouch.CoreFoundation;
 using MonoTouch.Foundation;
+using MonoTouch.Photos;
 using MonoTouch.UIKit;
 
 namespace Dojo
@@ -12,12 +13,15 @@ namespace Dojo
     public sealed class HomeViewController : UICollectionViewController
     {
         private const string RootTitle = "Image Pocket";
+        private const string SelectButtonName = "Select";
         private const string SelectImagesTitle = "Select images";
+        private const string TagButonName = "Tag";
         private static readonly NSString _cellId = new NSString("ImageCell");
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private UIBarButtonItem _btCancel, _btOpenMenu;
         private UIBarButtonItem _btSelect;
         private UIBarButtonItem _btTag;
+        private UIBarButtonItem _btTrash;
         private TagEntity _currentTag = TagEntity.All;
         private List<ImageEntity> _images = new List<ImageEntity>();
         private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity>();
@@ -87,6 +91,7 @@ namespace Dojo
             }
 
             NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty();
+            _btTrash.Enabled = _selectedImages.IsNotEmpty();
         }
 
         public void SetTag(TagEntity entity)
@@ -105,30 +110,30 @@ namespace Dojo
 
         public override void ViewWillAppear(bool animated)
         {
-            FilterImages();
             base.ViewWillAppear(animated);
+            NavigationController.SetToolbarHidden(false, true);
+            FilterImages();
             ReloadData();
-        }
-
-        public override void WillAnimateRotation(UIInterfaceOrientation toInterfaceOrientation, double duration)
-        {
-            base.WillAnimateRotation(toInterfaceOrientation, duration);
         }
 
         private void ClearSelectedCells()
         {
             _selectedImages = new Dictionary<string, ImageEntity>();
+            _btTrash.Enabled = false;
         }
 
         private void ConfigureToolbar()
         {
-            _btSelect = new UIBarButtonItem("Select", UIBarButtonItemStyle.Plain, OnBatchSelect);
+            _btSelect = new UIBarButtonItem(SelectButtonName, UIBarButtonItemStyle.Plain, OnBatchSelect);
             NavigationItem.RightBarButtonItem = _btSelect;
 
-            _btCancel = new UIBarButtonItem(UIBarButtonSystemItem.Cancel);
-            _btCancel.Clicked += OnBatchSelectCancel;
+            _btCancel = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, OnBatchSelectCancel);
+            _btTag = new UIBarButtonItem(TagButonName, UIBarButtonItemStyle.Plain, OnTagClicked);
 
-            _btTag = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
+            _btTrash = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
+            var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
+            ToolbarItems = new[] { deleteSpace, _btTrash };
+            _btTrash.Enabled = false;
         }
 
         private void ConfigureView()
@@ -176,6 +181,19 @@ namespace Dojo
         {
             SetReadMode();
             _imageCache.SaveOrUpdate(ea.Data);
+        }
+
+        private void OnTrashClicked(object sender, EventArgs e)
+        {
+            PHAsset[] assets = _selectedImages.Values.Select(x => x.LocalIdentifier)
+                                              .Select(x => _imageCache.GetAsset(x))
+                                              .ToArray();
+            if (assets.IsNullOrEmpty())
+            {
+                return;
+            }
+            PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() => PHAssetChangeRequest.DeleteAssets(assets),
+                (result, message) => Console.WriteLine(message));
         }
 
         private void ReloadData()
