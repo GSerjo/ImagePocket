@@ -26,6 +26,10 @@ namespace Dojo
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
+
+			var deleteButton = new UIBarButtonItem (UIBarButtonSystemItem.Trash, OnTrashClicked);
+			var deleteSpace = new UIBarButtonItem (UIBarButtonSystemItem.FlexibleSpace);
+			ToolbarItems = new []{deleteSpace,  deleteButton };
         }
 
         public override void ViewDidLoad()
@@ -57,6 +61,18 @@ namespace Dojo
             PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
             UpdateImage(asset);
         }
+
+		public override void ViewWillAppear (bool animated)
+		{
+			base.ViewWillAppear (animated);
+			NavigationController.SetToolbarHidden (false, true);
+		}
+
+		public override void ViewWillDisappear (bool animated)
+		{
+			base.ViewWillDisappear (animated);
+			NavigationController.SetToolbarHidden (true, true);
+		}
 
         private void OnImageSwipe(UISwipeGestureRecognizer gesture)
         {
@@ -90,8 +106,13 @@ namespace Dojo
         {
             _fullScreen = !_fullScreen;
             NavigationController.SetNavigationBarHidden(_fullScreen, false);
+			NavigationController.SetToolbarHidden (_fullScreen, false);
             View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
         }
+
+		private void OnTrashClicked(object sender, EventArgs ea)
+		{
+		}
 
         private void OnTagClicked(object sender, EventArgs ea)
         {

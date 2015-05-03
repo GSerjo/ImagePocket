@@ -2,8 +2,21 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.iSerjoAir" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/HomeViewController.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="18" Column="56" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="18" Column="35" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="14" Column="41" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Solution" expanded="True">
+            <Node name="Dojo" expanded="True" selected="True">
+              <Node name="Controllers" expanded="True" />
+            </Node>
+            <Node name="MonoTouch.SlideoutNavigation" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
