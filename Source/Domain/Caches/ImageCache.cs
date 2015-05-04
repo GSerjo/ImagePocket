@@ -55,17 +55,17 @@ namespace Domain
         }
 
         public List<ImageEntity> GetImages(TagEntity tag)
-        {
-            if (tag.IsAll)
-            {
-                return GetImages();
-            }
-            else if (tag.IsUntagged)
-            {
-                return GetUntagged();
-            }
-            return _taggedImages.Values.Where(x => x.ContainsTag(tag)).ToList();
-        }
+		{
+			if (tag.IsAll)
+			{
+				return GetImages ();
+			}
+			if (tag.IsUntagged)
+			{
+				return GetUntagged ();
+			}
+			return _taggedImages.Values.Where (x => x.ContainsTag (tag)).ToList ();
+		}
 
         public void SaveOrUpdate(List<ImageEntity> images)
         {
@@ -189,6 +189,10 @@ namespace Domain
                     {
                         _actualImages.Remove(entity.LocalIdentifier);
                     }
+					if (_taggedImages.ContainsKey(entity.LocalIdentifier))
+					{
+						_taggedImages.Remove(entity.LocalIdentifier);
+					}
                 }
             }
         }

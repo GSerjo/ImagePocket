@@ -138,7 +138,7 @@ namespace Dojo
         {
             _image = _images[_currentImageIndex];
             PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
-            UpdateImage(asset);
+			InvokeOnMainThread(()=>UpdateImage(asset));
         }
 
         private void OnImageTap(UITapGestureRecognizer gesture)

@@ -111,10 +111,10 @@ namespace Dojo
 
         public override void ViewWillAppear(bool animated)
         {
-            base.ViewWillAppear(animated);
-            NavigationController.SetToolbarHidden(false, true);
-            FilterImages();
+			NavigationController.SetToolbarHidden(false, true);
+			FilterImages();
             ReloadData();
+			base.ViewWillAppear(animated);
         }
 
         private void ClearSelectedCells()
