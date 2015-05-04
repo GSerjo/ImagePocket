@@ -23,7 +23,7 @@ namespace Dojo
         private UIBarButtonItem _btTag;
         private UIBarButtonItem _btTrash;
         private TagEntity _currentTag = TagEntity.All;
-        private List<ImageEntity> _filtered = new List<ImageEntity>();
+        private List<ImageEntity> _filteredImages = new List<ImageEntity>();
         private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity>();
         private ViewMode _viewMode = ViewMode.Read;
 
@@ -43,7 +43,7 @@ namespace Dojo
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var cell = (ImagePreviewCell)collectionView.DequeueReusableCell(_cellId, indexPath);
-            ImageEntity entity = _filtered[indexPath.Item];
+            ImageEntity entity = _filteredImages[indexPath.Item];
             cell.SetImage(entity.LocalIdentifier);
 
             if (_viewMode == ViewMode.Read)
@@ -63,20 +63,20 @@ namespace Dojo
 
         public override int GetItemsCount(UICollectionView collectionView, int section)
         {
-            return _filtered.Count;
+            return _filteredImages.Count;
         }
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
             if (_viewMode == ViewMode.Read)
             {
-                ImageEntity image = _filtered[indexPath.Item];
-                var photoController = new PhotoViewController(image, _filtered);
+                ImageEntity image = _filteredImages[indexPath.Item];
+                var photoController = new PhotoViewController(image, _filteredImages);
                 NavigationController.PushViewController(photoController, true);
                 return;
             }
             var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);
-            ImageEntity entity = _filtered[indexPath.Item];
+            ImageEntity entity = _filteredImages[indexPath.Item];
 
             ImageEntity selectedImage;
             if (_selectedImages.TryGetValue(entity.LocalIdentifier, out selectedImage))
@@ -124,9 +124,12 @@ namespace Dojo
             }
             else
             {
-                _imageCache.Remove(removedImages);
                 FilterImages();
-				DispatchQueue.MainQueue.DispatchAsync (SetReadMode);
+                DispatchQueue.MainQueue.DispatchAsync(() =>
+                {
+                    SetReadMode();
+                });
+                ReloadData();
             }
         }
 
@@ -157,10 +160,10 @@ namespace Dojo
 
         private void FilterImages()
         {
-            _filtered = _imageCache.GetImages(_currentTag);
-            if (_filtered.IsNullOrEmpty())
+            _filteredImages = _imageCache.GetImages(_currentTag);
+            if (_filteredImages.IsNullOrEmpty())
             {
-                _filtered = _imageCache.GetImages(TagEntity.All);
+                _filteredImages = _imageCache.GetImages(TagEntity.All);
             }
         }
 
@@ -172,6 +175,7 @@ namespace Dojo
         private void OnBatchSelectCancel(object sender, EventArgs ea)
         {
             SetReadMode();
+            ReloadData();
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
@@ -188,12 +192,14 @@ namespace Dojo
         private void OnTagSelectorCancel(object sender, EventArgs ea)
         {
             SetReadMode();
+            ReloadData();
         }
 
         private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
         {
             SetReadMode();
             _imageCache.SaveOrUpdate(ea.Data);
+            ReloadData();
         }
 
         private void OnTrashClicked(object sender, EventArgs e)
@@ -219,7 +225,7 @@ namespace Dojo
 
         private void ReloadData()
         {
-			DispatchQueue.MainQueue.DispatchAsync (CollectionView.ReloadData);
+            DispatchQueue.MainQueue.DispatchAsync(CollectionView.ReloadData);
         }
 
         private void SetReadMode()
@@ -230,7 +236,6 @@ namespace Dojo
             _btTrash.Enabled = false;
             _viewMode = ViewMode.Read;
             ClearSelectedCells();
-            ReloadData();
         }
 
         private void SetSelectMode()

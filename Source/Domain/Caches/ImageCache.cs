@@ -12,15 +12,21 @@ namespace Domain
         private static readonly ImageCache _instance = new ImageCache();
         private readonly PHCachingImageManager _imageManager = new PHCachingImageManager();
         private readonly ImageRepository _imageRepository = ImageRepository.Instance;
+        private readonly PhotoLibraryObserver _photoLibraryObserver;
+        private readonly Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity>();
         private Dictionary<string, ImageEntity> _actualImages = new Dictionary<string, ImageEntity>();
 
         private Dictionary<string, PHAsset> _assets = new Dictionary<string, PHAsset>();
-        private Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity>();
+        private PHFetchResult _fetchResult;
 
         private ImageCache()
         {
-            InitialiseAssets();
-            InitialiseImages();
+            _taggedImages = _imageRepository.GetAll().ToDictionary(x => x.LocalIdentifier);
+            _fetchResult = PHAsset.FetchAssets(PHAssetMediaType.Image, null);
+            _photoLibraryObserver = new PhotoLibraryObserver(this);
+            InitialiseAssets(_fetchResult);
+            InitialiseImages(_assets);
+            RegisterObservers();
         }
 
         public static ImageCache Instance
@@ -54,10 +60,6 @@ namespace Domain
                 return GetUntagged();
             }
             return _taggedImages.Values.Where(x => x.ContainsTag(tag)).ToList();
-        }
-
-        public void Remove(List<ImageEntity> images)
-        {
         }
 
         public void SaveOrUpdate(List<ImageEntity> images)
@@ -125,20 +127,23 @@ namespace Domain
             return result;
         }
 
-        private void InitialiseAssets()
+        private void InitialiseAssets(PHFetchResult fetchResult)
         {
-            PHFetchResult fetchResult = PHAsset.FetchAssets(PHAssetMediaType.Image, null);
             _assets = fetchResult.Cast<PHAsset>()
                                  .Where(x => x.PixelWidth > 0 && x.PixelHeight > 0)
                                  .ToDictionary(x => x.LocalIdentifier);
         }
 
-        private void InitialiseImages()
+        private void InitialiseImages(Dictionary<string, PHAsset> assets)
         {
-            _taggedImages = _imageRepository.GetAll().ToDictionary(x => x.LocalIdentifier);
-            _actualImages = _assets.Values
-                                   .Select(x => CreateImage(x))
-                                   .ToDictionary(x => x.LocalIdentifier);
+            _actualImages = assets.Values
+                                  .Select(x => CreateImage(x))
+                                  .ToDictionary(x => x.LocalIdentifier);
+        }
+
+        private void RegisterObservers()
+        {
+            PHPhotoLibrary.SharedPhotoLibrary.RegisterChangeObserver(_photoLibraryObserver);
         }
 
         private void UpdateTaggedImages(List<ImageEntity> images)
@@ -164,6 +169,29 @@ namespace Domain
                 {
                     _taggedImages[image.LocalIdentifier] = image;
                 }
+            }
+        }
+
+        private void OnPhotoLibraryDidChange()
+        {
+            InitialiseAssets(_fetchResult);
+            InitialiseImages(_assets);
+        }
+
+        private class PhotoLibraryObserver : PHPhotoLibraryChangeObserver
+        {
+            private readonly ImageCache _imageCache;
+
+            public PhotoLibraryObserver(ImageCache imageCache)
+            {
+                _imageCache = imageCache;
+            }
+
+            public override void PhotoLibraryDidChange(PHChange changeInstance)
+            {
+                PHFetchResultChangeDetails changes = changeInstance.GetFetchResultChangeDetails(_imageCache._fetchResult);
+                _imageCache._fetchResult = changes.FetchResultAfterChanges;
+                _imageCache.OnPhotoLibraryDidChange();
             }
         }
     }

@@ -75,7 +75,7 @@ namespace Dojo
             NavigationController.SetToolbarHidden(true, true);
         }
 
-        private static void OnDeleteAssetsCompleted(bool result, NSError error)
+        private static void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
         {
             if (result == false)
             {
@@ -142,7 +142,7 @@ namespace Dojo
                 PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(new[] { asset }),
-                    (result, error) => OnDeleteAssetsCompleted(result, error));
+                    (result, error) => OnDeleteAssetsCompleted(_image, result, error));
             }
             catch (Exception ex)
             {
