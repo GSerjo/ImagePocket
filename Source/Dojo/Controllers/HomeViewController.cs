@@ -162,17 +162,18 @@ namespace Dojo
             ReloadData();
         }
 
-        private void OnDeleteAssetsCompleted(bool result, NSError error)
+        private void OnDeleteAssetsCompleted(List<ImageEntity> removedImages, bool result, NSError error)
         {
             if (result)
             {
-				BeginInvokeOnMainThread (SetReadMode);
-//                FilterImages();
-//                DispatchQueue.MainQueue.DispatchAsync(() =>
-//                {
-//                    SetReadMode();
-//                    ReloadData();
-//                });
+                _imageCache.SaveOrUpdate(removedImages);
+                BeginInvokeOnMainThread(SetReadMode);
+                //                FilterImages();
+                //                DispatchQueue.MainQueue.DispatchAsync(() =>
+                //                {
+                //                    SetReadMode();
+                //                    ReloadData();
+                //                });
             }
             else
             {
@@ -183,7 +184,7 @@ namespace Dojo
         private void OnPhotoLibraryChanged(object sender, EventArgs e)
         {
             FilterImages();
-			BeginInvokeOnMainThread (ReloadData);
+            BeginInvokeOnMainThread(ReloadData);
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
@@ -223,7 +224,7 @@ namespace Dojo
                 }
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(assets),
-                    (result, error) => OnDeleteAssetsCompleted(result, error));
+                    (result, error) => OnDeleteAssetsCompleted(_selectedImages.Values.ToList(), result, error));
             }
             catch (Exception ex)
             {
@@ -233,7 +234,7 @@ namespace Dojo
 
         private void ReloadData()
         {
-			DispatchQueue.MainQueue.DispatchAsync (CollectionView.ReloadData);
+            DispatchQueue.MainQueue.DispatchAsync(CollectionView.ReloadData);
         }
 
         private void SetReadMode()

@@ -75,10 +75,33 @@ namespace Dojo
             NavigationController.SetToolbarHidden(true, true);
         }
 
-        private static void OnDeleteAssetsCompleted(bool result, NSError error)
+        private bool CanSwipeLeft()
+        {
+            return _currentImageIndex < _images.Count - 1;
+        }
+
+        private bool CanSwipeRight()
+        {
+            return _currentImageIndex > 0;
+        }
+
+        private void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
         {
             if (result)
             {
+                _images.Remove(removedImage);
+                _imageCache.SaveOrUpdate(removedImage);
+                _currentImageIndex--;
+                if (_images.IsNullOrEmpty())
+                {
+                    InvokeOnMainThread(() => DismissViewController(true, null));
+                    return;
+                }
+                else if (_currentImageIndex < 0)
+                {
+                    _currentImageIndex = 0;
+                }
+                SwipeImage();
             }
             else
             {
@@ -91,24 +114,28 @@ namespace Dojo
             switch (gesture.Direction)
             {
                 case UISwipeGestureRecognizerDirection.Left:
-                    if (_currentImageIndex >= _images.Count - 1)
+                    if (CanSwipeLeft())
                     {
-                        return;
+                        _currentImageIndex++;
+                        SwipeImage();
+                        break;
                     }
-                    _currentImageIndex++;
-
-                    break;
+                    return;
                 case UISwipeGestureRecognizerDirection.Right:
-                    if (_currentImageIndex <= 0)
+                    if (CanSwipeRight())
                     {
-                        return;
+                        _currentImageIndex--;
+                        SwipeImage();
+                        break;
                     }
-                    _currentImageIndex--;
-                    break;
+                    return;
                 default:
                     return;
             }
+        }
 
+        private void SwipeImage()
+        {
             _image = _images[_currentImageIndex];
             PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
             UpdateImage(asset);
@@ -145,7 +172,7 @@ namespace Dojo
                 PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(new[] { asset }),
-                    (result, error) => OnDeleteAssetsCompleted(result, error));
+                    (result, error) => OnDeleteAssetsCompleted(_image, result, error));
             }
             catch (Exception ex)
             {

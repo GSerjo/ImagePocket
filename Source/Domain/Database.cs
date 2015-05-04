@@ -25,20 +25,20 @@ namespace Domain
             CreateTable<ImageEntity>();
         }
 
-        public static int AddOrUpdate<T>(T value)
-            where T : Entity
-        {
-            lock (_locker)
-            {
-                if (value.New)
-                {
-                    return _database.Insert(value);
-                }
-                return _database.Update(value);
-            }
-        }
+//        public static int AddOrUpdate<T>(T value)
+//            where T : Entity
+//        {
+//            lock (_locker)
+//            {
+//                if (value.New)
+//                {
+//                    return _database.Insert(value);
+//                }
+//                return _database.Update(value);
+//            }
+//        }
 
-        public static void AddOrUpdateAll<T>(IList<T> values)
+        public static void AddOrUpdate<T>(IList<T> values)
             where T : Entity
         {
             lock (_locker)

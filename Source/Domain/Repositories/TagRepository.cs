@@ -28,7 +28,7 @@ namespace Domain
 
         public void SaveOrUpdate(List<TagEntity> values)
         {
-            Database.AddOrUpdateAll(values);
+            Database.AddOrUpdate(values);
         }
     }
 }
