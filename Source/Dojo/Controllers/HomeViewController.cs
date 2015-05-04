@@ -126,7 +126,7 @@ namespace Dojo
             {
                 _imageCache.Remove(removedImages);
                 FilterImages();
-                SetReadMode();
+				DispatchQueue.MainQueue.DispatchAsync (SetReadMode);
             }
         }
 
@@ -219,7 +219,7 @@ namespace Dojo
 
         private void ReloadData()
         {
-            DispatchQueue.MainQueue.DispatchAsync(() => CollectionView.ReloadData());
+			DispatchQueue.MainQueue.DispatchAsync (CollectionView.ReloadData);
         }
 
         private void SetReadMode()
