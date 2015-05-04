@@ -166,12 +166,13 @@ namespace Dojo
         {
             if (result)
             {
-                FilterImages();
-                DispatchQueue.MainQueue.DispatchAsync(() =>
-                {
-                    SetReadMode();
-                    ReloadData();
-                });
+				BeginInvokeOnMainThread (SetReadMode);
+//                FilterImages();
+//                DispatchQueue.MainQueue.DispatchAsync(() =>
+//                {
+//                    SetReadMode();
+//                    ReloadData();
+//                });
             }
             else
             {
@@ -182,7 +183,7 @@ namespace Dojo
         private void OnPhotoLibraryChanged(object sender, EventArgs e)
         {
             FilterImages();
-            ReloadData();
+			BeginInvokeOnMainThread (ReloadData);
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
@@ -232,7 +233,7 @@ namespace Dojo
 
         private void ReloadData()
         {
-            DispatchQueue.MainQueue.DispatchAsync(CollectionView.ReloadData);
+			DispatchQueue.MainQueue.DispatchAsync (CollectionView.ReloadData);
         }
 
         private void SetReadMode()

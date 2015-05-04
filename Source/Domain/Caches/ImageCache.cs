@@ -177,7 +177,7 @@ namespace Domain
         {
             InitialiseAssets(_fetchResult);
             InitialiseImages(_assets);
-            this.BeginRaiseEvent(PhotoLibraryChanged, EventArgs.Empty);
+            this.RaiseEvent(PhotoLibraryChanged, EventArgs.Empty);
         }
 
         private class PhotoLibraryObserver : PHPhotoLibraryChangeObserver
@@ -192,6 +192,10 @@ namespace Domain
             public override void PhotoLibraryDidChange(PHChange changeInstance)
             {
                 PHFetchResultChangeDetails changes = changeInstance.GetFetchResultChangeDetails(_imageCache._fetchResult);
+				if (changes == null)
+				{
+					return;
+				}
                 _imageCache._fetchResult = changes.FetchResultAfterChanges;
                 _imageCache.OnPhotoLibraryDidChange();
             }
