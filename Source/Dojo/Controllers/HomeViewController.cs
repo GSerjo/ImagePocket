@@ -23,7 +23,7 @@ namespace Dojo
         private UIBarButtonItem _btTag;
         private UIBarButtonItem _btTrash;
         private TagEntity _currentTag = TagEntity.All;
-        private List<ImageEntity> _images = new List<ImageEntity>();
+        private List<ImageEntity> _filtered = new List<ImageEntity>();
         private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity>();
         private ViewMode _viewMode = ViewMode.Read;
 
@@ -43,12 +43,12 @@ namespace Dojo
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var cell = (ImagePreviewCell)collectionView.DequeueReusableCell(_cellId, indexPath);
-            ImageEntity entity = _images[indexPath.Item];
+            ImageEntity entity = _filtered[indexPath.Item];
             cell.SetImage(entity.LocalIdentifier);
 
             if (_viewMode == ViewMode.Read)
             {
-                cell.Unselect();
+                cell.UnselectCell();
             }
             else if (_selectedImages.ContainsKey(entity.LocalIdentifier))
             {
@@ -56,33 +56,33 @@ namespace Dojo
             }
             else
             {
-                cell.Unselect();
+                cell.UnselectCell();
             }
             return cell;
         }
 
         public override int GetItemsCount(UICollectionView collectionView, int section)
         {
-            return _images.Count;
+            return _filtered.Count;
         }
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
             if (_viewMode == ViewMode.Read)
             {
-                ImageEntity image = _images[indexPath.Item];
-                var photoController = new PhotoViewController(image, _images);
+                ImageEntity image = _filtered[indexPath.Item];
+                var photoController = new PhotoViewController(image, _filtered);
                 NavigationController.PushViewController(photoController, true);
                 return;
             }
             var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);
-            ImageEntity entity = _images[indexPath.Item];
+            ImageEntity entity = _filtered[indexPath.Item];
 
             ImageEntity selectedImage;
             if (_selectedImages.TryGetValue(entity.LocalIdentifier, out selectedImage))
             {
                 _selectedImages.Remove(entity.LocalIdentifier);
-                cell.Unselect();
+                cell.UnselectCell();
             }
             else
             {
@@ -94,7 +94,7 @@ namespace Dojo
             _btTrash.Enabled = _selectedImages.IsNotEmpty();
         }
 
-        public void SetTag(TagEntity entity)
+        public void FilterImage(TagEntity entity)
         {
             _currentTag = entity;
             FilterImages();
@@ -114,6 +114,19 @@ namespace Dojo
             NavigationController.SetToolbarHidden(false, true);
             FilterImages();
             ReloadData();
+        }
+
+        private void OnDeleteAssetsCompleted(bool result, NSError error)
+        {
+            if (result == false)
+            {
+                Console.WriteLine(error);
+            }
+            else
+            {
+                FilterImages();
+                SetReadMode();
+            }
         }
 
         private void ClearSelectedCells()
@@ -144,10 +157,10 @@ namespace Dojo
 
         private void FilterImages()
         {
-            _images = _imageCache.GetImages(_currentTag);
-            if (_images.IsNullOrEmpty())
+            _filtered = _imageCache.GetImages(_currentTag);
+            if (_filtered.IsNullOrEmpty())
             {
-                _images = _imageCache.GetImages(TagEntity.All);
+                _filtered = _imageCache.GetImages(TagEntity.All);
             }
         }
 
@@ -185,15 +198,23 @@ namespace Dojo
 
         private void OnTrashClicked(object sender, EventArgs e)
         {
-            PHAsset[] assets = _selectedImages.Values.Select(x => x.LocalIdentifier)
-                                              .Select(x => _imageCache.GetAsset(x))
-                                              .ToArray();
-            if (assets.IsNullOrEmpty())
+            try
             {
-                return;
+                PHAsset[] assets = _selectedImages.Values.Select(x => x.LocalIdentifier)
+                                                  .Select(x => _imageCache.GetAsset(x))
+                                                  .ToArray();
+                if (assets.IsNullOrEmpty())
+                {
+                    return;
+                }
+                PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
+                    () => PHAssetChangeRequest.DeleteAssets(assets),
+                    (result, error) => OnDeleteAssetsCompleted(result, error));
             }
-            PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() => PHAssetChangeRequest.DeleteAssets(assets),
-                (result, message) => Console.WriteLine(message));
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private void ReloadData()

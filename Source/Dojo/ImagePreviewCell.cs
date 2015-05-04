@@ -38,7 +38,7 @@ namespace Dojo
                 PHImageContentMode.AspectFit, null, (img, info) => { _imageView.Image = img; });
         }
 
-        public void Unselect()
+        public void UnselectCell()
         {
             BackgroundColor = UIColor.White;
             Selected = false;

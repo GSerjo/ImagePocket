@@ -48,7 +48,7 @@ namespace Dojo
 
         private void FilterImage(TagEntity entity)
         {
-            _homeViewController.SetTag(entity);
+            _homeViewController.FilterImage(entity);
             NavigationController.PushViewController(_homeViewController, true);
         }
     }

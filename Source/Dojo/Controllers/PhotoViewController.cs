@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Domain;
+using MonoTouch.Foundation;
 using MonoTouch.Photos;
 using MonoTouch.UIKit;
 
@@ -74,6 +75,14 @@ namespace Dojo
             NavigationController.SetToolbarHidden(true, true);
         }
 
+        private static void OnDeleteAssetsCompleted(bool result, NSError error)
+        {
+            if (result == false)
+            {
+                Console.WriteLine(error);
+            }
+        }
+
         private void OnImageSwipe(UISwipeGestureRecognizer gesture)
         {
             switch (gesture.Direction)
@@ -128,12 +137,17 @@ namespace Dojo
 
         private void OnTrashClicked(object sender, EventArgs ea)
         {
-            PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(() =>
+            try
             {
                 PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
-                PHAssetChangeRequest.DeleteAssets(new[]{asset});
-            },
-            (result, message) => Console.WriteLine(message));
+                PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
+                    () => PHAssetChangeRequest.DeleteAssets(new[] { asset }),
+                    (result, error) => OnDeleteAssetsCompleted(result, error));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private void UpdateImage(PHAsset asset)
