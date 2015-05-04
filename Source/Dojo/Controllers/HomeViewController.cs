@@ -128,8 +128,8 @@ namespace Dojo
                 DispatchQueue.MainQueue.DispatchAsync(() =>
                 {
                     SetReadMode();
+					ReloadData();
                 });
-                ReloadData();
             }
         }
 
