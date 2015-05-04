@@ -56,6 +56,10 @@ namespace Domain
             return _taggedImages.Values.Where(x => x.ContainsTag(tag)).ToList();
         }
 
+        public void Remove(List<ImageEntity> images)
+        {
+        }
+
         public void SaveOrUpdate(List<ImageEntity> images)
         {
             _imageRepository.SaveOrUpdate(images);

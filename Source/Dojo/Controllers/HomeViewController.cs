@@ -116,7 +116,7 @@ namespace Dojo
             ReloadData();
         }
 
-        private void OnDeleteAssetsCompleted(bool result, NSError error)
+        private void OnDeleteAssetsCompleted(List<ImageEntity> removedImages, bool result, NSError error)
         {
             if (result == false)
             {
@@ -124,6 +124,7 @@ namespace Dojo
             }
             else
             {
+                _imageCache.Remove(removedImages);
                 FilterImages();
                 SetReadMode();
             }
@@ -132,7 +133,6 @@ namespace Dojo
         private void ClearSelectedCells()
         {
             _selectedImages = new Dictionary<string, ImageEntity>();
-            _btTrash.Enabled = false;
         }
 
         private void ConfigureToolbar()
@@ -209,7 +209,7 @@ namespace Dojo
                 }
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(assets),
-                    (result, error) => OnDeleteAssetsCompleted(result, error));
+                    (result, error) => OnDeleteAssetsCompleted(_selectedImages.Values.ToList(), result, error));
             }
             catch (Exception ex)
             {
@@ -227,6 +227,7 @@ namespace Dojo
             Title = RootTitle;
             NavigationItem.RightBarButtonItem = _btSelect;
             NavigationItem.LeftBarButtonItem = _btOpenMenu;
+            _btTrash.Enabled = false;
             _viewMode = ViewMode.Read;
             ClearSelectedCells();
             ReloadData();
