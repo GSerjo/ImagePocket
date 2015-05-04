@@ -79,7 +79,7 @@ namespace Dojo
 
         private void OnCancel(object sender, EventArgs ea)
         {
-            Cancel(null, EventArgs.Empty);
+            this.RaiseEvent(Cancel, EventArgs.Empty);
             DismissViewController(true, null);
         }
 
@@ -89,7 +89,7 @@ namespace Dojo
             {
                 Data = _images
             };
-            Done(null, eventArgs);
+            this.RaiseEvent(Done, eventArgs);
             DismissViewController(true, null);
         }
 

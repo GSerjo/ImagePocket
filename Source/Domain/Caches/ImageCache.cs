@@ -15,6 +15,7 @@ namespace Domain
         private readonly PhotoLibraryObserver _photoLibraryObserver;
         private readonly Dictionary<string, ImageEntity> _taggedImages = new Dictionary<string, ImageEntity>();
         private Dictionary<string, ImageEntity> _actualImages = new Dictionary<string, ImageEntity>();
+        public event EventHandler<EventArgs> PhotoLibraryChanged = delegate { };
 
         private Dictionary<string, PHAsset> _assets = new Dictionary<string, PHAsset>();
         private PHFetchResult _fetchResult;
@@ -121,7 +122,7 @@ namespace Domain
         private List<ImageEntity> GetUntagged()
         {
             var result = new List<ImageEntity>();
-            var comparer = new FuncComparer<ImageEntity>((x, y) => string.Equals(x.LocalIdentifier, y.LocalIdentifier, StringComparison.OrdinalIgnoreCase));
+            var comparer = new FuncComparer<ImageEntity>((x, y) => x.Equals(y));
             List<ImageEntity> untaggedImages = _actualImages.Values.Except(_taggedImages.Values.ToList(), comparer).ToList();
             result.AddRange(untaggedImages);
             return result;
@@ -176,6 +177,7 @@ namespace Domain
         {
             InitialiseAssets(_fetchResult);
             InitialiseImages(_assets);
+            this.BeginRaiseEvent(PhotoLibraryChanged, EventArgs.Empty);
         }
 
         private class PhotoLibraryObserver : PHPhotoLibraryChangeObserver

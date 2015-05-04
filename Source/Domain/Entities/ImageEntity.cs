@@ -91,7 +91,8 @@ namespace Domain
             {
                 return true;
             }
-            return value.EntityId == EntityId;
+            return value.EntityId == EntityId
+                   && string.Equals(value.LocalIdentifier, LocalIdentifier, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()

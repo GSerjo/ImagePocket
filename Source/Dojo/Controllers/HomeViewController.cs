@@ -40,6 +40,13 @@ namespace Dojo
         }
 
 
+        public void FilterImages(TagEntity entity)
+        {
+            _currentTag = entity;
+            FilterImages();
+            ReloadData();
+        }
+
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var cell = (ImagePreviewCell)collectionView.DequeueReusableCell(_cellId, indexPath);
@@ -94,18 +101,12 @@ namespace Dojo
             _btTrash.Enabled = _selectedImages.IsNotEmpty();
         }
 
-        public void FilterImage(TagEntity entity)
-        {
-            _currentTag = entity;
-            FilterImages();
-            ReloadData();
-        }
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             ConfigureView();
             ConfigureToolbar();
+            _imageCache.PhotoLibraryChanged += OnPhotoLibraryChanged;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -114,23 +115,6 @@ namespace Dojo
             NavigationController.SetToolbarHidden(false, true);
             FilterImages();
             ReloadData();
-        }
-
-        private void OnDeleteAssetsCompleted(List<ImageEntity> removedImages, bool result, NSError error)
-        {
-            if (result == false)
-            {
-                Console.WriteLine(error);
-            }
-            else
-            {
-                FilterImages();
-                DispatchQueue.MainQueue.DispatchAsync(() =>
-                {
-                    SetReadMode();
-					ReloadData();
-                });
-            }
         }
 
         private void ClearSelectedCells()
@@ -178,6 +162,29 @@ namespace Dojo
             ReloadData();
         }
 
+        private void OnDeleteAssetsCompleted(bool result, NSError error)
+        {
+            if (result)
+            {
+                FilterImages();
+                DispatchQueue.MainQueue.DispatchAsync(() =>
+                {
+                    SetReadMode();
+                    ReloadData();
+                });
+            }
+            else
+            {
+                Console.WriteLine(error);
+            }
+        }
+
+        private void OnPhotoLibraryChanged(object sender, EventArgs e)
+        {
+            FilterImages();
+            ReloadData();
+        }
+
         private void OnTagClicked(object sender, EventArgs ea)
         {
             var controller = new TagSelectorViewController(_selectedImages.Values.ToList())
@@ -215,7 +222,7 @@ namespace Dojo
                 }
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(assets),
-                    (result, error) => OnDeleteAssetsCompleted(_selectedImages.Values.ToList(), result, error));
+                    (result, error) => OnDeleteAssetsCompleted(result, error));
             }
             catch (Exception ex)
             {
