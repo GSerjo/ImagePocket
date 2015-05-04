@@ -90,7 +90,7 @@ namespace Dojo
             if (result)
             {
                 _images.Remove(removedImage);
-                _imageCache.SaveOrUpdate(removedImage);
+                _imageCache.Remove(removedImage);
                 _currentImageIndex--;
                 if (_images.IsNullOrEmpty())
                 {

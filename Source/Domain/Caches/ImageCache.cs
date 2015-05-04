@@ -55,29 +55,34 @@ namespace Domain
         }
 
         public List<ImageEntity> GetImages(TagEntity tag)
-		{
-			if (tag.IsAll)
-			{
-				return GetImages ();
-			}
-			if (tag.IsUntagged)
-			{
-				return GetUntagged ();
-			}
-			return _taggedImages.Values.Where (x => x.ContainsTag (tag)).ToList ();
-		}
+        {
+            if (tag.IsAll)
+            {
+                return GetImages();
+            }
+            if (tag.IsUntagged)
+            {
+                return GetUntagged();
+            }
+            return _taggedImages.Values.Where(x => x.ContainsTag(tag)).ToList();
+        }
+
+        public void Remove(List<ImageEntity> images)
+        {
+            _imageRepository.Remove(images);
+            UpdateTaggedImages(images);
+            RemoveCachedImages(images);
+        }
+
+        public void Remove(ImageEntity image)
+        {
+            Remove(new List<ImageEntity> { image });
+        }
 
         public void SaveOrUpdate(List<ImageEntity> images)
         {
             _imageRepository.SaveOrUpdate(images);
             UpdateTaggedImages(images);
-            List<ImageEntity> forRemove = images.ForRemove();
-            RemoveCachedImages(forRemove);
-        }
-
-        public void SaveOrUpdate(ImageEntity image)
-        {
-            SaveOrUpdate(new List<ImageEntity> { image });
         }
 
         private void CheckRemovedTags(List<TagEntity> tags)
@@ -189,10 +194,10 @@ namespace Domain
                     {
                         _actualImages.Remove(entity.LocalIdentifier);
                     }
-					if (_taggedImages.ContainsKey(entity.LocalIdentifier))
-					{
-						_taggedImages.Remove(entity.LocalIdentifier);
-					}
+                    if (_taggedImages.ContainsKey(entity.LocalIdentifier))
+                    {
+                        _taggedImages.Remove(entity.LocalIdentifier);
+                    }
                 }
             }
         }

@@ -41,7 +41,6 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Extensions\ImageEntityExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Entities\TagEntity.cs" />

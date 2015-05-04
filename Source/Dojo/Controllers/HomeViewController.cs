@@ -166,7 +166,7 @@ namespace Dojo
         {
             if (result)
             {
-                _imageCache.SaveOrUpdate(removedImages);
+                _imageCache.Remove(removedImages);
                 BeginInvokeOnMainThread(SetReadMode);
                 //                FilterImages();
                 //                DispatchQueue.MainQueue.DispatchAsync(() =>

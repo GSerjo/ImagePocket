@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core;
 
 namespace Domain
@@ -22,6 +23,11 @@ namespace Domain
             return Database.GetAll<ImageEntity>();
         }
 
+        public void Remove(List<ImageEntity> images)
+        {
+            Database.Remove(images);
+        }
+
         public void SaveOrUpdate(List<ImageEntity> images)
         {
             if (images.IsNullOrEmpty())
@@ -37,8 +43,11 @@ namespace Domain
                 TagCache.Instance.SaveOrUpdate(image.Tags);
             }
 
-            Database.Remove(images.ForRemove());
-            Database.AddOrUpdate(images.ForAddOrUpdate());
+            List<ImageEntity> forRemove = images.Where(x => x.Tags.IsEmpty() && x.New == false).ToList();
+            List<ImageEntity> forAddOrUpdate = images.Where(x => x.Tags.IsNotEmpty()).ToList();
+
+            Database.Remove(forRemove);
+            Database.AddOrUpdate(forAddOrUpdate);
         }
     }
 }
