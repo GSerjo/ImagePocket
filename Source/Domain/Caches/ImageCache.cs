@@ -70,8 +70,9 @@ namespace Domain
         public void Remove(List<ImageEntity> images)
         {
             _imageRepository.Remove(images);
-            UpdateTaggedImages(images);
             RemoveCachedImages(images);
+            List<TagEntity> tags = GetDistinctTags(images);
+            RemoveEmpyTags(tags);
         }
 
         public void Remove(ImageEntity image)
@@ -85,23 +86,6 @@ namespace Domain
             UpdateTaggedImages(images);
         }
 
-        private void CheckRemovedTags(List<TagEntity> tags)
-        {
-            if (tags.IsNullOrEmpty())
-            {
-                return;
-            }
-            var emptyTags = new List<TagEntity>();
-            foreach (TagEntity tag in tags)
-            {
-                if (_taggedImages.Values.Any(x => x.ContainsTag(tag)) == false)
-                {
-                    emptyTags.Add(tag);
-                }
-            }
-            TagCache.Instance.Remove(emptyTags);
-        }
-
         private ImageEntity CreateImage(PHAsset asset)
         {
             var result = new ImageEntity
@@ -110,6 +94,13 @@ namespace Domain
                 CreateTime = asset.CreationDate
             };
             return result;
+        }
+
+        private List<TagEntity> GetDistinctTags(List<ImageEntity> images)
+        {
+            var comparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
+            return images.SelectMany(x => x.Tags).Distinct(comparer).ToList();
+            ;
         }
 
         private List<ImageEntity> GetImages()
@@ -202,6 +193,23 @@ namespace Domain
             }
         }
 
+        private void RemoveEmpyTags(List<TagEntity> tags)
+        {
+            if (tags.IsNullOrEmpty())
+            {
+                return;
+            }
+            var emptyTags = new List<TagEntity>();
+            foreach (TagEntity tag in tags)
+            {
+                if (_taggedImages.Values.Any(x => x.ContainsTag(tag)) == false)
+                {
+                    emptyTags.Add(tag);
+                }
+            }
+            TagCache.Instance.Remove(emptyTags);
+        }
+
         private void UpdateTaggedImages(List<ImageEntity> images)
         {
             foreach (ImageEntity image in images)
@@ -219,7 +227,7 @@ namespace Domain
                     {
                         _taggedImages[image.LocalIdentifier] = image;
                     }
-                    CheckRemovedTags(removedTags);
+                    RemoveEmpyTags(removedTags);
                 }
                 else
                 {

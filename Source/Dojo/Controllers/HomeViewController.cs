@@ -111,10 +111,10 @@ namespace Dojo
 
         public override void ViewWillAppear(bool animated)
         {
-			NavigationController.SetToolbarHidden(false, true);
-			FilterImages();
+            NavigationController.SetToolbarHidden(false, true);
+            FilterImages();
             ReloadData();
-			base.ViewWillAppear(animated);
+            base.ViewWillAppear(animated);
         }
 
         private void ClearSelectedCells()
@@ -201,6 +201,7 @@ namespace Dojo
         private void OnTagSelectorCancel(object sender, EventArgs ea)
         {
             SetReadMode();
+            FilterImages();
             ReloadData();
         }
 
