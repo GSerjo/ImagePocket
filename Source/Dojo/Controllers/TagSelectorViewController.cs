@@ -12,7 +12,7 @@ namespace Dojo
 {
     public partial class TagSelectorViewController : UIViewController
     {
-        private static readonly TagCache _tagRepository = TagCache.Instance;
+        private static readonly TagCache _tagCache = TagCache.Instance;
         private readonly List<ImageEntity> _images = new List<ImageEntity>();
         private TagTableSource _tagTableSource;
         private TagTokenDelegate _tagTokenDelegate;
@@ -185,9 +185,9 @@ namespace Dojo
             {
                 var commparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
                 List<TagEntity> commonTags = _controller.GetCommonTags();
-                return _tagRepository.GetUserTags()
-                                     .Except(commonTags, commparer)
-                                     .ToList();
+                return _tagCache.GetUserTags()
+                                .Except(commonTags, commparer)
+                                .ToList();
             }
 
             private void ReloadTags()

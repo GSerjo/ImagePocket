@@ -9,7 +9,7 @@ namespace Domain
     public sealed class ImageEntity : Entity
     {
         private const string Separator = ",";
-        private readonly TagCache _tagRepository = TagCache.Instance;
+        private readonly TagCache _tagCache = TagCache.Instance;
         private List<TagEntity> _tags = new List<TagEntity>();
         private string _tagsInternal;
 
@@ -38,7 +38,8 @@ namespace Domain
                 }
                 _tags = _tagsInternal.Split(Separator[0])
                                      .Select(x => int.Parse(x))
-                                     .Select(x => _tagRepository.GetById(x))
+                                     .Where(x => _tagCache.Contains(x))
+                                     .Select(x => _tagCache.GetById(x))
                                      .ToList();
                 return _tags;
             }

@@ -13,7 +13,7 @@ namespace Domain
 
         private TagCache()
         {
-            _tags = Database.GetAll<TagEntity>().ToDictionary(x => x.EntityId);
+            _tags = _tagRepository.GetAll().ToDictionary(x => x.EntityId);
         }
 
         public static TagCache Instance
@@ -21,10 +21,9 @@ namespace Domain
             get { return _instance; }
         }
 
-        public bool Contains(string name)
+        public bool Contains(int id)
         {
-            TagEntity tag = _tags.Values.SingleOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
-            return tag != null;
+            return _tags.ContainsKey(id);
         }
 
         public List<TagEntity> Filter(string name)
@@ -43,16 +42,6 @@ namespace Domain
         public TagEntity GetById(int id)
         {
             return _tags[id];
-        }
-
-        public List<TagEntity> GetById(IEnumerable<int> ids)
-        {
-            var result = new List<TagEntity>();
-            foreach (int id in ids)
-            {
-                result.Add(_tags[id]);
-            }
-            return result;
         }
 
         public List<TagEntity> GetUserTags()

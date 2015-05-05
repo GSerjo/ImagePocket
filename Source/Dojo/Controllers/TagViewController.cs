@@ -11,12 +11,12 @@ namespace Dojo
     {
         private readonly Section _dataSection;
         private readonly HomeViewController _homeViewController;
-        private readonly TagCache _repository = TagCache.Instance;
+        private readonly TagCache _tagCache = TagCache.Instance;
 
         public TagViewController(HomeViewController homeViewController) : base(UITableViewStyle.Plain, null)
         {
             _homeViewController = homeViewController;
-            List<TagEntity> tags = _repository.GetAll();
+            List<TagEntity> tags = _tagCache.GetAll();
             _dataSection = CreateTagSection(tags);
             Root = new RootElement(string.Empty)
             {
@@ -27,7 +27,7 @@ namespace Dojo
         public override void ViewWillAppear(bool animated)
         {
             _dataSection.Clear();
-            _dataSection.AddAll(CreateElements(_repository.GetAll()));
+            _dataSection.AddAll(CreateElements(_tagCache.GetAll()));
             base.ViewWillAppear(animated);
         }
 
