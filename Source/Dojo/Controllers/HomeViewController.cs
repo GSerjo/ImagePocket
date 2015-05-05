@@ -201,7 +201,6 @@ namespace Dojo
         private void OnTagSelectorCancel(object sender, EventArgs ea)
         {
             SetReadMode();
-            FilterImages();
             ReloadData();
         }
 
@@ -209,6 +208,7 @@ namespace Dojo
         {
             SetReadMode();
             _imageCache.SaveOrUpdate(ea.Data);
+			FilterImages();
             ReloadData();
         }
 

@@ -56,15 +56,20 @@ namespace Domain
 
         public List<ImageEntity> GetImages(TagEntity tag)
         {
-            if (tag.IsAll)
-            {
-                return GetImages();
-            }
-            if (tag.IsUntagged)
-            {
-                return GetUntagged();
-            }
-            return _taggedImages.Values.Where(x => x.ContainsTag(tag)).ToList();
+			List<ImageEntity> result;
+			if (tag.IsAll)
+			{
+				result = GetImages ();
+			}
+			else if (tag.IsUntagged)
+			{
+				result = GetUntagged ();
+			}
+			else
+			{
+				result = _taggedImages.Values.Where (x => x.ContainsTag (tag)).ToList ();
+			}
+			return result.OrderByDescending (x => x.CreateTime).ToList ();
         }
 
         public void Remove(List<ImageEntity> images)
@@ -100,7 +105,6 @@ namespace Domain
         {
             var comparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
             return images.SelectMany(x => x.Tags).Distinct(comparer).ToList();
-            ;
         }
 
         private List<ImageEntity> GetImages()
@@ -119,7 +123,7 @@ namespace Domain
                     }
                     _actualImages[taggedImage.LocalIdentifier] = taggedImage;
                 }
-                return _actualImages.Values.OrderByDescending(x => x.CreateTime).ToList();
+				return _actualImages.Values.ToList ();
             }
         }
 
