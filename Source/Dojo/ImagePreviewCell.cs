@@ -11,23 +11,44 @@ namespace Dojo
     {
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly UIImageView _imageView;
+        private readonly UIImageView checkView = new UIImageView(new UIImage("Checked"));
 
         [Export("initWithFrame:")]
         public ImagePreviewCell(RectangleF frame) : base(frame)
         {
-            _imageView = new UIImageView(frame);
-            _imageView.Center = ContentView.Center;
-            _imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            _imageView = new UIImageView(frame)
+            {
+                Center = ContentView.Center,
+                ContentMode = UIViewContentMode.ScaleAspectFit,
+                AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth,
+                ClipsToBounds = true
+            };
 
             //			_imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
-            _imageView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
-            _imageView.ClipsToBounds = true;
             ContentView.AddSubview(_imageView);
+            ContentView.AddSubview(checkView);
+        }
+
+        public override bool Selected
+        {
+            get { return base.Selected; }
+            set
+            {
+                base.Selected = value;
+                checkView.Hidden = !Selected;
+            }
+        }
+
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+            _imageView.Frame = Bounds;
+            checkView.Frame = new RectangleF(new PointF(ContentView.Bounds.Width - checkView.Bounds.Width, 0), new SizeF(10, 10));
         }
 
         public void SelectCell()
         {
-            BackgroundColor = UIColor.Black;
+            //            BackgroundColor = UIColor.Black;
             Selected = true;
         }
 
@@ -40,7 +61,7 @@ namespace Dojo
 
         public void UnselectCell()
         {
-            BackgroundColor = UIColor.White;
+            //            BackgroundColor = UIColor.White;
             Selected = false;
         }
     }

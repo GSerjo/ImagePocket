@@ -221,4 +221,7 @@
     <InterfaceDefinition Include="Controllers\TagSelectorViewController.xib" />
     <InterfaceDefinition Include="ThumbnailCell.xib" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Checked%402x.png" />
+  </ItemGroup>
 </Project>
