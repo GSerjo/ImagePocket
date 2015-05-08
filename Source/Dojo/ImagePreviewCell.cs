@@ -74,9 +74,8 @@ namespace Dojo
     {
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly UIImageView _imageView;
-		private readonly UIImageView _overlayView = new UIImageView();
+		private readonly UIImageView _overlayView;
 		private readonly UIImage _selectedImage = UIImage.FromBundle("tick_selected");
-		private readonly UIImage _unselectedImage = UIImage.FromBundle("tick_deselected");
 
         [Export("initWithFrame:")]
         public ImagePreviewCell(RectangleF frame) : base(frame)
@@ -87,6 +86,7 @@ namespace Dojo
                 ContentMode = UIViewContentMode.ScaleAspectFit,
                 ClipsToBounds = true
             };
+			_overlayView = new UIImageView (_selectedImage);
 
             ContentView.AddSubview(_imageView);
 			_overlayView.Frame = Bounds;
@@ -96,7 +96,7 @@ namespace Dojo
         public void SelectCell()
         {
             Selected = true;
-			_overlayView.Image = _selectedImage;
+			_overlayView.Hidden = false;
         }
 
         public void SetImage(string localId)
@@ -116,7 +116,7 @@ namespace Dojo
         public void UnselectCell()
         {
             Selected = false;
-			_overlayView.Image = _unselectedImage;
+			_overlayView.Hidden = true;
         }
     }
 }
