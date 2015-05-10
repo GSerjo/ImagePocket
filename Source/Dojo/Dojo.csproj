@@ -106,16 +106,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images.xcassets\tick_selected.imageset\" />
     <Folder Include="Resources\" />
+    <Folder Include="Images.xcassets\Selected.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\DialogElements\MenuSectionView.cs" />
-    <Compile Include="ImageStore.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Controllers\HomeViewController.cs" />
@@ -133,6 +131,9 @@
     <Compile Include="Layouts\CollectionViewWaterfallLayout.cs" />
     <Compile Include="Layouts\CollectionViewWaterfallLayoutItemRenderDirection.cs" />
     <Compile Include="Layouts\CollectionViewDelegateWaterfallLayout.cs" />
+    <Compile Include="Controllers\DialogElements\MenuSectionView.cs" />
+    <Compile Include="ImageStore.cs" />
+    <Compile Include="Controllers\DialogElements\MenuElement.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
@@ -231,17 +232,15 @@
     <ImageAsset Include="Images.xcassets\LaunchImages.launchimage\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_selected.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_selected.imageset\tick_selected.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_selected.imageset\tick_selected%402x.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_selected.imageset\tick_selected%403x.png">
-      <InProject>false</InProject>
-    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\FlagSet.imageset\Contents.json" />
+    <ImageAsset Include="Images.xcassets\FlagSet.imageset\Flag.png" />
+    <ImageAsset Include="Images.xcassets\FlagSet.imageset\Flag%402x.png" />
+    <ImageAsset Include="Images.xcassets\AboutSet.imageset\Contents.json" />
+    <ImageAsset Include="Images.xcassets\AboutSet.imageset\About.png" />
+    <ImageAsset Include="Images.xcassets\AboutSet.imageset\About%402x.png" />
+    <ImageAsset Include="Images.xcassets\Selected.imageset\Contents.json" />
+    <ImageAsset Include="Images.xcassets\Selected.imageset\Selected.png" />
+    <ImageAsset Include="Images.xcassets\Selected.imageset\Selected%402x.png" />
+    <ImageAsset Include="Images.xcassets\Selected.imageset\Selected%403x.png" />
   </ItemGroup>
 </Project>

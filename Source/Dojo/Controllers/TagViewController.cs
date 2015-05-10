@@ -51,7 +51,10 @@ namespace Dojo
 
         private Section CreateTagSection(List<TagEntity> tags)
         {
-            var result = new Section();
+			var result = new Section
+			{
+				HeaderView = new MenuSectionView ("Tags")
+			};
             result.AddAll(CreateElements(tags));
             return result;
         }
