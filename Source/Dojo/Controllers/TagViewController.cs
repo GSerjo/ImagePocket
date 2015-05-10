@@ -20,7 +20,8 @@ namespace Dojo
             _dataSection = CreateTagSection(tags);
             Root = new RootElement(string.Empty)
             {
-                _dataSection
+                _dataSection,
+                CreateAppSection()
             };
         }
 
@@ -29,6 +30,15 @@ namespace Dojo
             _dataSection.Clear();
             _dataSection.AddAll(CreateElements(_tagCache.GetAll()));
             base.ViewWillAppear(animated);
+        }
+
+        private Section CreateAppSection()
+        {
+            var result = new Section
+            {
+                 HeaderView = new MenuSectionView ("Settings")
+            };
+            return result;
         }
 
         private List<Element> CreateElements(List<TagEntity> tags)

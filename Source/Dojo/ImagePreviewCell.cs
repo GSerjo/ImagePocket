@@ -9,7 +9,6 @@ namespace Dojo
 {
     public sealed class ImagePreviewCell : UICollectionViewCell
     {
-        private static readonly UIImage _selectedImage = UIImage.FromBundle("tick_selected");
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly UIImageView _imageView;
         private readonly UIImageView _overlayView;
@@ -23,7 +22,7 @@ namespace Dojo
                 ContentMode = UIViewContentMode.ScaleAspectFit,
                 ClipsToBounds = true
             };
-            _overlayView = new UIImageView(_selectedImage);
+            _overlayView = new UIImageView(ImageStore.Select);
             ContentView.AddSubview(_imageView);
             _overlayView.Frame = Bounds;
             ContentView.AddSubview(_overlayView);

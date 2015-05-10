@@ -106,14 +106,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
     <Folder Include="Images.xcassets\tick_selected.imageset\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DialogElements\MenuSectionView.cs" />
+    <Compile Include="ImageStore.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Controllers\HomeViewController.cs" />
@@ -221,9 +223,6 @@
   <ItemGroup>
     <InterfaceDefinition Include="Controllers\TagSelectorViewController.xib" />
     <InterfaceDefinition Include="ThumbnailCell.xib" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Checked%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Contents.json">
