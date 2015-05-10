@@ -94,7 +94,7 @@ namespace Dojo
                 _currentImageIndex--;
                 if (_images.IsNullOrEmpty())
                 {
-                    InvokeOnMainThread(() => DismissViewController(true, null));
+                    InvokeOnMainThread(() => NavigationController.PopViewControllerAnimated(true));
                     return;
                 }
                 else if (_currentImageIndex < 0)
@@ -134,13 +134,6 @@ namespace Dojo
             }
         }
 
-        private void SwipeImage()
-        {
-            _image = _images[_currentImageIndex];
-            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
-			InvokeOnMainThread(()=>UpdateImage(asset));
-        }
-
         private void OnImageTap(UITapGestureRecognizer gesture)
         {
             _fullScreen = !_fullScreen;
@@ -178,6 +171,13 @@ namespace Dojo
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        private void SwipeImage()
+        {
+            _image = _images[_currentImageIndex];
+            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+            InvokeOnMainThread(() => UpdateImage(asset));
         }
 
         private void UpdateImage(PHAsset asset)

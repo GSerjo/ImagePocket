@@ -9,10 +9,10 @@ namespace Dojo
 {
     public sealed class ImagePreviewCell : UICollectionViewCell
     {
+        private static readonly UIImage _selectedImage = UIImage.FromBundle("tick_selected");
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly UIImageView _imageView;
         private readonly UIImageView _overlayView;
-        private static readonly UIImage _selectedImage = UIImage.FromBundle("tick_selected");
 
         [Export("initWithFrame:")]
         public ImagePreviewCell(RectangleF frame) : base(frame)
@@ -33,7 +33,7 @@ namespace Dojo
         {
             Selected = true;
             _overlayView.Hidden = false;
-			_imageView.Alpha = 0.5f;
+            _imageView.Alpha = 0.5f;
         }
 
         public void SetImage(string localId)
@@ -49,7 +49,7 @@ namespace Dojo
         {
             Selected = false;
             _overlayView.Hidden = true;
-			_imageView.Alpha = 1f;
+            _imageView.Alpha = 1f;
         }
 
         private void UpdateImage(UIImage image, NSDictionary imageInfo)

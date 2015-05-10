@@ -26,11 +26,6 @@ namespace Domain
             return _tags.ContainsKey(id);
         }
 
-        public List<TagEntity> Filter(string name)
-        {
-            return _tags.Values.Where(x => x.Name.Contains(name)).ToList();
-        }
-
         public List<TagEntity> GetAll()
         {
             List<TagEntity> result = _tags.Values.OrderBy(x => x.Name).ToList();

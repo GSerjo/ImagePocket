@@ -208,7 +208,7 @@ namespace Dojo
         {
             SetReadMode();
             _imageCache.SaveOrUpdate(ea.Data);
-			FilterImages();
+            FilterImages();
             ReloadData();
         }
 
