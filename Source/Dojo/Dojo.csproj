@@ -107,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Images.xcassets\tick_deselected.imageset\" />
     <Folder Include="Images.xcassets\tick_selected.imageset\" />
   </ItemGroup>
   <ItemGroup>
@@ -231,18 +230,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Images.xcassets\LaunchImages.launchimage\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_deselected.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_deselected.imageset\tick_deselected.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_deselected.imageset\tick_deselected%402x.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Images.xcassets\tick_deselected.imageset\tick_deselected%403x.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Images.xcassets\tick_selected.imageset\Contents.json">
