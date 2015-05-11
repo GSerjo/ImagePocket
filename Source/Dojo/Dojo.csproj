@@ -134,6 +134,7 @@
     <Compile Include="Controllers\DialogElements\MenuSectionView.cs" />
     <Compile Include="ImageStore.cs" />
     <Compile Include="Controllers\DialogElements\MenuElement.cs" />
+    <Compile Include="Controllers\AboutAppViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

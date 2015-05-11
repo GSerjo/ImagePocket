@@ -10,7 +10,8 @@ namespace Dojo
     {
         private static readonly NSString _cellKey = new NSString("MenuElement");
         private readonly UIImage _image;
-        private readonly Action _tapped;
+        private readonly Action _tappedAction;
+		private readonly Func<UIViewController> _tappedFunc;
         private readonly string _title;
 
         public MenuElement(string title, UIImage image, Action tapped)
@@ -18,8 +19,16 @@ namespace Dojo
         {
             _title = title;
             _image = image;
-            _tapped = tapped;
+			_tappedAction = tapped;
         }
+
+		public MenuElement(string title, UIImage image, Func<UIViewController> tapped)
+			: base(string.Empty)
+		{
+			_title = title;
+			_image = image;
+			_tappedFunc = tapped;
+		}
 
         protected override NSString CellKey
         {
@@ -42,11 +51,15 @@ namespace Dojo
 
         public override void Selected(DialogViewController dvc, UITableView tableView, NSIndexPath path)
         {
-            if (_tapped != null)
+            if (_tappedAction != null)
             {
-                _tapped();
+                _tappedAction();
             }
-            base.Selected(dvc, tableView, path);
+			if (_tappedFunc != null)
+			{
+				var controller = _tappedFunc ();
+				dvc.ActivateController (controller);
+			}
         }
 
 
