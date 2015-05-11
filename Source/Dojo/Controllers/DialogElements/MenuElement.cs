@@ -52,34 +52,17 @@ namespace Dojo
 
         private sealed class ElementCell : UITableViewCell
         {
-//            private readonly UIImageView _imageView;
-//            private readonly UILabel _label;
             private const float ImageSize = 24f;
 
             public ElementCell(string title, UIImage image) : base(UITableViewCellStyle.Default, _cellKey)
             {
-//                _label = new UILabel
-//                {
-//                    TextAlignment = UITextAlignment.Left,
-//                };
-//                _imageView = new UIImageView();
-
                 Update(title, image);
-//                ContentView.Add(_imageView);
-//                ContentView.Add(_label);
             }
 
             public override void LayoutSubviews()
             {
-                base.LayoutSubviews();
-                ImageView.Frame = new RectangleF(0, 0, ImageSize, ImageSize);
-
-                var frame = TextLabel.Frame;
-                frame.X = ImageSize * 2;
-                frame.Width += (TextLabel.Frame.X - frame.X);
-                TextLabel.Frame = frame;
-
-//                _label.Frame = new RectangleF(45, 7, 200, 24);
+                ImageView.Frame = new RectangleF(12, 12, ImageSize, ImageSize);
+				TextLabel.Frame = new RectangleF(48, 12, 200, 24);
             }
 
             public void Update(string title, UIImage image)

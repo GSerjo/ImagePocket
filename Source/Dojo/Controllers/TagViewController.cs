@@ -29,7 +29,7 @@ namespace Dojo
         {
             _dataSection.Clear();
             _dataSection.AddAll(CreateElements(_tagCache.GetAll()));
-            base.ViewWillAppear(animated);
+			base.ViewWillAppear(false);
         }
 
         private Section CreateAppSection()
