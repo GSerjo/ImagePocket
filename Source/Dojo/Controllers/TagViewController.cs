@@ -36,8 +36,10 @@ namespace Dojo
         {
             var result = new Section
             {
-                 HeaderView = new MenuSectionView ("Settings")
+                HeaderView = new MenuSectionView("Settings")
             };
+            result.Add(new MenuElement("About", ImageStore.About, () => { }));
+            result.Add(new MenuElement("Feedback & Support", ImageStore.Flag, () => { }));
             return result;
         }
 
@@ -51,10 +53,10 @@ namespace Dojo
 
         private Section CreateTagSection(List<TagEntity> tags)
         {
-			var result = new Section
-			{
-				HeaderView = new MenuSectionView ("Tags")
-			};
+            var result = new Section
+            {
+                HeaderView = new MenuSectionView("Tags")
+            };
             result.AddAll(CreateElements(tags));
             return result;
         }

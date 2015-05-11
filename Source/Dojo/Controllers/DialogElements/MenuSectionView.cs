@@ -9,7 +9,7 @@ namespace Dojo
         public MenuSectionView(string caption)
             : base(new RectangleF(0, 0, 320, 27))
         {
-            //            BackgroundColor = Themes.Theme.Current.PrimaryNavigationBarColor;
+            BackgroundColor = UIColor.FromRGB(50, 50, 50);
             var label = new UILabel
             {
                 BackgroundColor = UIColor.Clear,
