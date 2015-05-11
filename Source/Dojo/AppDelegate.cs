@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.SlideoutNavigation;
 using MonoTouch.UIKit;
-using System.Linq;
 
 namespace Dojo
 {
@@ -39,33 +39,13 @@ namespace Dojo
 
             // If you have defined a root view controller, set it here:
             window.RootViewController = Menu;
-			UpdateTheme ();
-//            UINavigationBar.Appearance.TintColor = Resources.NavigationBarTintColor;
+            UpdateTheme();
+            //            UINavigationBar.Appearance.TintColor = Resources.NavigationBarTintColor;
             // make the window visible
             window.MakeKeyAndVisible();
 
             return true;
         }
-
-		private void UpdateTheme()
-		{
-			var bars = new []{typeof(MenuNavigationController), typeof(MainNavigationController)};
-			foreach (var item in bars.Select(x=>UINavigationBar.AppearanceWhenContainedIn(x)))
-			{
-				item.TintColor = Resources.NavigationBarTextColor;
-				item.SetTitleTextAttributes (new UITextAttributes
-				{
-					TextColor = Resources.NavigationBarTextColor,
-					Font = UIFont.SystemFontOfSize(18f)
-				});
-				item.BarTintColor = Resources.NavigationBarTintColor;
-			}
-//			foreach (var item in bars.Select(x=>UIToolbar.AppearanceWhenContainedIn(x)))
-//			{
-//				item.BarTintColor = Resources.NavigationBarTintColor;
-//				item.TintColor = Resources.NavigationBarTextColor;
-//			}
-		}
 
         private HomeViewController CreateHomeController()
         {
@@ -85,6 +65,26 @@ namespace Dojo
             };
             var controller = new HomeViewController(layout);
             return controller;
+        }
+
+        private void UpdateTheme()
+        {
+            var bars = new[] { typeof(MenuNavigationController), typeof(MainNavigationController) };
+            foreach (UINavigationBar.UINavigationBarAppearance item in bars.Select(x => UINavigationBar.AppearanceWhenContainedIn(x)))
+            {
+                item.TintColor = Resources.NavigationBarTextColor;
+                item.SetTitleTextAttributes(new UITextAttributes
+                {
+                    TextColor = Resources.NavigationBarTextColor,
+                    Font = UIFont.SystemFontOfSize(18f)
+                });
+                item.BarTintColor = Resources.NavigationBarTintColor;
+            }
+            //			foreach (var item in bars.Select(x=>UIToolbar.AppearanceWhenContainedIn(x)))
+            //			{
+            //				item.BarTintColor = Resources.NavigationBarTintColor;
+            //				item.TintColor = Resources.NavigationBarTextColor;
+            //			}
         }
     }
 }
