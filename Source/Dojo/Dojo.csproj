@@ -106,7 +106,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
     <Folder Include="Images.xcassets\Selected.imageset\" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +123,7 @@
     <Compile Include="Controllers\TagSelectorViewController.designer.cs">
       <DependentUpon>TagSelectorViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Resources.cs" />
     <Compile Include="ThumbnailCell.cs" />
     <Compile Include="ThumbnailCell.designer.cs">
       <DependentUpon>ThumbnailCell.cs</DependentUpon>
@@ -132,7 +132,6 @@
     <Compile Include="Layouts\CollectionViewWaterfallLayoutItemRenderDirection.cs" />
     <Compile Include="Layouts\CollectionViewDelegateWaterfallLayout.cs" />
     <Compile Include="Controllers\DialogElements\MenuSectionView.cs" />
-    <Compile Include="ImageStore.cs" />
     <Compile Include="Controllers\DialogElements\MenuElement.cs" />
     <Compile Include="Controllers\AboutAppViewController.cs" />
   </ItemGroup>

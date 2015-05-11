@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain;
 using MonoTouch.Dialog;
-using MonoTouch.UIKit;
 using MonoTouch.MessageUI;
+using MonoTouch.UIKit;
 
 namespace Dojo
 {
@@ -13,7 +13,7 @@ namespace Dojo
         private readonly Section _dataSection;
         private readonly HomeViewController _homeViewController;
         private readonly TagCache _tagCache = TagCache.Instance;
-		private MFMailComposeViewController _mailViewController;
+        private MFMailComposeViewController _mailViewController;
 
         public TagViewController(HomeViewController homeViewController) : base(UITableViewStyle.Plain, null)
         {
@@ -31,7 +31,19 @@ namespace Dojo
         {
             _dataSection.Clear();
             _dataSection.AddAll(CreateElements(_tagCache.GetAll()));
-			base.ViewWillAppear(false);
+            base.ViewWillAppear(false);
+        }
+
+        private void ContactUs()
+        {
+            if (MFMailComposeViewController.CanSendMail)
+            {
+                _mailViewController = new MFMailComposeViewController();
+                _mailViewController.SetToRecipients(new[] { "smorenko@gmail.com" });
+                _mailViewController.Finished += (sender, e) => e.Controller.DismissViewController(true, null);
+                _mailViewController.SetSubject("Feedback");
+                PresentViewController(_mailViewController, true, null);
+            }
         }
 
         private Section CreateAppSection()
@@ -40,22 +52,10 @@ namespace Dojo
             {
                 HeaderView = new MenuSectionView("Settings")
             };
-			result.Add(new MenuElement("About", ImageStore.About, () => new AboutAppViewController("About")));
-			result.Add(new MenuElement("Feedback & Support", ImageStore.Flag, ContactUs));
+            result.Add(new MenuElement("About", Resources.AboutImage, () => new AboutAppViewController("About")));
+            result.Add(new MenuElement("Feedback & Support", Resources.FlagImage, () => ContactUs()));
             return result;
         }
-
-		private void ContactUs()
-		{
-			if (MFMailComposeViewController.CanSendMail)
-			{
-				_mailViewController = new MFMailComposeViewController ();
-				_mailViewController.SetToRecipients (new[]{ "smorenko@gmail.com" });
-				_mailViewController.Finished += (sender, e) => e.Controller.DismissViewController(true, null);
-				_mailViewController.SetSubject ("Feedback");
-				PresentViewController (_mailViewController, true, null);
-			}
-		}
 
         private List<Element> CreateElements(List<TagEntity> tags)
         {

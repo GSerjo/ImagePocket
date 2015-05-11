@@ -22,7 +22,7 @@ namespace Dojo
                 ContentMode = UIViewContentMode.ScaleAspectFit,
                 ClipsToBounds = true
             };
-            _overlayView = new UIImageView(ImageStore.Select);
+            _overlayView = new UIImageView(Resources.SelectImage);
             ContentView.AddSubview(_imageView);
             _overlayView.Frame = Bounds;
             ContentView.AddSubview(_overlayView);
