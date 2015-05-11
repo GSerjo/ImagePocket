@@ -3,6 +3,7 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.SlideoutNavigation;
 using MonoTouch.UIKit;
+using System.Linq;
 
 namespace Dojo
 {
@@ -33,16 +34,38 @@ namespace Dojo
             Menu.MainViewController = new MainNavigationController(homeController, Menu);
             Menu.MenuViewController = new MenuNavigationController(new TagViewController(homeController), Menu)
             {
-                NavigationBarHidden = true
+                NavigationBarHidden = true,
             };
+
             // If you have defined a root view controller, set it here:
             window.RootViewController = Menu;
+			UpdateTheme ();
 //            UINavigationBar.Appearance.TintColor = Resources.NavigationBarTintColor;
             // make the window visible
             window.MakeKeyAndVisible();
 
             return true;
         }
+
+		private void UpdateTheme()
+		{
+			var bars = new []{typeof(MenuNavigationController), typeof(MainNavigationController)};
+			foreach (var item in bars.Select(x=>UINavigationBar.AppearanceWhenContainedIn(x)))
+			{
+				item.TintColor = Resources.NavigationBarTextColor;
+				item.SetTitleTextAttributes (new UITextAttributes
+				{
+					TextColor = Resources.NavigationBarTextColor,
+					Font = UIFont.SystemFontOfSize(18f)
+				});
+				item.BarTintColor = Resources.NavigationBarTintColor;
+			}
+//			foreach (var item in bars.Select(x=>UIToolbar.AppearanceWhenContainedIn(x)))
+//			{
+//				item.BarTintColor = Resources.NavigationBarTintColor;
+//				item.TintColor = Resources.NavigationBarTextColor;
+//			}
+		}
 
         private HomeViewController CreateHomeController()
         {
