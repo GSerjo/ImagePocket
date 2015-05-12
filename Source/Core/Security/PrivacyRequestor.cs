@@ -1,5 +1,5 @@
 ﻿using System;
-using MonoTouch.AssetsLibrary;
+using MonoTouch.Photos;
 
 namespace Core.Security
 {
@@ -7,9 +7,16 @@ namespace Core.Security
     {
         public static bool PhotoAccess()
         {
-            var library = new ALAssetsLibrary();
-            library.Enumerate(ALAssetsGroupType.All, delegate { }, delegate { });
-            return ALAssetsLibrary.AuthorizationStatus == ALAuthorizationStatus.Authorized;
+            if (PHPhotoLibrary.AuthorizationStatus == PHAuthorizationStatus.Authorized)
+            {
+                return true;
+            }
+            var result = PHAuthorizationStatus.NotDetermined;
+            PHPhotoLibrary.RequestAuthorization(x => result = x);
+            return result == PHAuthorizationStatus.Authorized;
+            //            var library = new ALAssetsLibrary();
+            //            library.Enumerate(ALAssetsGroupType.All, delegate { }, delegate { });
+            //            return ALAssetsLibrary.AuthorizationStatus == ALAuthorizationStatus.Authorized;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Core;
 using MonoTouch.Photos;
@@ -47,11 +46,6 @@ namespace Domain
             {
                 return _assets[localId];
             }
-        }
-
-        public SizeF GetImageSize(string localId)
-        {
-            return GetSize(localId);
         }
 
         public List<ImageEntity> GetImages(TagEntity tag)
@@ -127,12 +121,6 @@ namespace Domain
             }
         }
 
-        private SizeF GetSize(string localId)
-        {
-            PHAsset asset = GetAsset(localId);
-            return new SizeF(asset.PixelWidth, asset.PixelHeight);
-        }
-
         private List<ImageEntity> GetUntagged()
         {
             var result = new List<ImageEntity>();
@@ -148,20 +136,16 @@ namespace Domain
         private void InitialiseAssets(PHFetchResult fetchResult)
         {
             _fetchResult = fetchResult;
-            _assets = fetchResult.AsParallel()
-                                 .Cast<PHAsset>()
+            _assets = fetchResult.Cast<PHAsset>()
                                  .Where(x => x.PixelWidth > 0 && x.PixelHeight > 0)
-                                 .Select(x => new { x.LocalIdentifier, Value = x })
-                                 .ToDictionary(x => x.LocalIdentifier, x => x.Value);
+                                 .ToDictionary(x => x.LocalIdentifier);
         }
 
         private void InitialiseImages(Dictionary<string, PHAsset> assets)
         {
             _actualImages = assets.Values
-                                  .AsParallel()
                                   .Select(x => CreateImage(x))
-                                  .Select(x => new { x.LocalIdentifier, Value = x })
-                                  .ToDictionary(x => x.LocalIdentifier, x => x.Value);
+                                  .ToDictionary(x => x.LocalIdentifier);
         }
 
         private void OnPhotoLibraryDidChange(PHFetchResult fetchResult)

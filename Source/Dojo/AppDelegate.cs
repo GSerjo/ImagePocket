@@ -40,7 +40,7 @@ namespace Dojo
             // If you have defined a root view controller, set it here:
             window.RootViewController = Menu;
             UpdateTheme();
-            //            UINavigationBar.Appearance.TintColor = Resources.NavigationBarTintColor;
+
             // make the window visible
             window.MakeKeyAndVisible();
 

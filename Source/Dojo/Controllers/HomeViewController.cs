@@ -17,13 +17,13 @@ namespace Dojo
         private const string SelectImagesTitle = "Select images";
         private const string TagButonName = "Tag";
         private static readonly NSString _cellId = new NSString("ImageCell");
-        private readonly ImageCache _imageCache = ImageCache.Instance;
         private UIBarButtonItem _btCancel, _btOpenMenu;
         private UIBarButtonItem _btSelect;
         private UIBarButtonItem _btTag;
         private UIBarButtonItem _btTrash;
         private TagEntity _currentTag = TagEntity.All;
         private List<ImageEntity> _filteredImages = new List<ImageEntity>();
+        private ImageCache _imageCache;
         private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity>();
         private ViewMode _viewMode = ViewMode.Read;
 
@@ -104,6 +104,19 @@ namespace Dojo
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            if (PHPhotoLibrary.AuthorizationStatus != PHAuthorizationStatus.Authorized)
+            {
+                return;
+            }
+            var result = PHAuthorizationStatus.NotDetermined;
+            PHPhotoLibrary.RequestAuthorization(x => result = x);
+            if (result != PHAuthorizationStatus.Authorized)
+            {
+                return;
+            }
+
+            _imageCache = ImageCache.Instance;
             ConfigureView();
             ConfigureToolbar();
             _imageCache.PhotoLibraryChanged += OnPhotoLibraryChanged;
