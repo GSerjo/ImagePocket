@@ -1,11 +1,12 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/AppDelegate.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Domain/Caches/ImageCache.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="48" Column="3" />
-      <File FileName="Source/Dojo/Controllers/AboutAppViewController.cs" Line="23" Column="48" />
-      <File FileName="Source/Dojo/Controllers/DialogElements/MenuElement.cs" Line="77" Column="88" />
-      <File FileName="Source/Dojo/AppDelegate.cs" Line="48" Column="10" />
+      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/AboutAppViewController.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/DialogElements/MenuElement.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/AppDelegate.cs" Line="68" Column="1" />
+      <File FileName="Source/Domain/Caches/ImageCache.cs" Line="255" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -94,7 +94,4 @@
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Image.JPG" />
-  </ItemGroup>
 </Project>

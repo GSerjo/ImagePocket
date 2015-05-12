@@ -105,22 +105,36 @@ namespace Dojo
         {
             base.ViewDidLoad();
 
-            if (PHPhotoLibrary.AuthorizationStatus != PHAuthorizationStatus.Authorized)
-            {
-                return;
-            }
-            var result = PHAuthorizationStatus.NotDetermined;
-            PHPhotoLibrary.RequestAuthorization(x => result = x);
-            if (result != PHAuthorizationStatus.Authorized)
-            {
-                return;
-            }
-
-            _imageCache = ImageCache.Instance;
-            ConfigureView();
-            ConfigureToolbar();
-            _imageCache.PhotoLibraryChanged += OnPhotoLibraryChanged;
+			if (PHPhotoLibrary.AuthorizationStatus == PHAuthorizationStatus.Authorized)
+			{
+				AfterViewDidLoad ();
+			}
+			else
+			{
+				var result = PHAuthorizationStatus.NotDetermined;
+				PHPhotoLibrary.RequestAuthorization (x =>
+				{
+					result = x;
+					if (result == PHAuthorizationStatus.Authorized)
+					{
+						BeginInvokeOnMainThread(()=>
+						{
+							AfterViewDidLoad ();
+							FilterImages();
+							ReloadData();
+						});
+					}
+				});
+			}
         }
+
+		private void AfterViewDidLoad()
+		{
+			_imageCache = ImageCache.Instance;
+			ConfigureView();
+			ConfigureToolbar();
+			_imageCache.PhotoLibraryChanged += OnPhotoLibraryChanged;
+		}
 
         public override void ViewWillAppear(bool animated)
         {
@@ -157,6 +171,10 @@ namespace Dojo
 
         private void FilterImages()
         {
+			if (_imageCache == null)
+			{
+				return;
+			}
             _filteredImages = _imageCache.GetImages(_currentTag);
             if (_filteredImages.IsNullOrEmpty())
             {
