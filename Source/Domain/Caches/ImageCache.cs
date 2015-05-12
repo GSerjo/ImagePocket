@@ -148,16 +148,20 @@ namespace Domain
         private void InitialiseAssets(PHFetchResult fetchResult)
         {
             _fetchResult = fetchResult;
-            _assets = fetchResult.Cast<PHAsset>()
+            _assets = fetchResult.AsParallel()
+                                 .Cast<PHAsset>()
                                  .Where(x => x.PixelWidth > 0 && x.PixelHeight > 0)
-                                 .ToDictionary(x => x.LocalIdentifier);
+                                 .Select(x => new { x.LocalIdentifier, Value = x })
+                                 .ToDictionary(x => x.LocalIdentifier, x => x.Value);
         }
 
         private void InitialiseImages(Dictionary<string, PHAsset> assets)
         {
             _actualImages = assets.Values
+                                  .AsParallel()
                                   .Select(x => CreateImage(x))
-                                  .ToDictionary(x => x.LocalIdentifier);
+                                  .Select(x => new { x.LocalIdentifier, Value = x })
+                                  .ToDictionary(x => x.LocalIdentifier, x => x.Value);
         }
 
         private void OnPhotoLibraryDidChange(PHFetchResult fetchResult)
