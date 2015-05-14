@@ -36,9 +36,9 @@ namespace Domain
                 {
                     return new List<TagEntity>();
                 }
-                _tags = _tagsInternal.Split (Separator [0])
-                                     .Select (x => int.Parse (x))
-                                     .Where (_tagCache.Contains)
+                _tags = _tagsInternal.Split(Separator[0])
+                                     .Select(x => int.Parse(x))
+                                     .Where(_tagCache.Contains)
                                      .Select(x => _tagCache.GetById(x))
                                      .ToList();
                 return _tags;
@@ -122,7 +122,7 @@ namespace Domain
 
         private bool TagExists(TagEntity tag)
         {
-			return tag.New == false && Tags.Exists(x => x.EntityId == tag.EntityId);
+            return tag.New == false && Tags.Exists(x => x.EntityId == tag.EntityId);
         }
 
         private string TagsToString()

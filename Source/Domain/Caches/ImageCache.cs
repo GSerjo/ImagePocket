@@ -109,18 +109,18 @@ namespace Domain
         {
             lock (_locker)
             {
-//                foreach (ImageEntity taggedImage in _taggedImages.Values)
-//                {
-//                    if (!_actualImages.ContainsKey(taggedImage.LocalIdentifier))
-//                    {
-//                        continue;
-//                    }
-//                    if (taggedImage.Equals(_actualImages[taggedImage.LocalIdentifier]))
-//                    {
-//                        continue;
-//                    }
-//                    _actualImages[taggedImage.LocalIdentifier] = taggedImage;
-//                }
+                //                foreach (ImageEntity taggedImage in _taggedImages.Values)
+                //                {
+                //                    if (!_actualImages.ContainsKey(taggedImage.LocalIdentifier))
+                //                    {
+                //                        continue;
+                //                    }
+                //                    if (taggedImage.Equals(_actualImages[taggedImage.LocalIdentifier]))
+                //                    {
+                //                        continue;
+                //                    }
+                //                    _actualImages[taggedImage.LocalIdentifier] = taggedImage;
+                //                }
                 return _actualImages.Values.ToList();
             }
         }
@@ -151,7 +151,7 @@ namespace Domain
                                   .Select(x => CreateImage(x))
                                   .ToDictionary(x => x.LocalIdentifier);
 
-            foreach (var taggedImage in _taggedImages.Values)
+            foreach (ImageEntity taggedImage in _taggedImages.Values)
             {
                 if (_actualImages.ContainsKey(taggedImage.LocalIdentifier))
                 {
@@ -204,8 +204,8 @@ namespace Domain
             {
                 return;
             }
-			var comparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
-			tags = tags.Distinct (comparer).ToList ();
+            var comparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
+            tags = tags.Distinct(comparer).ToList();
             var emptyTags = new List<TagEntity>();
             foreach (TagEntity tag in tags)
             {
@@ -220,7 +220,7 @@ namespace Domain
         private void UpdateTaggedImages(List<ImageEntity> images)
         {
             var removedImages = new List<ImageEntity>();
-			var removeTags = new List<TagEntity> ();
+            var removeTags = new List<TagEntity>();
             foreach (ImageEntity image in images)
             {
                 ImageEntity previousImage;
@@ -230,18 +230,18 @@ namespace Domain
                     continue;
                 }
 
-				removeTags.AddRange(previousImage.GetRemovedTags(image));
+                removeTags.AddRange(previousImage.GetRemovedTags(image));
                 previousImage.Update(image);
-				if (image.Tags.IsEmpty ())
-				{
-					_taggedImages.Remove (image.LocalIdentifier);
-				}
-				else
-				{
-					_taggedImages [image.LocalIdentifier] = image;
-				}
+                if (image.Tags.IsEmpty())
+                {
+                    _taggedImages.Remove(image.LocalIdentifier);
+                }
+                else
+                {
+                    _taggedImages[image.LocalIdentifier] = image;
+                }
             }
-			RemoveEmpyTags(removeTags);
+            RemoveEmpyTags(removeTags);
             Remove(removedImages);
 
             //                ImageEntity previousImage;
