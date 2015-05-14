@@ -68,6 +68,10 @@ namespace Domain
 
         public void Remove(List<ImageEntity> images)
         {
+            if (images.IsNullOrEmpty())
+            {
+                return;
+            }
             _imageRepository.Remove(images);
             RemoveCachedImages(images);
             List<TagEntity> tags = GetDistinctTags(images);
@@ -105,18 +109,18 @@ namespace Domain
         {
             lock (_locker)
             {
-                foreach (ImageEntity taggedImage in _taggedImages.Values)
-                {
-                    if (!_actualImages.ContainsKey(taggedImage.LocalIdentifier))
-                    {
-                        continue;
-                    }
-                    if (taggedImage.Equals(_actualImages[taggedImage.LocalIdentifier]))
-                    {
-                        continue;
-                    }
-                    _actualImages[taggedImage.LocalIdentifier] = taggedImage;
-                }
+//                foreach (ImageEntity taggedImage in _taggedImages.Values)
+//                {
+//                    if (!_actualImages.ContainsKey(taggedImage.LocalIdentifier))
+//                    {
+//                        continue;
+//                    }
+//                    if (taggedImage.Equals(_actualImages[taggedImage.LocalIdentifier]))
+//                    {
+//                        continue;
+//                    }
+//                    _actualImages[taggedImage.LocalIdentifier] = taggedImage;
+//                }
                 return _actualImages.Values.ToList();
             }
         }
@@ -146,6 +150,15 @@ namespace Domain
             _actualImages = assets.Values
                                   .Select(x => CreateImage(x))
                                   .ToDictionary(x => x.LocalIdentifier);
+
+            foreach (var taggedImage in _taggedImages.Values)
+            {
+                if (_actualImages.ContainsKey(taggedImage.LocalIdentifier))
+                {
+                    _actualImages[taggedImage.LocalIdentifier] = taggedImage;
+                }
+            }
+            //TODO Remove absent images from TaggedStore
         }
 
         private void OnPhotoLibraryDidChange(PHFetchResult fetchResult)
@@ -204,28 +217,47 @@ namespace Domain
 
         private void UpdateTaggedImages(List<ImageEntity> images)
         {
+            var removedImages = new List<ImageEntity>();
             foreach (ImageEntity image in images)
             {
                 ImageEntity previousImage;
-                if (_taggedImages.TryGetValue(image.LocalIdentifier, out previousImage))
+                if (_actualImages.TryGetValue(image.LocalIdentifier, out previousImage) == false)
                 {
-                    List<TagEntity> removedTags = previousImage.GetRemovedTags(image);
+                    removedImages.Add(image);
+                    continue;
+                }
 
-                    if (image.Tags.IsEmpty())
-                    {
-                        _taggedImages.Remove(image.LocalIdentifier);
-                    }
-                    else
-                    {
-                        _taggedImages[image.LocalIdentifier] = image;
-                    }
-                    RemoveEmpyTags(removedTags);
-                }
-                else
+                List<TagEntity> removedTags = previousImage.GetRemovedTags(image);
+                previousImage.Update(image);
+                if (image.Tags.IsEmpty())
                 {
-                    _taggedImages[image.LocalIdentifier] = image;
+                    _taggedImages.Remove(image.LocalIdentifier);
                 }
+                RemoveEmpyTags(removedTags);
             }
+
+            Remove(removedImages);
+
+            //                ImageEntity previousImage;
+            //                if (_taggedImages.TryGetValue(image.LocalIdentifier, out previousImage))
+            //                {
+            //                    List<TagEntity> removedTags = previousImage.GetRemovedTags(image);
+            //
+            //                    if (image.Tags.IsEmpty())
+            //                    {
+            //                        _taggedImages.Remove(image.LocalIdentifier);
+            //                    }
+            //                    else
+            //                    {
+            //                        _taggedImages[image.LocalIdentifier] = image;
+            //                    }
+            //                    RemoveEmpyTags(removedTags);
+            //                }
+            //                else
+            //                {
+            //                    _taggedImages[image.LocalIdentifier] = image;
+            //                }
+            //            }
         }
 
 

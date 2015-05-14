@@ -113,6 +113,13 @@ namespace Domain
             _tagsInternal = TagsToString();
         }
 
+        public void Update(ImageEntity value)
+        {
+            _tags.Clear();
+            _tags.AddRange(value.Tags);
+            _tagsInternal = TagsToString();
+        }
+
         private bool TagExists(TagEntity tag)
         {
             return Tags.Exists(x => x.EntityId == tag.EntityId);
