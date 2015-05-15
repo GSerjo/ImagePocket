@@ -117,6 +117,7 @@ namespace Domain
         {
             _tags.Clear();
             _tags.AddRange(value.Tags);
+            EntityId = value.EntityId;
             _tagsInternal = TagsToString();
         }
 

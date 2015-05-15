@@ -109,18 +109,6 @@ namespace Domain
         {
             lock (_locker)
             {
-                //                foreach (ImageEntity taggedImage in _taggedImages.Values)
-                //                {
-                //                    if (!_actualImages.ContainsKey(taggedImage.LocalIdentifier))
-                //                    {
-                //                        continue;
-                //                    }
-                //                    if (taggedImage.Equals(_actualImages[taggedImage.LocalIdentifier]))
-                //                    {
-                //                        continue;
-                //                    }
-                //                    _actualImages[taggedImage.LocalIdentifier] = taggedImage;
-                //                }
                 return _actualImages.Values.ToList();
             }
         }
