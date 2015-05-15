@@ -231,27 +231,6 @@ namespace Domain
             }
             RemoveEmpyTags(removeTags);
             Remove(removedImages);
-
-            //                ImageEntity previousImage;
-            //                if (_taggedImages.TryGetValue(image.LocalIdentifier, out previousImage))
-            //                {
-            //                    List<TagEntity> removedTags = previousImage.GetRemovedTags(image);
-            //
-            //                    if (image.Tags.IsEmpty())
-            //                    {
-            //                        _taggedImages.Remove(image.LocalIdentifier);
-            //                    }
-            //                    else
-            //                    {
-            //                        _taggedImages[image.LocalIdentifier] = image;
-            //                    }
-            //                    RemoveEmpyTags(removedTags);
-            //                }
-            //                else
-            //                {
-            //                    _taggedImages[image.LocalIdentifier] = image;
-            //                }
-            //            }
         }
 
 
