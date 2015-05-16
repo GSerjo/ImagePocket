@@ -118,16 +118,18 @@ namespace Dojo
 
             public void Filter(string text)
             {
+                List<TagEntity> tags = GetTags();
                 if (string.IsNullOrWhiteSpace(text))
                 {
-                    _tags = GetTags();
+                    _tags = tags.OrderBy(x => x.Name).ToList();
                 }
                 else
                 {
-                    _tags = GetTags()
-                        .Where(x => x.Name.Contains(text))
-                        .ToList();
-                    if (_tags.IsEmpty())
+                    _tags = tags.Where(x => x.Name.Contains(text))
+                                .OrderBy(x => x.Name)
+                                .ToList();
+                    var isAddTag = tags.Exists(x => string.Equals(x.Name, text, StringComparison.Ordinal)) == false;
+                    if (isAddTag)
                     {
                         TagEntity addTagRequest = TagEntity.AddTagRequest;
                         addTagRequest.Name = text;
