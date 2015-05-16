@@ -95,7 +95,7 @@ namespace Dojo
 
         private void ReloadData()
         {
-			DispatchQueue.MainQueue.DispatchAsync (allTags.ReloadData);
+            DispatchQueue.MainQueue.DispatchAsync(allTags.ReloadData);
         }
 
         private void RemoveTagFormImages(TagEntity tag)
@@ -128,7 +128,7 @@ namespace Dojo
                     _tags = tags.Where(x => x.Name.Contains(text))
                                 .OrderBy(x => x.Name)
                                 .ToList();
-                    var isAddTag = tags.Exists(x => string.Equals(x.Name, text, StringComparison.Ordinal)) == false;
+                    bool isAddTag = tags.Exists(x => string.Equals(x.Name, text, StringComparison.Ordinal)) == false;
                     if (isAddTag)
                     {
                         TagEntity addTagRequest = TagEntity.AddTagRequest;
