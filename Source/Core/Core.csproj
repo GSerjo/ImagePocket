@@ -46,6 +46,7 @@
     <Compile Include="DataStructures\EventArgsOf.cs" />
     <Compile Include="DataStructures\Option.cs" />
     <Compile Include="Extensions\OptionExtensions.cs" />
+    <Compile Include="Extensions\UIImageExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />

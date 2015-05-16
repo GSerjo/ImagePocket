@@ -95,7 +95,7 @@ namespace Dojo
 
         private void ReloadData()
         {
-            DispatchQueue.MainQueue.DispatchAsync(() => allTags.ReloadData());
+			DispatchQueue.MainQueue.DispatchAsync (allTags.ReloadData);
         }
 
         private void RemoveTagFormImages(TagEntity tag)
