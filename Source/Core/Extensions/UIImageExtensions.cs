@@ -93,7 +93,6 @@ namespace Core
 
 			default:
 				throw new Exception("Invalid image orientation");
-				break;
 			}
 
 			UIGraphics.BeginImageContext(bounds.Size);

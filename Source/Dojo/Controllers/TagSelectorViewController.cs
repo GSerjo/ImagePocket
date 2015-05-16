@@ -133,7 +133,7 @@ namespace Dojo
                     {
                         TagEntity addTagRequest = TagEntity.AddTagRequest;
                         addTagRequest.Name = text;
-                        _tags.Insert(_tags.Count, addTagRequest);
+                        _tags.Insert(0, addTagRequest);
                     }
                 }
                 ReloadTags();
