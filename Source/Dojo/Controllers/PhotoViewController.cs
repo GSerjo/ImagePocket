@@ -6,6 +6,7 @@ using Domain;
 using MonoTouch.Foundation;
 using MonoTouch.Photos;
 using MonoTouch.UIKit;
+using System.Drawing;
 
 namespace Dojo
 {
@@ -40,7 +41,9 @@ namespace Dojo
             _imageView = new UIImageView(View.Frame)
             {
                 MultipleTouchEnabled = true,
-                UserInteractionEnabled = true
+                UserInteractionEnabled = true,
+				ContentMode = UIViewContentMode.ScaleAspectFit,
+				AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
             };
 
             var tapGesture = new UITapGestureRecognizer(OnImageTap);
@@ -62,6 +65,30 @@ namespace Dojo
             PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
             UpdateImage(asset);
         }
+
+		public UIImage ResizeImage(UIImage sourceImage, float width, float height)
+		{
+			UIGraphics.BeginImageContext(new SizeF(width, height));
+			sourceImage.Draw(new RectangleF(0, 0, width, height));
+			var resultImage = UIGraphics.GetImageFromCurrentImageContext();
+			UIGraphics.EndImageContext();
+			return resultImage;
+		}
+
+//		public override bool ShouldAutorotate ()
+//		{
+//			return true;
+//		}
+//
+//		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
+//		{
+//			return true;
+//		}
+
+//		public override UIInterfaceOrientationMask GetSupportedInterfaceOrientations ()
+//		{
+//			return UIInterfaceOrientationMask.All;
+//		}
 
         public override void ViewWillAppear(bool animated)
         {
@@ -185,7 +212,6 @@ namespace Dojo
             PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
-                    _imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
                     UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.TransitionCrossDissolve, () => _imageView.Image = img, null);
                 });
         }
