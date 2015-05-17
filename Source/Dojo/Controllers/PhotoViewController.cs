@@ -6,7 +6,6 @@ using Domain;
 using MonoTouch.Foundation;
 using MonoTouch.Photos;
 using MonoTouch.UIKit;
-using System.Drawing;
 
 namespace Dojo
 {
@@ -42,8 +41,8 @@ namespace Dojo
             {
                 MultipleTouchEnabled = true,
                 UserInteractionEnabled = true,
-				ContentMode = UIViewContentMode.ScaleAspectFit,
-				AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+                ContentMode = UIViewContentMode.ScaleAspectFit,
+                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
             };
 
             var tapGesture = new UITapGestureRecognizer(OnImageTap);
@@ -65,15 +64,6 @@ namespace Dojo
             PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
             UpdateImage(asset);
         }
-
-		public UIImage ResizeImage(UIImage sourceImage, float width, float height)
-		{
-			UIGraphics.BeginImageContext(new SizeF(width, height));
-			sourceImage.Draw(new RectangleF(0, 0, width, height));
-			var resultImage = UIGraphics.GetImageFromCurrentImageContext();
-			UIGraphics.EndImageContext();
-			return resultImage;
-		}
 
         public override void ViewWillAppear(bool animated)
         {
@@ -197,7 +187,7 @@ namespace Dojo
             PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
-//					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
+                    //					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
                     UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
                 });
         }

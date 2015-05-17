@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\PrivacyRequestor.cs" />
     <Compile Include="FuncComparer.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -46,7 +45,6 @@
     <Compile Include="DataStructures\EventArgsOf.cs" />
     <Compile Include="DataStructures\Option.cs" />
     <Compile Include="Extensions\OptionExtensions.cs" />
-    <Compile Include="Extensions\UIImageExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
