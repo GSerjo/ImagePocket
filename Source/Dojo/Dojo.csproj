@@ -224,6 +224,7 @@
   <ItemGroup>
     <InterfaceDefinition Include="Controllers\TagSelectorViewController.xib" />
     <InterfaceDefinition Include="ThumbnailCell.xib" />
+    <InterfaceDefinition Include="Launch.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Contents.json">

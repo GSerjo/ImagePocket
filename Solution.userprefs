@@ -1,30 +1,13 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/TagViewController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.4" />
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="98" Column="55" />
+      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="1" Column="1" />
       <File FileName="Source/Dojo/Main.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/AppDelegate.cs" Line="35" Column="81" />
-      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="78" Column="10" />
+      <File FileName="Source/Dojo/AppDelegate.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="85" Column="33" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="223" Column="21" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Solution" expanded="True">
-            <Node name="Dojo" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="DialogElements" expanded="True" />
-                <Node name="TagSelectorViewController.cs" expanded="True" />
-                <Node name="TagViewController.cs" selected="True" />
-              </Node>
-            </Node>
-            <Node name="Domain" expanded="True">
-              <Node name="Caches" expanded="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
