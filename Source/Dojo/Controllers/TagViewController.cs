@@ -10,10 +10,10 @@ namespace Dojo
 {
     public sealed class TagViewController : DialogViewController
     {
-        private Section _dataSection;
-		private Section _appSection;
         private readonly HomeViewController _homeViewController;
         private readonly TagCache _tagCache = TagCache.Instance;
+        private Section _appSection;
+        private Section _dataSection;
         private MFMailComposeViewController _mailViewController;
 
         public TagViewController(HomeViewController homeViewController) : base(UITableViewStyle.Plain, null)
@@ -21,29 +21,32 @@ namespace Dojo
             _homeViewController = homeViewController;
         }
 
-		public override void ViewDidLoad ()
-		{
-			base.ViewDidLoad ();
-			_dataSection = CreateTagSection();
-			_appSection = CreateAppSection ();
-			Root = new RootElement(string.Empty)
-			{
-				_dataSection,
-				_appSection
-			};
-		}
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            _dataSection = CreateTagSection();
+            _appSection = CreateAppSection();
+            Root = new RootElement(string.Empty)
+            {
+                _dataSection,
+                _appSection
+            };
+        }
 
         public override void ViewWillAppear(bool animated)
         {
-			base.ViewWillAppear(animated);
-			RefreshData();
+            base.ViewWillAppear(animated);
+            RefreshData();
         }
 
-		private void RefreshData()
-		{
-			_dataSection.Elements = CreateElements();
-			Root.Reload (_dataSection, UITableViewRowAnimation.None);
-		}
+        private static Section CreateTagSection()
+        {
+            var result = new Section
+            {
+                HeaderView = new MenuSectionView("Tags")
+            };
+            return result;
+        }
 
         private void ContactUs()
         {
@@ -64,25 +67,16 @@ namespace Dojo
                 HeaderView = new MenuSectionView("Settings")
             };
             result.Add(new MenuElement("About", Resources.AboutImage, () => new AboutAppViewController("About")));
-            result.Add(new MenuElement ("Feedback & Support", Resources.FlagImage, ContactUs));
+            result.Add(new MenuElement("Feedback & Support", Resources.FlagImage, ()=> ContactUs()));
             return result;
         }
 
         private List<Element> CreateElements()
         {
-			List<TagEntity> tags = _tagCache.GetAll();
-			List<Element> result = tags.Select(x => new StyledStringElement(x.Name, () => FilterImage(x)))
+            List<TagEntity> tags = _tagCache.GetAll();
+            List<Element> result = tags.Select(x => new StringElement(x.Name, () => FilterImage(x)))
                                        .Cast<Element>()
                                        .ToList();
-            return result;
-        }
-
-        private static Section CreateTagSection()
-        {
-            var result = new Section
-            {
-                HeaderView = new MenuSectionView("Tags")
-            };
             return result;
         }
 
@@ -90,6 +84,12 @@ namespace Dojo
         {
             _homeViewController.FilterImages(entity);
             NavigationController.PushViewController(_homeViewController, true);
+        }
+
+        private void RefreshData()
+        {
+            _dataSection.Elements = CreateElements();
+            Root.Reload(_dataSection, UITableViewRowAnimation.None);
         }
     }
 }

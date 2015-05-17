@@ -42,9 +42,16 @@ namespace Dojo
 
         public void FilterImages(TagEntity entity)
         {
-            _currentTag = entity;
-            FilterImages();
-            ReloadData();
+            try
+            {
+                _currentTag = entity;
+                FilterImages();
+                ReloadData();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
