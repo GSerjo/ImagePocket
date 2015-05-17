@@ -113,7 +113,7 @@ namespace Dojo
             public TagTableSource(TagSelectorViewController controller)
             {
                 _controller = controller;
-                _tags = GetTags();
+				_tags = GetTags().OrderBy(x=>x.Name).ToList();
             }
 
             public void Filter(string text)
