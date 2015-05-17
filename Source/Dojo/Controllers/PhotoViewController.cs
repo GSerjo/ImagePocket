@@ -75,21 +75,6 @@ namespace Dojo
 			return resultImage;
 		}
 
-//		public override bool ShouldAutorotate ()
-//		{
-//			return true;
-//		}
-//
-//		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
-//		{
-//			return true;
-//		}
-
-//		public override UIInterfaceOrientationMask GetSupportedInterfaceOrientations ()
-//		{
-//			return UIInterfaceOrientationMask.All;
-//		}
-
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
@@ -212,7 +197,8 @@ namespace Dojo
             PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
-                    UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.TransitionCrossDissolve, () => _imageView.Image = img, null);
+//					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
+                    UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
                 });
         }
     }
