@@ -155,6 +155,7 @@ namespace Dojo
                 else
                 {
                     cell.TextLabel.Text = tag.Name;
+					cell.TextLabel.TextColor = UIColor.DarkTextColor;
                 }
                 return cell;
             }
