@@ -25,18 +25,38 @@ namespace Domain
             CreateTable<ImageEntity>();
         }
 
-//        public static int AddOrUpdate<T>(T value)
-//            where T : Entity
-//        {
-//            lock (_locker)
-//            {
-//                if (value.New)
-//                {
-//                    return _database.Insert(value);
-//                }
-//                return _database.Update(value);
-//            }
-//        }
+        private static string DocumentPath
+        {
+            get { return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); }
+        }
+
+        private static string LibraryPath
+        {
+            get { return Path.Combine(RootPath, "Library"); }
+        }
+
+        private static string RootPath
+        {
+            get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ".."); }
+        }
+
+        private static string TempPath
+        {
+            get { return Path.Combine(RootPath, "tmp"); }
+        }
+
+        //        public static int AddOrUpdate<T>(T value)
+        //            where T : Entity
+        //        {
+        //            lock (_locker)
+        //            {
+        //                if (value.New)
+        //                {
+        //                    return _database.Insert(value);
+        //                }
+        //                return _database.Update(value);
+        //            }
+        //        }
 
         public static void AddOrUpdate<T>(IList<T> values)
             where T : Entity
@@ -86,8 +106,7 @@ namespace Domain
 
         private static string GetDatabasePath()
         {
-            string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            return Path.Combine(documentPath, "NeliburPocket.db");
+            return Path.Combine(DocumentPath, "ImagePocket_B326EC74.db");
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Dojo
         {
             List<TagEntity> result = _images.First().Tags;
             IEnumerable<List<TagEntity>> imageTags = _images.Select(x => x.Tags);
-			var comparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
+            var comparer = new FuncComparer<TagEntity>((x, y) => x.Equals(y));
 
             foreach (List<TagEntity> tags in imageTags)
             {
@@ -113,7 +113,7 @@ namespace Dojo
             public TagTableSource(TagSelectorViewController controller)
             {
                 _controller = controller;
-				_tags = GetTags().OrderBy(x=>x.Name).ToList();
+                _tags = GetTags().OrderBy(x => x.Name).ToList();
             }
 
             public void Filter(string text)
@@ -133,7 +133,7 @@ namespace Dojo
                     {
                         TagEntity addTagRequest = TagEntity.AddTagRequest;
                         addTagRequest.Name = text;
-						_tags.Insert(_tags.Count, addTagRequest);
+                        _tags.Insert(_tags.Count, addTagRequest);
                     }
                 }
                 ReloadTags();
@@ -150,12 +150,12 @@ namespace Dojo
                 if (tag.IsAddTagRequest)
                 {
                     cell.TextLabel.Text = string.Format("Add new tag \"{0}\"", tag.Name);
-					cell.TextLabel.TextColor = UIColor.FromRGB(99,194,188);
+                    cell.TextLabel.TextColor = UIColor.FromRGB(99, 194, 188);
                 }
                 else
                 {
                     cell.TextLabel.Text = tag.Name;
-					cell.TextLabel.TextColor = UIColor.DarkTextColor;
+                    cell.TextLabel.TextColor = UIColor.DarkTextColor;
                 }
                 return cell;
             }
@@ -174,7 +174,7 @@ namespace Dojo
                 }
                 _controller.AddTagToImages(addTag);
                 _controller._tagTokenSource.AddTag(addTag);
-				_tags = GetTags();
+                _tags = GetTags();
                 ReloadTags();
             }
 
