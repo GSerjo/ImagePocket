@@ -41,18 +41,9 @@ namespace Dojo
 
 
         public void FilterImages(TagEntity entity)
-        {
-            try
-            {
-                _currentTag = entity;
-                FilterImages();
-                ReloadData();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
+		{
+			_currentTag = entity;
+		}
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
@@ -136,7 +127,7 @@ namespace Dojo
 
         public override void ViewWillAppear(bool animated)
         {
-            NavigationController.SetToolbarHidden(false, true);
+			NavigationController.SetToolbarHidden(false, false);
             FilterImages();
             ReloadData();
             base.ViewWillAppear(animated);
