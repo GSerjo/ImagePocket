@@ -107,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images.xcassets\Selected.imageset\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -264,8 +263,5 @@
     <ImageAsset Include="Images.xcassets\Selected.imageset\Selected%403x.png">
       <InProject>false</InProject>
     </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\2_1.jpg" />
   </ItemGroup>
 </Project>
