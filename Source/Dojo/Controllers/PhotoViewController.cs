@@ -17,6 +17,7 @@ namespace Dojo
         private bool _fullScreen;
         private ImageEntity _image;
         private UIImageView _imageView;
+		private UIScrollView _scrollView;
 
         public PhotoViewController(ImageEntity image, List<ImageEntity> images)
         {
@@ -37,13 +38,13 @@ namespace Dojo
         {
             View.BackgroundColor = UIColor.White;
 
-            _imageView = new UIImageView(View.Frame)
-            {
-                MultipleTouchEnabled = true,
-                UserInteractionEnabled = true,
-                ContentMode = UIViewContentMode.ScaleAspectFit,
-                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-            };
+//            _imageView = new UIImageView(View.Frame)
+//            {
+//                MultipleTouchEnabled = true,
+//                UserInteractionEnabled = true,
+//                ContentMode = UIViewContentMode.ScaleAspectFit,
+//                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+//            };
 
             var tapGesture = new UITapGestureRecognizer(OnImageTap);
             _imageView.AddGestureRecognizer(tapGesture);
@@ -52,14 +53,24 @@ namespace Dojo
             {
                 Direction = UISwipeGestureRecognizerDirection.Left
             };
-            _imageView.AddGestureRecognizer(leftSwipe);
+//            _imageView.AddGestureRecognizer(leftSwipe);
 
             var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
             {
                 Direction = UISwipeGestureRecognizerDirection.Right
             };
-            _imageView.AddGestureRecognizer(rigthSwipe);
-            View.AddSubview(_imageView);
+//            _imageView.AddGestureRecognizer(rigthSwipe);
+            //View.AddSubview(_imageView);
+
+			_scrollView = new UIScrollView ()
+			{
+				Delegate = new ScrollViewDelegate(),
+				ContentSize = new System.Drawing.SizeF(View.Frame.Width * _images.Count, View.Frame.Height)
+			};
+
+//			_scrollView.AddSubview (_imageView);
+			View.AddSubview (_scrollView);
+
 
             PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
             UpdateImage(asset);
@@ -191,5 +202,12 @@ namespace Dojo
                     UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
                 });
         }
+
+		private sealed class ScrollViewDelegate : UIScrollViewDelegate
+		{
+			public override void Scrolled (UIScrollView scrollView)
+			{
+			}
+		}
     }
 }
