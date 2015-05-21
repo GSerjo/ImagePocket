@@ -63,7 +63,7 @@ namespace Dojo
             //            _imageView.AddGestureRecognizer(rigthSwipe);
             //View.AddSubview(_imageView);
 
-            _scrollView = new UIScrollView
+			_scrollView = new UIScrollView(View.Frame)
             {
                 Delegate = new ScrollViewDelegate(this),
                 ContentSize = new SizeF(View.Frame.Width * _images.Count, View.Frame.Height)
