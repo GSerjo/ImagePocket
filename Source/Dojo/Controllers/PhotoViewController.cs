@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Core;
 using Domain;
@@ -13,18 +14,18 @@ namespace Dojo
     {
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly List<ImageEntity> _images;
+        private ImageEntity _currentImage;
         private int _currentImageIndex;
         private bool _fullScreen;
-        private ImageEntity _image;
-        private UIImageView _imageView;
-		private UIScrollView _scrollView;
+        //        private UIImageView _imageView;
+        private UIScrollView _scrollView;
 
-        public PhotoViewController(ImageEntity image, List<ImageEntity> images)
+        public PhotoViewController(ImageEntity currentImage, List<ImageEntity> images)
         {
             Title = "Image";
-            _image = image;
+            _currentImage = currentImage;
             _images = images;
-            _currentImageIndex = _images.FindIndex(x => x.Equals(image));
+            _currentImageIndex = _images.FindIndex(x => x.Equals(currentImage));
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
@@ -38,42 +39,41 @@ namespace Dojo
         {
             View.BackgroundColor = UIColor.White;
 
-//            _imageView = new UIImageView(View.Frame)
-//            {
-//                MultipleTouchEnabled = true,
-//                UserInteractionEnabled = true,
-//                ContentMode = UIViewContentMode.ScaleAspectFit,
-//                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-//            };
+            //            _imageView = new UIImageView(View.Frame)
+            //            {
+            //                MultipleTouchEnabled = true,
+            //                UserInteractionEnabled = true,
+            //                ContentMode = UIViewContentMode.ScaleAspectFit,
+            //                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+            //            };
 
-//            var tapGesture = new UITapGestureRecognizer(OnImageTap);
-//            _imageView.AddGestureRecognizer(tapGesture);
-//
-//            var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
-//            {
-//                Direction = UISwipeGestureRecognizerDirection.Left
-//            };
-//            _imageView.AddGestureRecognizer(leftSwipe);
+            //            var tapGesture = new UITapGestureRecognizer(OnImageTap);
+            //            _imageView.AddGestureRecognizer(tapGesture);
+            //
+            //            var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
+            //            {
+            //                Direction = UISwipeGestureRecognizerDirection.Left
+            //            };
+            //            _imageView.AddGestureRecognizer(leftSwipe);
 
-//            var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
-//            {
-//                Direction = UISwipeGestureRecognizerDirection.Right
-//            };
-//            _imageView.AddGestureRecognizer(rigthSwipe);
+            //            var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
+            //            {
+            //                Direction = UISwipeGestureRecognizerDirection.Right
+            //            };
+            //            _imageView.AddGestureRecognizer(rigthSwipe);
             //View.AddSubview(_imageView);
 
-			_scrollView = new UIScrollView ()
-			{
-				Delegate = new ScrollViewDelegate(this),
-				ContentSize = new System.Drawing.SizeF(View.Frame.Width * _images.Count, View.Frame.Height)
-			};
+            _scrollView = new UIScrollView
+            {
+                Delegate = new ScrollViewDelegate(this),
+                ContentSize = new SizeF(View.Frame.Width * _images.Count, View.Frame.Height)
+            };
 
-//			_scrollView.AddSubview (_imageView);
-			View.AddSubview (_scrollView);
+            //			_scrollView.AddSubview (_imageView);
+            View.AddSubview(_scrollView);
 
-
-//            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
-//            UpdateImage(asset);
+            //            PHAsset asset = _imageCache.GetAsset(_currentImage.LocalIdentifier);
+            //            UpdateImage(asset);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -157,7 +157,7 @@ namespace Dojo
 
         private void OnTagClicked(object sender, EventArgs ea)
         {
-            var controller = new TagSelectorViewController(_image)
+            var controller = new TagSelectorViewController(_currentImage)
             {
                 ModalPresentationStyle = UIModalPresentationStyle.FormSheet
             };
@@ -168,17 +168,17 @@ namespace Dojo
         private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
         {
             _imageCache.SaveOrUpdate(ea.Data);
-            _image = ea.Data.First();
+            _currentImage = ea.Data.First();
         }
 
         private void OnTrashClicked(object sender, EventArgs ea)
         {
             try
             {
-                PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+                PHAsset asset = _imageCache.GetAsset(_currentImage.LocalIdentifier);
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(new[] { asset }),
-                    (result, error) => OnDeleteAssetsCompleted(_image, result, error));
+                    (result, error) => OnDeleteAssetsCompleted(_currentImage, result, error));
             }
             catch (Exception ex)
             {
@@ -188,8 +188,8 @@ namespace Dojo
 
         private void SwipeImage()
         {
-            _image = _images[_currentImageIndex];
-            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+            _currentImage = _images[_currentImageIndex];
+            PHAsset asset = _imageCache.GetAsset(_currentImage.LocalIdentifier);
             InvokeOnMainThread(() => UpdateImage(asset));
         }
 
@@ -199,44 +199,47 @@ namespace Dojo
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
                     //					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
-                    UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
+                    //                    UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
                 });
         }
 
-		private sealed class ScrollViewDelegate : UIScrollViewDelegate
-		{
-			private PhotoViewController _controller;
+        private void UpdateImage()
+        {
+            float pageWidth = _scrollView.Frame.Size.Width;
+            var imageIndex = (int)Math.Floor((_scrollView.ContentOffset.X * 2.0 + pageWidth) / (pageWidth * 2.0));
 
-			public ScrollViewDelegate (PhotoViewController controller)
-			{
-				_controller = controller;
-			}
+            ImageEntity image = _images[imageIndex];
+            PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
 
-			public override void Scrolled (UIScrollView scrollView)
-			{
+            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
+                PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
+                {
+                    var imageView = new UIImageView(img)
+                    {
+                        MultipleTouchEnabled = true,
+                        UserInteractionEnabled = true,
+                        ContentMode = UIViewContentMode.ScaleAspectFit,
+                        AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+                        Frame = _scrollView.Bounds
+                    };
+                    _scrollView.AddSubview(imageView);
+                });
+        }
 
-				PHAsset asset = _controller._imageCache.GetAsset(_controller._image.LocalIdentifier);
-				UpdateImage(asset);
-			}
 
-			private void UpdateImage(PHAsset asset)
-			{
-				PHImageManager.DefaultManager.RequestImageForAsset(asset, _controller._scrollView.Frame.Size,
-					PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
-				{
-					var imageView = new UIImageView(img)
-					{
-						MultipleTouchEnabled = true,
-						UserInteractionEnabled = true,
-						ContentMode = UIViewContentMode.ScaleAspectFit,
-						AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-					};
-					_controller._scrollView.AddSubview (imageView);
-					//					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
-//					UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
-				});
-			}
+        private sealed class ScrollViewDelegate : UIScrollViewDelegate
+        {
+            private readonly PhotoViewController _controller;
 
-		}
+            public ScrollViewDelegate(PhotoViewController controller)
+            {
+                _controller = controller;
+            }
+
+            public override void Scrolled(UIScrollView scrollView)
+            {
+                _controller.UpdateImage();
+            }
+        }
     }
 }
