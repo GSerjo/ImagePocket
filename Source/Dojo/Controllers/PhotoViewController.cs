@@ -46,25 +46,25 @@ namespace Dojo
 //                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
 //            };
 
-            var tapGesture = new UITapGestureRecognizer(OnImageTap);
-            _imageView.AddGestureRecognizer(tapGesture);
-
-            var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
-            {
-                Direction = UISwipeGestureRecognizerDirection.Left
-            };
+//            var tapGesture = new UITapGestureRecognizer(OnImageTap);
+//            _imageView.AddGestureRecognizer(tapGesture);
+//
+//            var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
+//            {
+//                Direction = UISwipeGestureRecognizerDirection.Left
+//            };
 //            _imageView.AddGestureRecognizer(leftSwipe);
 
-            var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
-            {
-                Direction = UISwipeGestureRecognizerDirection.Right
-            };
+//            var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
+//            {
+//                Direction = UISwipeGestureRecognizerDirection.Right
+//            };
 //            _imageView.AddGestureRecognizer(rigthSwipe);
             //View.AddSubview(_imageView);
 
 			_scrollView = new UIScrollView ()
 			{
-				Delegate = new ScrollViewDelegate(),
+				Delegate = new ScrollViewDelegate(this),
 				ContentSize = new System.Drawing.SizeF(View.Frame.Width * _images.Count, View.Frame.Height)
 			};
 
@@ -72,8 +72,8 @@ namespace Dojo
 			View.AddSubview (_scrollView);
 
 
-            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
-            UpdateImage(asset);
+//            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+//            UpdateImage(asset);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -205,9 +205,38 @@ namespace Dojo
 
 		private sealed class ScrollViewDelegate : UIScrollViewDelegate
 		{
+			private PhotoViewController _controller;
+
+			public ScrollViewDelegate (PhotoViewController controller)
+			{
+				_controller = controller;
+			}
+
 			public override void Scrolled (UIScrollView scrollView)
 			{
+
+				PHAsset asset = _controller._imageCache.GetAsset(_controller._image.LocalIdentifier);
+				UpdateImage(asset);
 			}
+
+			private void UpdateImage(PHAsset asset)
+			{
+				PHImageManager.DefaultManager.RequestImageForAsset(asset, _controller._scrollView.Frame.Size,
+					PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
+				{
+					var imageView = new UIImageView(img)
+					{
+						MultipleTouchEnabled = true,
+						UserInteractionEnabled = true,
+						ContentMode = UIViewContentMode.ScaleAspectFit,
+						AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+					};
+					_controller._scrollView.AddSubview (imageView);
+					//					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
+//					UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
+				});
+			}
+
 		}
     }
 }
