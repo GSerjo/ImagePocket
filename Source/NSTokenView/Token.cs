@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using CoreGraphics;
+using Foundation;
+using UIKit;
 
 namespace NSTokenView
 {
@@ -46,7 +47,7 @@ namespace NSTokenView
             titleLabel.Text = title;
             titleLabel.TextColor = ColorScheme;
             titleLabel.SizeToFit();
-            Frame = new RectangleF(Frame.X, Frame.Y, titleLabel.Frame.Width + 3, Frame.Height);
+            Frame = new CGRect(Frame.X, Frame.Y, titleLabel.Frame.Width + 3, Frame.Height);
             titleLabel.SizeToFit();
         }
 

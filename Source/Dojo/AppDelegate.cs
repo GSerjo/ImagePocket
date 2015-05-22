@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using MonoTouch.Foundation;
+using Foundation;
 using MonoTouch.SlideoutNavigation;
-using MonoTouch.UIKit;
+using UIKit;
 
 namespace Dojo
 {

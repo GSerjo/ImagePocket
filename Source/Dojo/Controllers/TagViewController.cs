@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain;
 using MonoTouch.Dialog;
-using MonoTouch.MessageUI;
-using MonoTouch.UIKit;
+using MessageUI;
+using UIKit;
 
 namespace Dojo
 {

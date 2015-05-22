@@ -4,7 +4,7 @@
 // actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
-using MonoTouch.Foundation;
+using Foundation;
 using System.CodeDom.Compiler;
 
 namespace Dojo
@@ -13,13 +13,13 @@ namespace Dojo
 	partial class TagSelectorViewController
 	{
 		[Outlet]
-		MonoTouch.UIKit.UITableView allTags { get; set; }
+		UIKit.UITableView allTags { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UIBarButtonItem btCancel { get; set; }
+		UIKit.UIBarButtonItem btCancel { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UIBarButtonItem btDone { get; set; }
+		UIKit.UIBarButtonItem btDone { get; set; }
 
 		[Outlet]
 		NSTokenView.TokenView tagTokenView { get; set; }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using Domain;
-using MonoTouch.Foundation;
-using MonoTouch.Photos;
-using MonoTouch.UIKit;
+using Foundation;
+using Photos;
+using UIKit;
 
 namespace Dojo
 {

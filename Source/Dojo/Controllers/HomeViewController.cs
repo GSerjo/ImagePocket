@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using CoreFoundation;
 using Domain;
-using MonoTouch.CoreFoundation;
-using MonoTouch.Foundation;
-using MonoTouch.Photos;
-using MonoTouch.UIKit;
+using Foundation;
+using Photos;
+using UIKit;
 
 namespace Dojo
 {
@@ -48,7 +48,7 @@ namespace Dojo
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var cell = (ImagePreviewCell)collectionView.DequeueReusableCell(_cellId, indexPath);
-            ImageEntity entity = _filteredImages[indexPath.Item];
+            ImageEntity entity = _filteredImages[(int)indexPath.Item];
             cell.SetImage(entity.LocalIdentifier);
 
             if (_viewMode == ViewMode.Read)
@@ -66,7 +66,7 @@ namespace Dojo
             return cell;
         }
 
-        public override int GetItemsCount(UICollectionView collectionView, int section)
+        public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
             return _filteredImages.Count;
         }
@@ -75,13 +75,13 @@ namespace Dojo
         {
             if (_viewMode == ViewMode.Read)
             {
-                ImageEntity image = _filteredImages[indexPath.Item];
+                ImageEntity image = _filteredImages[(int)indexPath.Item];
                 var photoController = new PhotoViewController(image, _filteredImages);
                 NavigationController.PushViewController(photoController, true);
                 return;
             }
             var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);
-            ImageEntity entity = _filteredImages[indexPath.Item];
+            ImageEntity entity = _filteredImages[(int)indexPath.Item];
 
             ImageEntity selectedImage;
             if (_selectedImages.TryGetValue(entity.LocalIdentifier, out selectedImage))

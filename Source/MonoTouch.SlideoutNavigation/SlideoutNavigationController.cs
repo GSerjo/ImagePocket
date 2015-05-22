@@ -1,7 +1,8 @@
 using System;
-using MonoTouch.UIKit;
 using System.Drawing;
-using MonoTouch.Foundation;
+using CoreGraphics;
+using Foundation;
+using UIKit;
 
 namespace MonoTouch.SlideoutNavigation
 {
@@ -212,8 +213,8 @@ namespace MonoTouch.SlideoutNavigation
             if (_menuViewController != null)
                 _menuViewController.ViewWillAppear(animated);
 
-            NSAction animation = () => Animate(_menuViewController.View, ContainerView, 1);
-            NSAction completion = () =>
+            Action animation = () => Animate(_menuViewController.View, ContainerView, 1);
+            Action completion = () =>
             {
                 IsOpen = true;
                 ContainerView.AddGestureRecognizer(_tapGesture);
@@ -249,8 +250,8 @@ namespace MonoTouch.SlideoutNavigation
             if (_menuViewController != null)
                 _menuViewController.ViewWillDisappear(animated);
 
-            NSAction animation = () => Animate(_menuViewController.View, ContainerView, 0);
-            NSAction completion = () =>
+            Action animation = () => Animate(_menuViewController.View, ContainerView, 0);
+            Action completion = () =>
             {
                 IsOpen = false;
 
@@ -284,7 +285,7 @@ namespace MonoTouch.SlideoutNavigation
                 ContainerView.Frame = containerFrame;
 
                 View.AddSubview(ContainerView);
-                var updatedMenuFrame = new RectangleF(View.Bounds.Location, new SizeF(MenuWidth, View.Bounds.Height));
+                var updatedMenuFrame = new CGRect(View.Bounds.Location, new CGSize(MenuWidth, View.Bounds.Height));
                 UIView.Animate(OpenAnimationDuration, 0, UIViewAnimationOptions.BeginFromCurrentState | AnimationOption,
                     () => MenuViewController.View.Frame = updatedMenuFrame, null);
 
@@ -320,7 +321,7 @@ namespace MonoTouch.SlideoutNavigation
                 resizing = UIViewAutoresizing.FlexibleHeight;
             }
 
-            viewController.View.Frame = new RectangleF(View.Bounds.Location, new SizeF(width, View.Bounds.Height));
+            viewController.View.Frame = new CGRect(View.Bounds.Location, new CGSize(width, View.Bounds.Height));
             viewController.View.AutoresizingMask = resizing;
             View.InsertSubview(viewController.View, 0);
 

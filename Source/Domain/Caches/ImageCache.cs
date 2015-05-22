@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using MonoTouch.Photos;
+using Photos;
 
 namespace Domain
 {
@@ -94,7 +94,7 @@ namespace Domain
             var result = new ImageEntity
             {
                 LocalIdentifier = asset.LocalIdentifier,
-                CreateTime = asset.CreationDate
+                CreateTime = (DateTime)asset.CreationDate
             };
             return result;
         }

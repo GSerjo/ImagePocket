@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
-using MonoTouch.UIKit;
+using CoreGraphics;
+using UIKit;
 
 namespace MonoTouch.SlideoutNavigation
 {
@@ -59,7 +60,7 @@ namespace MonoTouch.SlideoutNavigation
             }
 
             var x = View.Bounds.X + (MenuWidth * percentage);
-            mainView.Frame = new RectangleF(new PointF(x, mainView.Frame.Y), mainView.Frame.Size);
+            mainView.Frame = new CGRect(new CGPoint(x, mainView.Frame.Y), mainView.Frame.Size);
         }
     }
 }

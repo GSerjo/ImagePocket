@@ -4,7 +4,7 @@
 // actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
-using MonoTouch.Foundation;
+using Foundation;
 using System.CodeDom.Compiler;
 
 namespace NSTokenView
@@ -12,10 +12,10 @@ namespace NSTokenView
 	partial class Token
 	{
 		[Outlet]
-		MonoTouch.UIKit.UIView backgroundView { get; set; }
+		UIKit.UIView backgroundView { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UILabel titleLabel { get; set; }
+		UIKit.UILabel titleLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{

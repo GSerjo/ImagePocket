@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using MonoTouch.Foundation;
-using MonoTouch.ObjCRuntime;
-using MonoTouch.UIKit;
+using CoreGraphics;
+using Foundation;
+using ObjCRuntime;
+using UIKit;
 
 namespace NSTokenView
 {
@@ -28,7 +29,7 @@ namespace NSTokenView
         private BackspaceTextField _invisibleTextField;
         private float _maxHeight;
         private float _minInputWidth;
-        private float _orifinalHeight;
+        private nfloat _orifinalHeight;
         private string _placeholderText;
         private UIScrollView _scrollView;
 
@@ -136,15 +137,15 @@ namespace NSTokenView
         {
             ClearTokens();
 
-            float currentX = 0;
-            float currentY = 0;
+            nfloat currentX = 0;
+            nfloat currentY = 0;
 
             LayoutTokensWithCurrentX(ref currentX, ref currentY);
             LayoutInputTextFieldWithCurrentX(ref currentX, ref currentY);
 
             AdjustHeightForCurrentY(currentY);
 
-            _scrollView.ContentSize = new SizeF(_scrollView.ContentSize.Width, currentY + HeightForToken);
+            _scrollView.ContentSize = new CGSize(_scrollView.ContentSize.Width, currentY + HeightForToken);
 
             UpdateInputTextField();
 
@@ -218,9 +219,9 @@ namespace NSTokenView
             SetCursorVisibility();
         }
 
-        private void AdjustHeightForCurrentY(float currentY)
+        private void AdjustHeightForCurrentY(nfloat currentY)
         {
-            float height;
+            nfloat height;
             if (currentY + HeightForToken > Frame.Height)
             {
                 if (currentY + HeightForToken <= _maxHeight)
@@ -243,7 +244,7 @@ namespace NSTokenView
                     height = _orifinalHeight;
                 }
             }
-            Frame = new RectangleF(Frame.X, Frame.Y, Frame.Width, height);
+            Frame = new CGRect(Frame.X, Frame.Y, Frame.Width, height);
         }
 
         private void ClearTokens()
@@ -264,11 +265,11 @@ namespace NSTokenView
 
         private void FocusInputTextField()
         {
-            PointF contentOffset = _scrollView.ContentOffset;
-            float targetY = InputTextField.Frame.Y + HeightForToken - _maxHeight;
+            var contentOffset = _scrollView.ContentOffset;
+            var targetY = InputTextField.Frame.Y + HeightForToken - _maxHeight;
             if (targetY > contentOffset.Y)
             {
-                _scrollView.SetContentOffset(new PointF(contentOffset.X, targetY), false);
+                _scrollView.SetContentOffset(new CGPoint(contentOffset.X, targetY), false);
             }
         }
 
@@ -296,9 +297,9 @@ namespace NSTokenView
             TokenDelegate.FilterToken(this, InputText());
         }
 
-        private void LayoutInputTextFieldWithCurrentX(ref float currentX, ref float currentY)
+        private void LayoutInputTextFieldWithCurrentX(ref nfloat currentX, ref nfloat currentY)
         {
-            float inputTextFieldWidth = _scrollView.ContentSize.Width - currentX;
+            nfloat inputTextFieldWidth = _scrollView.ContentSize.Width - currentX;
             if (inputTextFieldWidth < _minInputWidth)
             {
                 inputTextFieldWidth = _scrollView.ContentSize.Width;
@@ -306,7 +307,7 @@ namespace NSTokenView
                 currentX = 0;
             }
             InputTextField.Text = string.Empty;
-            InputTextField.Frame = new RectangleF(currentX, currentY + 1, inputTextFieldWidth, HeightForToken - 1);
+            InputTextField.Frame = new CGRect(currentX, currentY + 1, inputTextFieldWidth, HeightForToken - 1);
             InputTextField.TintColor = ColorScheme;
             _scrollView.AddSubview(InputTextField);
         }
@@ -322,14 +323,16 @@ namespace NSTokenView
 
         private void LayoutScrollView()
         {
-            _scrollView = new UIScrollView(new RectangleF(0, 0, Frame.Width, Frame.Height));
-            _scrollView.ContentSize = new SizeF(Frame.Width - _horizontalInset * 2, Frame.Height - _verticalInset * 2);
-            _scrollView.ContentInset = new UIEdgeInsets(_verticalInset, _horizontalInset, _verticalInset, _horizontalInset);
-            _scrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
+            _scrollView = new UIScrollView(new CGRect(0, 0, Frame.Width, Frame.Height))
+            {
+                ContentSize = new CGSize(Frame.Width - _horizontalInset * 2, Frame.Height - _verticalInset * 2),
+                ContentInset = new UIEdgeInsets(_verticalInset, _horizontalInset, _verticalInset, _horizontalInset),
+                AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+            };
             AddSubview(_scrollView);
         }
 
-        private void LayoutTokensWithCurrentX(ref float currentX, ref float currentY)
+        private void LayoutTokensWithCurrentX(ref nfloat currentX, ref nfloat currentY)
         {
             for (int i = 0; i < NumberOfTokens(); i++)
             {
@@ -343,18 +346,18 @@ namespace NSTokenView
                 token.SetTitleText(title);
                 if (currentX + token.Frame.Width <= _scrollView.Frame.Width)
                 {
-                    token.Frame = new RectangleF(currentX, currentY, token.Frame.Width, token.Frame.Height);
+                    token.Frame = new CGRect(currentX, currentY, token.Frame.Width, token.Frame.Height);
                 }
                 else
                 {
                     currentY += token.Frame.Height;
                     currentX = 0;
-                    float tokenWidth = token.Frame.Width;
+                    nfloat tokenWidth = token.Frame.Width;
                     if (tokenWidth > _scrollView.ContentSize.Width)
                     {
                         tokenWidth = _scrollView.ContentSize.Width;
                     }
-                    token.Frame = new RectangleF(currentX, currentY, tokenWidth, token.Frame.Height);
+                    token.Frame = new CGRect(currentX, currentY, tokenWidth, token.Frame.Height);
                 }
                 currentX += token.Frame.Width + _tokenPadding;
                 _scrollView.AddSubview(token);

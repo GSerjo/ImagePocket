@@ -1,6 +1,6 @@
 using System;
-using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
+using UIKit;
+using CoreGraphics;
 using System.Drawing;
 
 namespace MonoTouch.SlideoutNavigation
@@ -53,7 +53,7 @@ namespace MonoTouch.SlideoutNavigation
 		{
 			var x = View.Bounds.X + ((View.Bounds.Width - HorizontalOpenOffset) * percentage);
 			mainView.Transform = CGAffineTransform.MakeScale(1 - (percentage * 0.6f), 1 - (percentage * 0.6f));
-			mainView.Frame = new RectangleF(new PointF(x, mainView.Frame.Y), mainView.Frame.Size);
+			mainView.Frame = new CGRect(new CGPoint(x, mainView.Frame.Y), mainView.Frame.Size);
 		}
     }
 }

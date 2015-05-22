@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Domain;
-using MonoTouch.CoreFoundation;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using CoreFoundation;
+using Foundation;
+using UIKit;
 using NSTokenView;
 
 namespace Dojo
@@ -163,7 +163,7 @@ namespace Dojo
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
                 TagEntity addTag;
-                TagEntity selectedTag = _tags[indexPath.Item];
+                TagEntity selectedTag = _tags[(int)indexPath.Item];
                 if (selectedTag.IsAddTagRequest)
                 {
                     addTag = new TagEntity { Name = selectedTag.Name };
@@ -178,7 +178,7 @@ namespace Dojo
                 ReloadTags();
             }
 
-            public override int RowsInSection(UITableView tableview, int section)
+            public override nint RowsInSection(UITableView tableview, nint section)
             {
                 return _tags.Count;
             }

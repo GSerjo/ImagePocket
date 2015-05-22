@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Drawing;
+using CoreGraphics;
 using Domain;
-using MonoTouch.Foundation;
-using MonoTouch.Photos;
-using MonoTouch.UIKit;
+using Foundation;
+using Photos;
+using UIKit;
 
 namespace Dojo
 {
@@ -19,9 +20,9 @@ namespace Dojo
         }
 
         [Export("initWithFrame:")]
-        public ThumbnailCell(RectangleF frame) : base(frame)
+        public ThumbnailCell(CGRect frame): base(frame)
         {
-            frame = new RectangleF(0, 0, ContentView.Bounds.Width, ContentView.Bounds.Height);
+            frame = new CGRect(0, 0, ContentView.Bounds.Width, ContentView.Bounds.Height);
             _imageView = new UIImageView(frame)
             {
                 AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth,

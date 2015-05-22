@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Core;
+using CoreGraphics;
 using Domain;
-using MonoTouch.Foundation;
-using MonoTouch.Photos;
-using MonoTouch.UIKit;
+using Foundation;
+using Photos;
+using UIKit;
 
 namespace Dojo
 {
@@ -43,9 +44,9 @@ namespace Dojo
 			_scrollView = new UIScrollView(View.Frame)
             {
                 Delegate = new ScrollViewDelegate(this),
-                ContentSize = new SizeF(View.Frame.Width * _images.Count, View.Frame.Height)
+                ContentSize = new CGSize(View.Frame.Width * _images.Count, View.Frame.Height)
             };
-			_scrollView.ContentOffset = new PointF(View.Frame.Width *( _currentImageIndex - 1), 0);
+			_scrollView.ContentOffset = new CGPoint(View.Frame.Width *( _currentImageIndex - 1), 0);
             View.AddSubview(_scrollView);
         }
 
@@ -70,7 +71,7 @@ namespace Dojo
                 _currentImageIndex--;
                 if (_images.IsNullOrEmpty())
                 {
-                    InvokeOnMainThread(() => NavigationController.PopViewControllerAnimated(true));
+                    InvokeOnMainThread(() => NavigationController.PopViewController(true));
                     return;
                 }
                 else if (_currentImageIndex < 0)
@@ -126,7 +127,7 @@ namespace Dojo
 
         private void LoadVisibleImages()
         {
-            float pageWidth = _scrollView.Frame.Size.Width;
+            nfloat pageWidth = _scrollView.Frame.Size.Width;
             var imageIndex = (int)Math.Floor((_scrollView.ContentOffset.X * 2.0 + pageWidth) / (pageWidth * 2.0));
 
 			_currentImageIndex = imageIndex;
