@@ -17,8 +17,8 @@ namespace Dojo
         private ImageEntity _currentImage;
         private int _currentImageIndex;
         private bool _fullScreen;
-        //        private UIImageView _imageView;
         private UIScrollView _scrollView;
+		private readonly List<UIImageView> _imageViews = new List<UIImageView> ();
 
         public PhotoViewController(ImageEntity currentImage, List<ImageEntity> images)
         {
@@ -26,6 +26,7 @@ namespace Dojo
             _currentImage = currentImage;
             _images = images;
             _currentImageIndex = _images.FindIndex(x => x.Equals(currentImage));
+			_images.Iter (x => _imageViews.Add(null));
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
@@ -39,41 +40,13 @@ namespace Dojo
         {
             View.BackgroundColor = UIColor.White;
 
-            //            _imageView = new UIImageView(View.Frame)
-            //            {
-            //                MultipleTouchEnabled = true,
-            //                UserInteractionEnabled = true,
-            //                ContentMode = UIViewContentMode.ScaleAspectFit,
-            //                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-            //            };
-
-            //            var tapGesture = new UITapGestureRecognizer(OnImageTap);
-            //            _imageView.AddGestureRecognizer(tapGesture);
-            //
-            //            var leftSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
-            //            {
-            //                Direction = UISwipeGestureRecognizerDirection.Left
-            //            };
-            //            _imageView.AddGestureRecognizer(leftSwipe);
-
-            //            var rigthSwipe = new UISwipeGestureRecognizer(OnImageSwipe)
-            //            {
-            //                Direction = UISwipeGestureRecognizerDirection.Right
-            //            };
-            //            _imageView.AddGestureRecognizer(rigthSwipe);
-            //View.AddSubview(_imageView);
-
 			_scrollView = new UIScrollView(View.Frame)
             {
                 Delegate = new ScrollViewDelegate(this),
                 ContentSize = new SizeF(View.Frame.Width * _images.Count, View.Frame.Height)
             };
-
-            //			_scrollView.AddSubview (_imageView);
+			_scrollView.ContentOffset = new PointF(View.Frame.Width *( _currentImageIndex - 1), 0);
             View.AddSubview(_scrollView);
-
-            //            PHAsset asset = _imageCache.GetAsset(_currentImage.LocalIdentifier);
-            //            UpdateImage(asset);
         }
 
         public override void ViewWillAppear(bool animated)
@@ -86,16 +59,6 @@ namespace Dojo
         {
             base.ViewWillDisappear(animated);
             NavigationController.SetToolbarHidden(true, true);
-        }
-
-        private bool CanSwipeLeft()
-        {
-            return _currentImageIndex < _images.Count - 1;
-        }
-
-        private bool CanSwipeRight()
-        {
-            return _currentImageIndex > 0;
         }
 
         private void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
@@ -114,36 +77,11 @@ namespace Dojo
                 {
                     _currentImageIndex = 0;
                 }
-                SwipeImage();
+//                SwipeImage();
             }
             else
             {
                 Console.WriteLine(error);
-            }
-        }
-
-        private void OnImageSwipe(UISwipeGestureRecognizer gesture)
-        {
-            switch (gesture.Direction)
-            {
-                case UISwipeGestureRecognizerDirection.Left:
-                    if (CanSwipeLeft())
-                    {
-                        _currentImageIndex++;
-                        SwipeImage();
-                        break;
-                    }
-                    return;
-                case UISwipeGestureRecognizerDirection.Right:
-                    if (CanSwipeRight())
-                    {
-                        _currentImageIndex--;
-                        SwipeImage();
-                        break;
-                    }
-                    return;
-                default:
-                    return;
             }
         }
 
@@ -186,46 +124,71 @@ namespace Dojo
             }
         }
 
-        private void SwipeImage()
-        {
-            _currentImage = _images[_currentImageIndex];
-            PHAsset asset = _imageCache.GetAsset(_currentImage.LocalIdentifier);
-            InvokeOnMainThread(() => UpdateImage(asset));
-        }
-
-        private void UpdateImage(PHAsset asset)
-        {
-            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
-                PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
-                {
-                    //					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
-                    //                    UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
-                });
-        }
-
-        private void UpdateImage()
+        private void LoadVisibleImages()
         {
             float pageWidth = _scrollView.Frame.Size.Width;
             var imageIndex = (int)Math.Floor((_scrollView.ContentOffset.X * 2.0 + pageWidth) / (pageWidth * 2.0));
 
-            ImageEntity image = _images[imageIndex];
-            PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
+			_currentImageIndex = imageIndex;
 
-            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
-                PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
-                {
-                    var imageView = new UIImageView(img)
-                    {
-                        MultipleTouchEnabled = true,
-                        UserInteractionEnabled = true,
-                        ContentMode = UIViewContentMode.ScaleAspectFit,
-                        AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
-                        Frame = _scrollView.Bounds
-                    };
-                    _scrollView.AddSubview(imageView);
-                });
+			var firstImage = _currentImageIndex - 1;
+			var lastImage = _currentImageIndex + 1;
+			for (int i = 0; i < firstImage; ++i)
+			{
+				PurgeImage (i);
+			}
+
+			for (int i = firstImage; i <= lastImage; ++i)
+			{
+				LoadImage (i);
+			}
+
+			for (int i = lastImage+1; i < _imageViews.Count; ++i)
+			{
+				PurgeImage (i);
+			}
+
         }
 
+		private void LoadImage(int imageIndex)
+		{
+			if (imageIndex < 0 || imageIndex >= _imageViews.Count)
+			{
+				return;
+			}
+			ImageEntity image = _images[imageIndex];
+			PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
+
+			PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
+				PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
+			{
+				var imageView = new UIImageView(img)
+				{
+					MultipleTouchEnabled = true,
+					UserInteractionEnabled = true,
+					ContentMode = UIViewContentMode.ScaleAspectFit,
+					AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+					Frame = _scrollView.Bounds
+				};
+				_imageViews[imageIndex] = imageView;
+				_scrollView.AddSubview(imageView);
+			});
+		}
+
+		private void PurgeImage(int imageIndex)
+		{
+			if (imageIndex < 0 || imageIndex >= _imageViews.Count)
+			{
+				return;
+			}
+			var imageView = _imageViews [imageIndex];
+			if (imageView == null)
+			{
+				return;
+			}
+			imageView.RemoveFromSuperview ();
+			_imageViews [imageIndex] = null;
+		}
 
         private sealed class ScrollViewDelegate : UIScrollViewDelegate
         {
@@ -238,7 +201,7 @@ namespace Dojo
 
             public override void Scrolled(UIScrollView scrollView)
             {
-                _controller.UpdateImage();
+                _controller.LoadVisibleImages();
             }
         }
     }

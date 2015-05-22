@@ -12,5 +12,15 @@ namespace Core
                 action(item);
             }
         }
+
+		public static void IterI<T>(this IEnumerable<T> value, Action<int, T> action)
+		{
+			int i = 0;
+			foreach (T item in value)
+			{
+				action(i++, item);
+			}
+		}
+
     }
 }

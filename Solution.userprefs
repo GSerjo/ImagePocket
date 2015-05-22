@@ -1,8 +1,9 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/TagSelectorViewController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PhotoViewController.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="15" Column="54" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="136" Column="38" />
+      <File FileName="Source/Core/Extensions/EnumerableExtensions.cs" Line="24" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
