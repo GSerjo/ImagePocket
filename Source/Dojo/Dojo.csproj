@@ -85,7 +85,6 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="MonoTouch.Dialog-1" />
     <Reference Include="System.Reactive.Core">
       <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.Core.dll</HintPath>
     </Reference>
@@ -104,6 +103,7 @@
     <Reference Include="System.Reactive.PlatformServices">
       <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
+    <Reference Include="MonoTouch.Dialog-1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images.xcassets\Selected.imageset\" />
@@ -141,26 +141,26 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{6d39d05e-6c52-457e-aa26-9ac2e3691d01}</Project>
+      <Project>{6D39D05E-6C52-457E-AA26-9AC2E3691D01}</Project>
       <Name>Core</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
+      <IsAppExtension>False</IsAppExtension>
+      <IsWatchApp>False</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\Domain\Domain.csproj">
       <Project>{FF5282BA-A31A-40AF-9EFF-F5FE8FF07C2B}</Project>
       <Name>Domain</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
+      <IsAppExtension>False</IsAppExtension>
+      <IsWatchApp>False</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\MonoTouch.SlideoutNavigation\MonoTouch.SlideoutNavigation.csproj">
       <Project>{6D7B9B53-CFEF-46BE-A608-14A4A1381CF6}</Project>
       <Name>MonoTouch.SlideoutNavigation</Name>
     </ProjectReference>
     <ProjectReference Include="..\NSTokenView\NSTokenView.csproj">
-      <Project>{30f02cc7-2a69-4a23-aeaa-39e96f7d143b}</Project>
+      <Project>{30F02CC7-2A69-4A23-AEAA-39E96F7D143B}</Project>
       <Name>NSTokenView</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
+      <IsAppExtension>False</IsAppExtension>
+      <IsWatchApp>False</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,12 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PhotoViewController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.4" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/TilingView.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="136" Column="38" />
-      <File FileName="Source/Core/Extensions/EnumerableExtensions.cs" Line="24" Column="3" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="1" Column="1" />
+      <File FileName="Source/Core/Extensions/EnumerableExtensions.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/TilingView.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/ImageDetails.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/ImageScrollView.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

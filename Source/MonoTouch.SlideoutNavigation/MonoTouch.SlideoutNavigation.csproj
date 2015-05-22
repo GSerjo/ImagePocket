@@ -32,7 +32,6 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <Compile Include="SlideoutNavigationController.cs" />
     <Compile Include="MenuNavigationController.cs" />
