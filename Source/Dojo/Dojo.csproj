@@ -113,6 +113,8 @@
     <None Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageDetails.cs" />
+    <Compile Include="ImageScrollView.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Controllers\HomeViewController.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="Controllers\DialogElements\MenuSectionView.cs" />
     <Compile Include="Controllers\DialogElements\MenuElement.cs" />
     <Compile Include="Controllers\AboutAppViewController.cs" />
+    <Compile Include="TilingView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
