@@ -41,9 +41,9 @@ namespace Dojo
 
 
         public void FilterImages(TagEntity entity)
-		{
-			_currentTag = entity;
-		}
+        {
+            _currentTag = entity;
+        }
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
@@ -76,8 +76,11 @@ namespace Dojo
             if (_viewMode == ViewMode.Read)
             {
                 ImageEntity image = _filteredImages[(int)indexPath.Item];
-                var photoController = new PhotoViewController(image, _filteredImages);
-                NavigationController.PushViewController(photoController, true);
+//                var photoController = new PhotoViewController(image, _filteredImages);
+//                NavigationController.PushViewController(photoController, true);
+
+                var pageViewController = new PageViewController(image, _filteredImages);
+                NavigationController.PushViewController(pageViewController, true);
                 return;
             }
             var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);
@@ -127,7 +130,7 @@ namespace Dojo
 
         public override void ViewWillAppear(bool animated)
         {
-			NavigationController.SetToolbarHidden(false, false);
+            NavigationController.SetToolbarHidden(false, false);
             FilterImages();
             ReloadData();
             base.ViewWillAppear(animated);

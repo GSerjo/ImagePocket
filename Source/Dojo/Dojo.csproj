@@ -113,8 +113,10 @@
     <None Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\PageViewController.cs" />
+    <Compile Include="Controllers\PhotoScrollView.cs" />
     <Compile Include="ImageDetails.cs" />
-    <Compile Include="ImageScrollView.cs" />
+    <Compile Include="Controllers\ImageScrollView.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Controllers\HomeViewController.cs" />

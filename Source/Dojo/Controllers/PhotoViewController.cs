@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Core;
 using CoreGraphics;
@@ -14,12 +13,12 @@ namespace Dojo
     public sealed class PhotoViewController : UIViewController
     {
         private readonly ImageCache _imageCache = ImageCache.Instance;
+        private readonly List<UIImageView> _imageViews = new List<UIImageView>();
         private readonly List<ImageEntity> _images;
         private ImageEntity _currentImage;
         private int _currentImageIndex;
         private bool _fullScreen;
         private UIScrollView _scrollView;
-		private readonly List<UIImageView> _imageViews = new List<UIImageView> ();
 
         public PhotoViewController(ImageEntity currentImage, List<ImageEntity> images)
         {
@@ -27,7 +26,7 @@ namespace Dojo
             _currentImage = currentImage;
             _images = images;
             _currentImageIndex = _images.FindIndex(x => x.Equals(currentImage));
-			_images.Iter (x => _imageViews.Add(null));
+            _images.Iter(x => _imageViews.Add(null));
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
@@ -41,12 +40,12 @@ namespace Dojo
         {
             View.BackgroundColor = UIColor.White;
 
-			_scrollView = new UIScrollView(View.Frame)
+            _scrollView = new UIScrollView(View.Frame)
             {
                 Delegate = new ScrollViewDelegate(this),
                 ContentSize = new CGSize(View.Frame.Width * _images.Count, View.Frame.Height)
             };
-			_scrollView.ContentOffset = new CGPoint(View.Frame.Width *( _currentImageIndex - 1), 0);
+            _scrollView.ContentOffset = new CGPoint(View.Frame.Width * (_currentImageIndex - 1), 0);
             View.AddSubview(_scrollView);
         }
 
@@ -62,6 +61,56 @@ namespace Dojo
             NavigationController.SetToolbarHidden(true, true);
         }
 
+        private void LoadImage(int imageIndex)
+        {
+            if (imageIndex < 0 || imageIndex >= _imageViews.Count)
+            {
+                return;
+            }
+            ImageEntity image = _images[imageIndex];
+            PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
+
+            PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
+                PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
+                {
+                    var imageView = new UIImageView(img)
+                    {
+                        MultipleTouchEnabled = true,
+                        UserInteractionEnabled = true,
+                        ContentMode = UIViewContentMode.ScaleAspectFit,
+                        AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+                        Frame = _scrollView.Bounds
+                    };
+                    _imageViews[imageIndex] = imageView;
+                    _scrollView.AddSubview(imageView);
+                });
+        }
+
+        private void LoadVisibleImages()
+        {
+            nfloat pageWidth = _scrollView.Frame.Size.Width;
+            var imageIndex = (int)Math.Floor((_scrollView.ContentOffset.X * 2.0 + pageWidth) / (pageWidth * 2.0));
+
+            _currentImageIndex = imageIndex;
+
+            int firstImage = _currentImageIndex - 1;
+            int lastImage = _currentImageIndex + 1;
+            for (int i = 0; i < firstImage; ++i)
+            {
+                PurgeImage(i);
+            }
+
+            for (int i = firstImage; i <= lastImage; ++i)
+            {
+                LoadImage(i);
+            }
+
+            for (int i = lastImage + 1; i < _imageViews.Count; ++i)
+            {
+                PurgeImage(i);
+            }
+        }
+
         private void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
         {
             if (result)
@@ -72,13 +121,12 @@ namespace Dojo
                 if (_images.IsNullOrEmpty())
                 {
                     InvokeOnMainThread(() => NavigationController.PopViewController(true));
-                    return;
                 }
                 else if (_currentImageIndex < 0)
                 {
                     _currentImageIndex = 0;
                 }
-//                SwipeImage();
+                //                SwipeImage();
             }
             else
             {
@@ -125,71 +173,21 @@ namespace Dojo
             }
         }
 
-        private void LoadVisibleImages()
+        private void PurgeImage(int imageIndex)
         {
-            nfloat pageWidth = _scrollView.Frame.Size.Width;
-            var imageIndex = (int)Math.Floor((_scrollView.ContentOffset.X * 2.0 + pageWidth) / (pageWidth * 2.0));
-
-			_currentImageIndex = imageIndex;
-
-			var firstImage = _currentImageIndex - 1;
-			var lastImage = _currentImageIndex + 1;
-			for (int i = 0; i < firstImage; ++i)
-			{
-				PurgeImage (i);
-			}
-
-			for (int i = firstImage; i <= lastImage; ++i)
-			{
-				LoadImage (i);
-			}
-
-			for (int i = lastImage+1; i < _imageViews.Count; ++i)
-			{
-				PurgeImage (i);
-			}
-
+            if (imageIndex < 0 || imageIndex >= _imageViews.Count)
+            {
+                return;
+            }
+            UIImageView imageView = _imageViews[imageIndex];
+            if (imageView == null)
+            {
+                return;
+            }
+            imageView.RemoveFromSuperview();
+            _imageViews[imageIndex] = null;
         }
 
-		private void LoadImage(int imageIndex)
-		{
-			if (imageIndex < 0 || imageIndex >= _imageViews.Count)
-			{
-				return;
-			}
-			ImageEntity image = _images[imageIndex];
-			PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
-
-			PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
-				PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
-			{
-				var imageView = new UIImageView(img)
-				{
-					MultipleTouchEnabled = true,
-					UserInteractionEnabled = true,
-					ContentMode = UIViewContentMode.ScaleAspectFit,
-					AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
-					Frame = _scrollView.Bounds
-				};
-				_imageViews[imageIndex] = imageView;
-				_scrollView.AddSubview(imageView);
-			});
-		}
-
-		private void PurgeImage(int imageIndex)
-		{
-			if (imageIndex < 0 || imageIndex >= _imageViews.Count)
-			{
-				return;
-			}
-			var imageView = _imageViews [imageIndex];
-			if (imageView == null)
-			{
-				return;
-			}
-			imageView.RemoveFromSuperview ();
-			_imageViews [imageIndex] = null;
-		}
 
         private sealed class ScrollViewDelegate : UIScrollViewDelegate
         {

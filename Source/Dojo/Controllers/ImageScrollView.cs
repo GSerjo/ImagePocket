@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 using CoreGraphics;
 using UIKit;
 
 namespace Dojo
 {
-    public class ImageScrollView : UIScrollView
+    public abstract class ImageScrollView : UIScrollView
     {
+        //        private readonly bool TileImagesMode = true;
         // turn on to use tiled images, if off, we use whole images
-        private readonly bool TileImagesMode = true;
-        private static List<ImageDetails> data;
+        //        private static List<ImageDetails> data;
 
         private CGSize _imageSize;
         private int _index;
         // if tiling this contains a very low-res placeholder image. otherwise it contains the full image.
         private CGPoint _pointToCenterAfterResize;
         private nfloat _scaleToRestoreAfterResize;
-        private TilingView tilingView;
+        //        private TilingView tilingView;
         private UIImageView zoomView;
 
-        public ImageScrollView()
+        protected ImageScrollView()
         {
             ShowsVerticalScrollIndicator = false;
             ShowsHorizontalScrollIndicator = false;
@@ -31,11 +27,6 @@ namespace Dojo
 
             // Return the view to use when zooming
             ViewForZoomingInScrollView = sv => zoomView;
-        }
-
-        public static int ImageCount
-        {
-            get { return ImageData.Count; }
         }
 
         public override CGRect Frame
@@ -65,79 +56,27 @@ namespace Dojo
             {
                 _index = value;
 
-                if (TileImagesMode)
-                {
-                    DisplayTiledImageNamed(ImageNameAtIndex(_index), ImageSizeAtIndex(_index));
-                }
-                else
-                {
-                    DisplayImage(ImageAtIndex(_index));
-                }
+                //                if (TileImagesMode)
+                //                {
+                //                    DisplayTiledImageNamed(ImageNameAtIndex(_index), ImageSizeAtIndex(_index));
+                //                }
+                //                else
+                //                {
+                DisplayImage(_index);
+                //                DisplayImage(ImageAtIndex(_index));
+                //                }
             }
         }
 
-        private static List<ImageDetails> ImageData
-        {
-            get
-            {
-                data = data ?? FetchImageData();
-                return data;
-            }
-        }
-
-        public void ConfigureForImageSize(CGSize imageSize)
-        {
-            _imageSize = imageSize;
-            ContentSize = imageSize;
-            SetMaxMinZoomScalesForCurrentBounds();
-            ZoomScale = MinimumZoomScale;
-        }
-
-        public void DisplayImage(UIImage image)
-        {
-            if (image == null)
-            {
-                throw new ArgumentNullException("image");
-            }
-
-            if (zoomView != null)
-            {
-                zoomView.RemoveFromSuperview();
-                zoomView = null;
-                ZoomScale = 1.0f;
-            }
-
-            zoomView = new UIImageView(image);
-            AddSubview(zoomView);
-            ConfigureForImageSize(image.Size);
-        }
-
-        public void DisplayTiledImageNamed(string imageName, CGSize image_Size)
-        {
-            //clear views for the previous image
-            if (zoomView != null)
-            {
-                zoomView.RemoveFromSuperview();
-                zoomView = null;
-                tilingView = null;
-            }
-            ZoomScale = 1.0f;
-
-            //make views to display the new image
-            zoomView = new UIImageView(new CGRect(CGPoint.Empty, image_Size))
-            {
-                Image = PlaceholderImageNamed(imageName)
-            };
-
-            AddSubview(zoomView);
-            tilingView = new TilingView(imageName, image_Size)
-            {
-                Frame = zoomView.Bounds
-            };
-
-            zoomView.AddSubview(tilingView);
-            ConfigureForImageSize(image_Size);
-        }
+        //
+        //        private static List<ImageDetails> ImageData
+        //        {
+        //            get
+        //            {
+        //                data = data ?? FetchImageData();
+        //                return data;
+        //            }
+        //        }
 
         public override void LayoutSubviews()
         {
@@ -170,19 +109,126 @@ namespace Dojo
             zoomView.Frame = frameToCenter;
         }
 
-        public CGPoint MaximumContentOffset()
+        protected abstract void DisplayImage(int imageIndex);
+
+        protected void DisplayImage(UIImage image)
+        {
+            if (image == null)
+            {
+                throw new ArgumentNullException("image");
+            }
+
+            if (zoomView != null)
+            {
+                zoomView.RemoveFromSuperview();
+                zoomView = null;
+                ZoomScale = 1.0f;
+            }
+
+            zoomView = new UIImageView(image);
+            AddSubview(zoomView);
+            ConfigureForImageSize(image.Size);
+        }
+
+        //        private static List<ImageDetails> FetchImageData()
+        //        {
+        //            List<ImageDetails> result = null;
+        //            string path = Path.Combine("Image", "ImageDetails.xml");
+        //
+        //            try
+        //            {
+        //                using (TextReader reader = new StreamReader(path))
+        //                {
+        //                    var serializer = new XmlSerializer(typeof(List<ImageDetails>));
+        //                    result = (List<ImageDetails>)serializer.Deserialize(reader);
+        //                }
+        //            }
+        //            catch (XmlException e)
+        //            {
+        //                Console.WriteLine(e);
+        //            }
+        //
+        //            return result;
+        //        }
+
+        //        private static UIImage ImageAtIndex(int index)
+        //        {
+        //            string imageName = ImageNameAtIndex(index);
+        //            string imageNameWithExt = Path.ChangeExtension(imageName, "jpg");
+        //            string fullImage = Path.Combine("Image", "FullImages", imageNameWithExt);
+        //
+        //            UIImage img = UIImage.FromBundle(fullImage);
+        //            return img;
+        //        }
+
+        //        private static string ImageNameAtIndex(int index)
+        //        {
+        //            return ImageData[index].Name;
+        //        }
+
+        //        private static CGSize ImageSizeAtIndex(int index)
+        //        {
+        //            return ImageData[index].Size;
+        //        }
+
+        //        private static UIImage PlaceholderImageNamed(string name)
+        //        {
+        //            string placeholderName = string.Format("{0}_Placeholder", name);
+        //            string placeholderNameWithExt = Path.ChangeExtension(placeholderName, "png");
+        //            string fullName = Path.Combine("Image", "PlaceholderImages", placeholderNameWithExt);
+        //
+        //            UIImage img = UIImage.FromBundle(fullName);
+        //            return img;
+        //        }
+
+        private void ConfigureForImageSize(CGSize imageSize)
+        {
+            _imageSize = imageSize;
+            ContentSize = imageSize;
+            SetMaxMinZoomScalesForCurrentBounds();
+            ZoomScale = MinimumZoomScale;
+        }
+
+        //        private void DisplayTiledImageNamed(string imageName, CGSize image_Size)
+        //        {
+        //            //clear views for the previous image
+        //            if (zoomView != null)
+        //            {
+        //                zoomView.RemoveFromSuperview();
+        //                zoomView = null;
+        //                tilingView = null;
+        //            }
+        //            ZoomScale = 1.0f;
+        //
+        //            //make views to display the new image
+        //            zoomView = new UIImageView(new CGRect(CGPoint.Empty, image_Size))
+        //            {
+        //                Image = PlaceholderImageNamed(imageName)
+        //            };
+        //
+        //            AddSubview(zoomView);
+        //            tilingView = new TilingView(imageName, image_Size)
+        //            {
+        //                Frame = zoomView.Bounds
+        //            };
+        //
+        //            zoomView.AddSubview(tilingView);
+        //            ConfigureForImageSize(image_Size);
+        //        }
+
+        private CGPoint MaximumContentOffset()
         {
             CGSize contentSize = ContentSize;
             CGSize boundsSize = Bounds.Size;
             return new CGPoint(contentSize.Width - boundsSize.Width, contentSize.Height - boundsSize.Height);
         }
 
-        public CGPoint MinimumContentOffset()
+        private CGPoint MinimumContentOffset()
         {
             return CGPoint.Empty;
         }
 
-        public void PrepareToResize()
+        private void PrepareToResize()
         {
             var boundsCenter = new CGPoint(Bounds.GetMidX(), Bounds.GetMidY());
             _pointToCenterAfterResize = ConvertPointToView(boundsCenter, zoomView);
@@ -195,7 +241,7 @@ namespace Dojo
             }
         }
 
-        public void RecoverFromResizing()
+        private void RecoverFromResizing()
         {
             SetMaxMinZoomScalesForCurrentBounds();
 
@@ -215,7 +261,7 @@ namespace Dojo
             ContentOffset = offset;
         }
 
-        public void SetMaxMinZoomScalesForCurrentBounds()
+        private void SetMaxMinZoomScalesForCurrentBounds()
         {
             CGSize boundsSize = Bounds.Size;
 
@@ -239,57 +285,6 @@ namespace Dojo
             // don't let minScale exceed maxScale. (If the image is smaller than the screen, we don't want to force it to be zoomed.)
             MaximumZoomScale = maxScale;
             MinimumZoomScale = minScale;
-        }
-
-        private static List<ImageDetails> FetchImageData()
-        {
-            List<ImageDetails> result = null;
-            string path = Path.Combine("Image", "ImageDetails.xml");
-
-            try
-            {
-                using (TextReader reader = new StreamReader(path))
-                {
-                    var serializer = new XmlSerializer(typeof(List<ImageDetails>));
-                    result = (List<ImageDetails>)serializer.Deserialize(reader);
-                }
-            }
-            catch (XmlException e)
-            {
-                Console.WriteLine(e);
-            }
-
-            return result;
-        }
-
-        private static UIImage ImageAtIndex(int index)
-        {
-            string imageName = ImageNameAtIndex(index);
-            string imageNameWithExt = Path.ChangeExtension(imageName, "jpg");
-            string fullImage = Path.Combine("Image", "FullImages", imageNameWithExt);
-
-            UIImage img = UIImage.FromBundle(fullImage);
-            return img;
-        }
-
-        private static string ImageNameAtIndex(int index)
-        {
-            return ImageData[index].Name;
-        }
-
-        private static CGSize ImageSizeAtIndex(int index)
-        {
-            return ImageData[index].Size;
-        }
-
-        private static UIImage PlaceholderImageNamed(string name)
-        {
-            string placeholderName = string.Format("{0}_Placeholder", name);
-            string placeholderNameWithExt = Path.ChangeExtension(placeholderName, "png");
-            string fullName = Path.Combine("Image", "PlaceholderImages", placeholderNameWithExt);
-
-            UIImage img = UIImage.FromBundle(fullName);
-            return img;
         }
     }
 }
