@@ -2,9 +2,9 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.4" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PageViewController.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/PageViewController.cs" Line="109" Column="1" />
-      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/PageViewController.cs" Line="162" Column="57" />
       <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/PhotoScrollView.cs" Line="25" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -28,10 +28,11 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="152" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="160" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="85" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="25" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="154" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="162" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="87" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="27" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoScrollView.cs" line="25" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
