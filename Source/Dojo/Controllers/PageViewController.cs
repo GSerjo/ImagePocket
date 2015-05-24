@@ -12,7 +12,7 @@ namespace Dojo
         public PageViewController(ImageEntity currentImage, List<ImageEntity> images)
             : base(UIPageViewControllerTransitionStyle.Scroll,
                 UIPageViewControllerNavigationOrientation.Horizontal,
-                UIPageViewControllerSpineLocation.None, 20f)
+                UIPageViewControllerSpineLocation.None, 10f)
         {
             _images = images;
             int currentImageIndex = _images.FindIndex(x => x.Equals(currentImage));
@@ -34,16 +34,13 @@ namespace Dojo
             public int PageIndex { get; private set; }
 
             public static ImageViewController FromPageIndex(int pageIndex)
-            {
-                if (pageIndex >= 0 && pageIndex < _images.Count)
-                {
-                    return new ImageViewController(pageIndex);
-                }
-                else
-                {
-                    return null;
-                }
-            }
+			{
+				if (pageIndex >= 0 && pageIndex < _images.Count)
+				{
+					return new ImageViewController (pageIndex);
+				}
+				return null;
+			}
 
             public override void LoadView()
             {

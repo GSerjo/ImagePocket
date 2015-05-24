@@ -1,16 +1,37 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/TilingView.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PhotoScrollView.cs">
     <Files>
+      <File FileName="Source/Dojo/Controllers/PhotoScrollView.cs" Line="31" Column="5" />
+      <File FileName="Source/Dojo/Controllers/ImageScrollView.cs" Line="106" Column="1" />
+      <File FileName="Source/Dojo/Controllers/PageViewController.cs" Line="1" Column="1" />
       <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="1" Column="1" />
-      <File FileName="Source/Core/Extensions/EnumerableExtensions.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/TilingView.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/ImageDetails.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/ImageScrollView.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Solution" expanded="True">
+            <Node name="Core" expanded="True">
+              <Node name="Extensions" expanded="True" />
+            </Node>
+            <Node name="Dojo" expanded="True">
+              <Node name="Controllers" expanded="True">
+                <Node name="PhotoScrollView.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="Domain" expanded="True" />
+            <Node name="MonoTouch.SlideoutNavigation" expanded="True" />
+            <Node name="NSTokenView" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoScrollView.cs" line="33" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>
