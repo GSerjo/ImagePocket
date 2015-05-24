@@ -19,7 +19,7 @@ namespace Dojo
 
         public override void ViewDidLoad()
         {
-            var firstPage = new Page(_currentImageIndex, _images);
+            
             _pageViewController = new UIPageViewController(
                 UIPageViewControllerTransitionStyle.Scroll,
                 UIPageViewControllerNavigationOrientation.Horizontal,
@@ -27,14 +27,14 @@ namespace Dojo
             {
                 GetNextViewController = GetNextViewController,
                 GetPreviousViewController = GetPreviousViewController,
-                View = { Frame = View.Bounds }
-            };
-
+			};
+			var firstPage = new Page(_currentImageIndex, _images);
             _pageViewController.SetViewControllers(
                 new UIViewController[] { firstPage },
                 UIPageViewControllerNavigationDirection.Forward,
                 false, x => { });
 
+			_pageViewController.View.Frame = View.Bounds;
             View.AddSubview(_pageViewController.View);
         }
 
