@@ -87,24 +87,24 @@ namespace Dojo
 
         protected abstract void DisplayImage(int imageIndex);
 
-		protected void DisplayImage(UIImageView image)
-		{
-			if (image == null)
-			{
-				throw new ArgumentNullException("image");
-			}
+        protected void DisplayImage(UIImageView image)
+        {
+            if (image == null)
+            {
+                throw new ArgumentNullException("image");
+            }
 
-			if (zoomView != null)
-			{
-				zoomView.RemoveFromSuperview();
-				zoomView = null;
-				ZoomScale = 1.0f;
-			}
+            if (zoomView != null)
+            {
+                zoomView.RemoveFromSuperview();
+                zoomView = null;
+                ZoomScale = 1.0f;
+            }
 
-			zoomView = image;
-			AddSubview(zoomView);
-			ConfigureForImageSize(zoomView.Image.Size);
-		}
+            zoomView = image;
+            AddSubview(zoomView);
+            ConfigureForImageSize(zoomView.Image.Size);
+        }
 
         protected void DisplayImage(UIImage image)
         {
@@ -120,14 +120,14 @@ namespace Dojo
                 ZoomScale = 1.0f;
             }
 
-			zoomView = new UIImageView (image)
-			{
-				ContentMode = UIViewContentMode.ScaleAspectFit,
-				Frame = UIScreen.MainScreen.Bounds,
-				AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
-			};
+            zoomView = new UIImageView(image)
+            {
+                ContentMode = UIViewContentMode.ScaleAspectFit,
+                Frame = UIScreen.MainScreen.Bounds,
+                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+            };
             AddSubview(zoomView);
-			ConfigureForImageSize(zoomView.Frame.Size);
+            ConfigureForImageSize(zoomView.Frame.Size);
         }
 
         private void ConfigureForImageSize(CGSize imageSize)
