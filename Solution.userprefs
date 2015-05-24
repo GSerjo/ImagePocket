@@ -1,38 +1,18 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadRetina.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PageViewController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadAir.8.4" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PhotoViewController1.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/PageViewController.cs" Line="162" Column="57" />
-      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controllers/PhotoScrollView.cs" Line="25" Column="1" />
+      <File FileName="Source/Dojo/Controllers/PhotoScrollView.cs" Line="10" Column="51" />
+      <File FileName="Source/Dojo/Main.cs" Line="13" Column="1" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="25" Column="30" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController1.cs" Line="21" Column="10" />
+      <File FileName="Source/Dojo/Controllers/Page.cs" Line="33" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Solution" expanded="True">
-            <Node name="Core" expanded="True">
-              <Node name="Extensions" expanded="True" />
-            </Node>
-            <Node name="Dojo" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="PageViewController.cs" selected="True" />
-              </Node>
-            </Node>
-            <Node name="Domain" expanded="True" />
-            <Node name="MonoTouch.SlideoutNavigation" expanded="True" />
-            <Node name="NSTokenView" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="154" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="162" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="87" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="27" column="1" />
-      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoScrollView.cs" line="25" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="54" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="46" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

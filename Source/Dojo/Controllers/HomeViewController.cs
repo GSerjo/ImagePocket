@@ -83,7 +83,7 @@ namespace Dojo
 //                NavigationController.PushViewController(pageViewController, true);
 
                 var viewController = new PhotoViewController1(image, _filteredImages);
-                NavigationController.PushViewController(viewController, true);
+				NavigationController.PushViewController(viewController, false);
                 return;
             }
             var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);

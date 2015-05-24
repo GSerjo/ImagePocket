@@ -11,9 +11,12 @@ namespace Dojo
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly List<ImageEntity> _images;
         private UIImageView _imageView;
+		private bool _fullScreen;
+		PhotoViewController1 _photoViewController;
 
-        public Page(int pageIndex, List<ImageEntity> images)
+		public Page(PhotoViewController1 photoViewController, int pageIndex, List<ImageEntity> images)
         {
+			_photoViewController = photoViewController;
             _images = images;
             PageIndex = pageIndex;
         }
@@ -25,12 +28,25 @@ namespace Dojo
             base.ViewDidLoad();
             _imageView = new UIImageView(View.Frame)
             {
+				MultipleTouchEnabled = true,
+				UserInteractionEnabled = true,
                 ContentMode = UIViewContentMode.ScaleAspectFit,
                 AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
             };
+			var tapGesture = new UITapGestureRecognizer(OnImageTap);
+			_imageView.AddGestureRecognizer(tapGesture);
+
             View.AddSubview(_imageView);
             UpdateImage();
         }
+
+		private void OnImageTap(UITapGestureRecognizer gesture)
+		{
+			_fullScreen = !_fullScreen;
+			_photoViewController.NavigationController.SetNavigationBarHidden(_fullScreen, false);
+			_photoViewController.NavigationController.SetToolbarHidden(_fullScreen, false);
+			View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
+		}
 
         private void UpdateImage()
         {

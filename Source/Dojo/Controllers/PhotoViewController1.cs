@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using Domain;
 using UIKit;
+using System.Linq;
+using Core;
+using Photos;
+using Foundation;
 
 namespace Dojo
 {
@@ -10,6 +14,7 @@ namespace Dojo
         private readonly int _currentImageIndex;
         private readonly List<ImageEntity> _images;
         private UIPageViewController _pageViewController;
+		private readonly ImageCache _imageCache = ImageCache.Instance;
 
         public PhotoViewController1(ImageEntity image, List<ImageEntity> images)
         {
@@ -35,7 +40,7 @@ namespace Dojo
                 GetPreviousViewController = GetPreviousViewController,
             };
 
-            var firstPage = new Page(_currentImageIndex, _images);
+            var firstPage = new Page(this, _currentImageIndex, _images);
             _pageViewController.SetViewControllers(
                 new UIViewController[] { firstPage },
                 UIPageViewControllerNavigationDirection.Forward,
@@ -57,7 +62,7 @@ namespace Dojo
             {
                 int nextPageIndex = currentPageController.PageIndex + 1;
 
-                return new Page(nextPageIndex, _images);
+                return new Page(this, nextPageIndex, _images);
             }
         }
 
@@ -72,16 +77,78 @@ namespace Dojo
             {
                 int previousPageIndex = currentPageController.PageIndex - 1;
 
-                return new Page(previousPageIndex, _images);
+                return new Page(this, previousPageIndex, _images);
             }
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
         {
+			var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault ();
+			if (viewController == null)
+			{
+				return;
+			}
+
+			var pageIndex = viewController.PageIndex;
+			var image = _images [pageIndex];
+			var controller = new TagSelectorViewController(image)
+			{
+				ModalPresentationStyle = UIModalPresentationStyle.FormSheet
+			};
+			controller.Done += OnTagSelectorDone;
+			NavigationController.PresentViewController(controller, true, null);
         }
+
+		private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
+		{
+			_imageCache.SaveOrUpdate(ea.Data);
+		}
 
         private void OnTrashClicked(object sender, EventArgs ea)
         {
+			try
+			{
+				var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault ();
+				if (viewController == null)
+				{
+					return;
+				}
+
+				var pageIndex = viewController.PageIndex;
+				var image = _images [pageIndex];
+				PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
+				PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
+					() => PHAssetChangeRequest.DeleteAssets(new[] { asset }),
+					(result, error) => OnDeleteAssetsCompleted(image, result, error));
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
         }
+
+		private void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
+		{
+			if (result)
+			{
+				_images.Remove(removedImage);
+				_imageCache.Remove(removedImage);
+//				_currentImageIndex--;
+//				if (_images.IsNullOrEmpty())
+//				{
+//					InvokeOnMainThread(() => NavigationController.PopViewController(true));
+//					return;
+//				}
+//				else if (_currentImageIndex < 0)
+//				{
+//					_currentImageIndex = 0;
+//				}
+//				SwipeImage();
+			}
+			else
+			{
+				Console.WriteLine(error);
+			}
+		}
     }
 }
