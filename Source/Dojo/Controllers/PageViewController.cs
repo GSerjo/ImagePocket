@@ -22,7 +22,7 @@ namespace Dojo
             _images = images;
             _currentImageIndex = _images.FindIndex(x => x.Equals(currentImage));
 
-            DataSource = new MyDataSource();
+            
 
             ImageViewController currentViewController = ImageViewController.FromPageIndex(_currentImageIndex);
             SetViewControllers(new UIViewController[] { currentViewController }, UIPageViewControllerNavigationDirection.Forward, false, null);
@@ -33,6 +33,8 @@ namespace Dojo
             var btTrash = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
             ToolbarItems = new[] { deleteSpace, btTrash };
+
+			DataSource = new MyDataSource();
         }
 
         private ImageEntity GetCurrentImage()
@@ -157,7 +159,7 @@ namespace Dojo
             {
                 int index = ((ImageViewController)referenceViewController).PageIndex;
                 _currentImageIndex = index - 1;
-                return ImageViewController.FromPageIndex(index - 1);
+				return ImageViewController.FromPageIndex(_currentImageIndex);
             }
         }
     }
