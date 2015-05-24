@@ -32,32 +32,24 @@ namespace Dojo
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
             ToolbarItems = new[] { deleteSpace, btTrash };
 
-			DataSource = new MyDataSource();
+            DataSource = new MyDataSource();
 
-//			GetNextViewController = NextViewController;
-//			GetPreviousViewController = PreviousViewController;
-        }
-
-		private UIViewController NextViewController(UIPageViewController pageViewController, 
-			UIViewController referenceViewController)
-		{
-            int index = ((ImageViewController)referenceViewController).PageIndex;
-            _currentImageIndex = index + 1;
-            return ImageViewController.FromPageIndex(_currentImageIndex);
-		}
-
-		private UIViewController PreviousViewController(UIPageViewController pageViewController,
-            UIViewController referenceViewController)
-        {
-            int index = ((ImageViewController)referenceViewController).PageIndex;
-            _currentImageIndex = index - 1;
-			return ImageViewController.FromPageIndex(_currentImageIndex);
+            //			GetNextViewController = NextViewController;
+            //			GetPreviousViewController = PreviousViewController;
         }
 
         private ImageEntity GetCurrentImage()
         {
             ImageEntity result = _images[_currentImageIndex];
             return result;
+        }
+
+        private UIViewController NextViewController(UIPageViewController pageViewController,
+            UIViewController referenceViewController)
+        {
+            int index = ((ImageViewController)referenceViewController).PageIndex;
+            _currentImageIndex = index + 1;
+            return ImageViewController.FromPageIndex(_currentImageIndex);
         }
 
         private void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
@@ -111,6 +103,14 @@ namespace Dojo
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        private UIViewController PreviousViewController(UIPageViewController pageViewController,
+            UIViewController referenceViewController)
+        {
+            int index = ((ImageViewController)referenceViewController).PageIndex;
+            _currentImageIndex = index - 1;
+            return ImageViewController.FromPageIndex(_currentImageIndex);
         }
 
         private void SwipeImage()
@@ -167,16 +167,16 @@ namespace Dojo
                 UIViewController referenceViewController)
             {
                 int index = ((ImageViewController)referenceViewController).PageIndex;
-				var resultIndex = index + 1;
-				return ImageViewController.FromPageIndex(resultIndex);
+                int resultIndex = index + 1;
+                return ImageViewController.FromPageIndex(resultIndex);
             }
 
             public override UIViewController GetPreviousViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
             {
                 int index = ((ImageViewController)referenceViewController).PageIndex;
-				var resultIndex = index - 1;
-				return ImageViewController.FromPageIndex(resultIndex);
+                int resultIndex = index - 1;
+                return ImageViewController.FromPageIndex(resultIndex);
             }
         }
     }
