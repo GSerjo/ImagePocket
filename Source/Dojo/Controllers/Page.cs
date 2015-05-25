@@ -22,6 +22,7 @@ namespace Dojo
         }
 
         public int PageIndex { get; private set; }
+		public UIImage Image { get; private set; }
 
         public override void ViewDidLoad()
         {
@@ -56,7 +57,11 @@ namespace Dojo
                 asset,
                 View.Frame.Size,
                 PHImageContentMode.AspectFit,
-                new PHImageRequestOptions(), (img, info) => _imageView.Image = img);
+                new PHImageRequestOptions(), (img, info) =>
+			{
+				_imageView.Image = img;
+				Image = img;
+			});
         }
     }
 }

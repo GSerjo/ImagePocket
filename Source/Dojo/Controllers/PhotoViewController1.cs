@@ -16,6 +16,7 @@ namespace Dojo
         private UIPageViewController _pageViewController;
 		private readonly ImageCache _imageCache = ImageCache.Instance;
 		UIPopoverController _shareController;
+		private UIBarButtonItem _btShare;
 
         public PhotoViewController1(ImageEntity image, List<ImageEntity> images)
         {
@@ -25,10 +26,10 @@ namespace Dojo
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
 
-			var btShare = new UIBarButtonItem (UIBarButtonSystemItem.Action, OnShareClicked);
+			_btShare = new UIBarButtonItem (UIBarButtonSystemItem.Action, OnShareClicked);
             var btTrash = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
-			ToolbarItems = new[] {btShare, deleteSpace, btTrash };
+			ToolbarItems = new[] {_btShare, deleteSpace, btTrash };
         }
 
         public override void ViewDidLoad()
@@ -85,15 +86,12 @@ namespace Dojo
 
         private void OnTagClicked(object sender, EventArgs ea)
         {
-			var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault ();
-			if (viewController == null)
+			var currentImage = GetCurrentImage ();
+			if (currentImage.HasNoValue)
 			{
 				return;
 			}
-
-			var pageIndex = viewController.PageIndex;
-			var image = _images [pageIndex];
-			var controller = new TagSelectorViewController(image)
+			var controller = new TagSelectorViewController(currentImage.Value)
 			{
 				ModalPresentationStyle = UIModalPresentationStyle.FormSheet
 			};
@@ -106,23 +104,38 @@ namespace Dojo
 			_imageCache.SaveOrUpdate(ea.Data);
 		}
 
+		private Option<ImageEntity> GetCurrentImage()
+		{
+			var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault ();
+			if (viewController == null)
+			{
+				return Option<ImageEntity>.Empty;
+			}
+
+			var pageIndex = viewController.PageIndex;
+			var image = _images [pageIndex];
+			return image.ToOption ();
+		}
+
 		private void OnShareClicked(object sender, EventArgs ea)
 		{
-//			var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault ();
-//			if (viewController == null)
-//			{
-//				return;
-//			}
-//
-//			var pageIndex = viewController.PageIndex;
-//			var image = _images [pageIndex];
-//
-//			UIActivityViewController activityController = new UIActivityViewController(image, null);
-//
-//			_shareController = new UIPopoverController (activityController);
-//			PresentViewController (_shareController, true, () =>
-//			{
-//			});
+			if (_shareController == null)
+			{
+				var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault ();
+				if (viewController == null)
+				{
+					return;
+				}
+				var activityController = new UIActivityViewController (new NSObject[]{viewController.Image}, null);
+				_shareController = new UIPopoverController (activityController);
+				_shareController.DidDismiss += (s, e) => _shareController = null;
+				_shareController.PresentFromBarButtonItem (_btShare, UIPopoverArrowDirection.Up, true);
+			}
+			else
+			{
+				_shareController.Dismiss (true);
+				_shareController = null;
+			}
 		}
 
         private void OnTrashClicked(object sender, EventArgs ea)
