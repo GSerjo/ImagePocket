@@ -133,7 +133,7 @@ namespace Dojo
                     {
                         TagEntity addTagRequest = TagEntity.AddTagRequest;
                         addTagRequest.Name = text;
-                        _tags.Insert(_tags.Count, addTagRequest);
+                        _tags.Insert(0, addTagRequest);
                     }
                 }
                 ReloadTags();
@@ -149,7 +149,7 @@ namespace Dojo
                 TagEntity tag = _tags[indexPath.Row];
                 if (tag.IsAddTagRequest)
                 {
-                    cell.TextLabel.Text = string.Format("Add new tag \"{0}\"", tag.Name);
+                    cell.TextLabel.Text = string.Format("Create new tag \"{0}\"", tag.Name);
                     cell.TextLabel.TextColor = UIColor.FromRGB(99, 194, 188);
                 }
                 else

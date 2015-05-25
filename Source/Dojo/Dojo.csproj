@@ -114,11 +114,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Page.cs" />
-    <Compile Include="Controllers\PageViewController.cs" />
-    <Compile Include="Controllers\PhotoScrollView.cs" />
     <Compile Include="Controllers\PhotoViewController1.cs" />
     <Compile Include="ImageDetails.cs" />
-    <Compile Include="Controllers\ImageScrollView.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Controllers\HomeViewController.cs" />

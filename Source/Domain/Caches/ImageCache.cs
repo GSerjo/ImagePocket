@@ -138,20 +138,20 @@ namespace Domain
             _actualImages = assets.Values
                                   .Select(x => CreateImage(x))
                                   .ToDictionary(x => x.LocalIdentifier);
-			
-			var remove = new List<ImageEntity> ();
-			foreach (ImageEntity imageEntity in _taggedImages.Values)
+
+            var remove = new List<ImageEntity>();
+            foreach (ImageEntity imageEntity in _taggedImages.Values)
             {
-				if (_actualImages.ContainsKey (imageEntity.LocalIdentifier))
-				{
-					_actualImages [imageEntity.LocalIdentifier] = imageEntity;
-				}
-				else
-				{
-					remove.Add (imageEntity);
-				}
+                if (_actualImages.ContainsKey(imageEntity.LocalIdentifier))
+                {
+                    _actualImages[imageEntity.LocalIdentifier] = imageEntity;
+                }
+                else
+                {
+                    remove.Add(imageEntity);
+                }
             }
-			Remove (remove);
+            Remove(remove);
         }
 
         private void OnPhotoLibraryDidChange(PHFetchResult fetchResult)
