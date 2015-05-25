@@ -36,11 +36,11 @@ namespace Dojo
             return (ThumbnailCell)Nib.Instantiate(null, null)[0];
         }
 
-        public new void Select()
-        {
-            BackgroundColor = UIColor.Black;
-            Selected = true;
-        }
+//        public new void Select()
+//        {
+//            BackgroundColor = UIColor.Black;
+//            Selected = true;
+//        }
 
         public void SetImage(string localId)
         {

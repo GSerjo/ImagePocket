@@ -15,6 +15,7 @@ namespace Dojo
         private readonly List<ImageEntity> _images;
         private UIPageViewController _pageViewController;
 		private readonly ImageCache _imageCache = ImageCache.Instance;
+		UIPopoverController _shareController;
 
         public PhotoViewController1(ImageEntity image, List<ImageEntity> images)
         {
@@ -24,9 +25,10 @@ namespace Dojo
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
 
+			var btShare = new UIBarButtonItem (UIBarButtonSystemItem.Action, OnShareClicked);
             var btTrash = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
-            ToolbarItems = new[] { deleteSpace, btTrash };
+			ToolbarItems = new[] {btShare, deleteSpace, btTrash };
         }
 
         public override void ViewDidLoad()
@@ -102,6 +104,25 @@ namespace Dojo
 		private void OnTagSelectorDone(object sender, EventArgsOf<List<ImageEntity>> ea)
 		{
 			_imageCache.SaveOrUpdate(ea.Data);
+		}
+
+		private void OnShareClicked(object sender, EventArgs ea)
+		{
+//			var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault ();
+//			if (viewController == null)
+//			{
+//				return;
+//			}
+//
+//			var pageIndex = viewController.PageIndex;
+//			var image = _images [pageIndex];
+//
+//			UIActivityViewController activityController = new UIActivityViewController(image, null);
+//
+//			_shareController = new UIPopoverController (activityController);
+//			PresentViewController (_shareController, true, () =>
+//			{
+//			});
 		}
 
         private void OnTrashClicked(object sender, EventArgs ea)
