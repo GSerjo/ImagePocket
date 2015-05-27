@@ -43,7 +43,7 @@ namespace Dojo
                 GetPreviousViewController = GetPreviousViewController,
             };
 
-            var firstPage = new Page(this, _currentImageIndex, _images);
+            var firstPage = new PhotoPage(this, _currentImageIndex, _images);
             _pageViewController.SetViewControllers(
                 new UIViewController[] { firstPage },
                 UIPageViewControllerNavigationDirection.Forward,
@@ -55,7 +55,7 @@ namespace Dojo
 
         private Option<ImageEntity> GetCurrentImage()
         {
-            var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault();
+            var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault();
             if (viewController == null)
             {
                 return Option<ImageEntity>.Empty;
@@ -68,7 +68,7 @@ namespace Dojo
 
         private UIViewController GetNextViewController(UIPageViewController pageController, UIViewController referenceViewController)
         {
-            var currentPageController = referenceViewController as Page;
+            var currentPageController = referenceViewController as PhotoPage;
 
             if (currentPageController.PageIndex >= (_images.Count - 1))
             {
@@ -78,13 +78,13 @@ namespace Dojo
             {
                 int nextPageIndex = currentPageController.PageIndex + 1;
 
-                return new Page(this, nextPageIndex, _images);
+                return new PhotoPage(this, nextPageIndex, _images);
             }
         }
 
         private UIViewController GetPreviousViewController(UIPageViewController pageController, UIViewController referenceViewController)
         {
-            var currentPageController = referenceViewController as Page;
+            var currentPageController = referenceViewController as PhotoPage;
             if (currentPageController.PageIndex <= 0)
             {
                 return null;
@@ -93,7 +93,7 @@ namespace Dojo
             {
                 int previousPageIndex = currentPageController.PageIndex - 1;
 
-                return new Page(this, previousPageIndex, _images);
+                return new PhotoPage(this, previousPageIndex, _images);
             }
         }
 
@@ -125,7 +125,7 @@ namespace Dojo
         {
             if (_shareController == null)
             {
-                var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault();
+                var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault();
                 if (viewController == null)
                 {
                     return;
@@ -166,7 +166,7 @@ namespace Dojo
         {
             try
             {
-                var viewController = (Page)_pageViewController.ViewControllers.FirstOrDefault();
+                var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault();
                 if (viewController == null)
                 {
                     return;

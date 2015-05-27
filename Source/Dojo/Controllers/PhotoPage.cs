@@ -6,7 +6,7 @@ using UIKit;
 
 namespace Dojo
 {
-    public class Page : UIViewController
+    public sealed class PhotoPage : UIViewController
     {
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly List<ImageEntity> _images;
@@ -14,7 +14,7 @@ namespace Dojo
         private bool _fullScreen;
         private UIImageView _imageView;
 
-        public Page(PhotoViewController1 photoViewController, int pageIndex, List<ImageEntity> images)
+        public PhotoPage(PhotoViewController1 photoViewController, int pageIndex, List<ImageEntity> images)
         {
             _photoViewController = photoViewController;
             _images = images;
