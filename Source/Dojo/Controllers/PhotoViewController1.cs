@@ -21,7 +21,7 @@ namespace Dojo
         public PhotoViewController1(ImageEntity image, List<ImageEntity> images)
         {
             _images = images;
-            _currentImageIndex = _images.FindIndex(x => x.Equals(image));
+			_currentImageIndex = GetImageIndex(image);
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
@@ -82,6 +82,11 @@ namespace Dojo
             }
         }
 
+		private int GetImageIndex(ImageEntity image)
+		{
+			return _images.FindIndex(x => x.Equals(image));
+		}
+
         private UIViewController GetPreviousViewController(UIPageViewController pageController, UIViewController referenceViewController)
         {
             var currentPageController = referenceViewController as PhotoPage;
@@ -99,26 +104,38 @@ namespace Dojo
 
         private void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
         {
-            if (result)
-            {
-                _images.Remove(removedImage);
-                _imageCache.Remove(removedImage);
-                //				_currentImageIndex--;
-                //				if (_images.IsNullOrEmpty())
-                //				{
-                //					InvokeOnMainThread(() => NavigationController.PopViewController(true));
-                //					return;
-                //				}
-                //				else if (_currentImageIndex < 0)
-                //				{
-                //					_currentImageIndex = 0;
-                //				}
-                //				SwipeImage();
-            }
-            else
-            {
-                Console.WriteLine(error);
-            }
+			if (result == false)
+			{
+				return;
+			}
+			else
+			{
+				Console.WriteLine (error);
+			}
+			var imageIndex = GetImageIndex (removedImage);
+			_images.Remove (removedImage);
+			_imageCache.Remove (removedImage);
+
+			InvokeOnMainThread (() =>
+			{
+				var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault ();
+				if (viewController == null)
+				{
+					return;
+				}
+
+				if (_images.IsNullOrEmpty ())
+				{
+					NavigationController.PopViewController (true);
+					return;
+				}
+				imageIndex--;
+				if (imageIndex < 0)
+				{
+					imageIndex = 0;
+				}
+				viewController.SetImage (_images [imageIndex]);
+			});
         }
 
         private void OnShareClicked(object sender, EventArgs ea)
@@ -177,7 +194,7 @@ namespace Dojo
                 PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(new[] { asset }),
-                    (result, error) => OnDeleteAssetsCompleted(image, result, error));
+					(result, error) => OnDeleteAssetsCompleted(image, result, error));
             }
             catch (Exception ex)
             {

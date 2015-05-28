@@ -41,6 +41,23 @@ namespace Dojo
             UpdateImage();
         }
 
+		public void SetImage(ImageEntity image)
+		{
+			var imageInadex = _images.FindIndex(x => x.Equals(image));
+			PageIndex = imageInadex;
+			PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
+			InvokeOnMainThread(() => UpdateImage(asset));
+		}
+
+		private void UpdateImage(PHAsset asset)
+		{
+			PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
+				PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
+			{
+				UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
+			});
+		}
+
         private void OnImageTap(UITapGestureRecognizer gesture)
         {
             _fullScreen = !_fullScreen;
