@@ -17,6 +17,7 @@ namespace Dojo
         private readonly List<ImageEntity> _images;
         private UIPageViewController _pageViewController;
         private UIPopoverController _shareController;
+		private UIPageViewControllerDataSource _pageViewDataSource;
 
         public PhotoViewController1(ImageEntity image, List<ImageEntity> images)
         {
@@ -34,20 +35,21 @@ namespace Dojo
 
         public override void ViewDidLoad()
         {
-            _pageViewController = new UIPageViewController(
-                UIPageViewControllerTransitionStyle.Scroll,
-                UIPageViewControllerNavigationOrientation.Horizontal,
-                UIPageViewControllerSpineLocation.None, 10f)
-            {
-                GetNextViewController = GetNextViewController,
-                GetPreviousViewController = GetPreviousViewController,
-            };
+			_pageViewController = new UIPageViewController (
+				UIPageViewControllerTransitionStyle.Scroll,
+				UIPageViewControllerNavigationOrientation.Horizontal,
+				UIPageViewControllerSpineLocation.None, 10f);
+//            {
+//                GetNextViewController = GetNextViewController,
+//                GetPreviousViewController = GetPreviousViewController,
+//            };
+			_pageViewDataSource = new MyDataSource (this, _pageViewController);
+			_pageViewController.DataSource = _pageViewDataSource;
 
             var firstPage = new PhotoPage(this, _currentImageIndex, _images);
-            _pageViewController.SetViewControllers(
-                new UIViewController[] { firstPage },
-                UIPageViewControllerNavigationDirection.Forward,
-                false, x => { });
+            _pageViewController.SetViewControllers( new UIViewController[] { firstPage },
+				UIPageViewControllerNavigationDirection.Forward,
+				false, null);
 
             _pageViewController.View.Frame = View.Bounds;
             View.AddSubview(_pageViewController.View);
@@ -118,6 +120,7 @@ namespace Dojo
 
 			InvokeOnMainThread (() =>
 			{
+				ResetDataSource();
 				var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault ();
 				if (viewController == null)
 				{
@@ -201,5 +204,55 @@ namespace Dojo
                 Console.WriteLine(ex);
             }
         }
+
+		private void ResetDataSource()
+		{
+			_pageViewController.DataSource = null;
+			_pageViewController.DataSource = _pageViewDataSource;
+		}
+
+		class MyDataSource : UIPageViewControllerDataSource
+		{
+			readonly UIPageViewController _pageViewController;
+			private readonly PhotoViewController1 _parentController;
+
+			public MyDataSource (PhotoViewController1 parentController, UIPageViewController pageViewController)
+			{
+				_pageViewController = pageViewController;
+				_parentController = parentController;
+			}
+
+			public override UIViewController GetPreviousViewController (UIPageViewController pageViewController,
+				UIViewController referenceViewController)
+			{
+				var currentPageController = referenceViewController as PhotoPage;
+				if (currentPageController.PageIndex <= 0)
+				{
+					return null;
+				}
+				else
+				{
+					int previousPageIndex = currentPageController.PageIndex - 1;
+					return new PhotoPage(_parentController, previousPageIndex, _parentController._images);
+				}
+			}
+
+			public override UIViewController GetNextViewController (UIPageViewController pageViewController,
+				UIViewController referenceViewController)
+			{
+				var currentPageController = referenceViewController as PhotoPage;
+
+				if (currentPageController.PageIndex >= (_parentController._images.Count - 1))
+				{
+					return null;
+				}
+				else
+				{
+					int nextPageIndex = currentPageController.PageIndex + 1;
+
+					return new PhotoPage(_parentController, nextPageIndex, _parentController._images);
+				}
+			}
+		}
     }
 }
