@@ -15,14 +15,14 @@ namespace Dojo
         private readonly int _currentImageIndex;
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly List<ImageEntity> _images;
-        private UIPageViewController _pageViewController;
+        private MyPageViewController _pageViewController;
+        private UIPageViewControllerDataSource _pageViewDataSource;
         private UIPopoverController _shareController;
-		private UIPageViewControllerDataSource _pageViewDataSource;
 
         public PhotoViewController1(ImageEntity image, List<ImageEntity> images)
         {
             _images = images;
-			_currentImageIndex = GetImageIndex(image);
+            _currentImageIndex = GetImageIndex(image);
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
@@ -35,21 +35,21 @@ namespace Dojo
 
         public override void ViewDidLoad()
         {
-			_pageViewController = new UIPageViewController (
-				UIPageViewControllerTransitionStyle.Scroll,
-				UIPageViewControllerNavigationOrientation.Horizontal,
-				UIPageViewControllerSpineLocation.None, 10f);
-//            {
-//                GetNextViewController = GetNextViewController,
-//                GetPreviousViewController = GetPreviousViewController,
-//            };
-			_pageViewDataSource = new MyDataSource (this, _pageViewController);
-			_pageViewController.DataSource = _pageViewDataSource;
+            _pageViewController = new MyPageViewController(
+                UIPageViewControllerTransitionStyle.Scroll,
+                UIPageViewControllerNavigationOrientation.Horizontal,
+                UIPageViewControllerSpineLocation.None, 10f);
+            //            {
+            //                GetNextViewController = GetNextViewController,
+            //                GetPreviousViewController = GetPreviousViewController,
+            //            };
+            _pageViewDataSource = new MyDataSource(this);
+            _pageViewController.DataSource = _pageViewDataSource;
 
             var firstPage = new PhotoPage(this, _currentImageIndex, _images);
-            _pageViewController.SetViewControllers( new UIViewController[] { firstPage },
-				UIPageViewControllerNavigationDirection.Forward,
-				false, null);
+            _pageViewController.SetViewControllers(new UIViewController[] { firstPage },
+                UIPageViewControllerNavigationDirection.Forward,
+                false, null);
 
             _pageViewController.View.Frame = View.Bounds;
             View.AddSubview(_pageViewController.View);
@@ -68,6 +68,11 @@ namespace Dojo
             return image.ToOption();
         }
 
+        private int GetImageIndex(ImageEntity image)
+        {
+            return _images.FindIndex(x => x.Equals(image));
+        }
+
         private UIViewController GetNextViewController(UIPageViewController pageController, UIViewController referenceViewController)
         {
             var currentPageController = referenceViewController as PhotoPage;
@@ -83,11 +88,6 @@ namespace Dojo
                 return new PhotoPage(this, nextPageIndex, _images);
             }
         }
-
-		private int GetImageIndex(ImageEntity image)
-		{
-			return _images.FindIndex(x => x.Equals(image));
-		}
 
         private UIViewController GetPreviousViewController(UIPageViewController pageController, UIViewController referenceViewController)
         {
@@ -106,39 +106,39 @@ namespace Dojo
 
         private void OnDeleteAssetsCompleted(ImageEntity removedImage, bool result, NSError error)
         {
-			if (result == false)
-			{
-				return;
-			}
-			else
-			{
-				Console.WriteLine (error);
-			}
-			var imageIndex = GetImageIndex (removedImage);
-			_images.Remove (removedImage);
-			_imageCache.Remove (removedImage);
+            if (result == false)
+            {
+                return;
+            }
+            else
+            {
+                Console.WriteLine(error);
+            }
+            int imageIndex = GetImageIndex(removedImage);
+            _images.Remove(removedImage);
+            _imageCache.Remove(removedImage);
 
-			InvokeOnMainThread (() =>
-			{
-				ResetDataSource();
-				var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault ();
-				if (viewController == null)
-				{
-					return;
-				}
+            InvokeOnMainThread(() =>
+            {
+                ResetDataSource();
+                var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault();
+                if (viewController == null)
+                {
+                    return;
+                }
 
-				if (_images.IsNullOrEmpty ())
-				{
-					NavigationController.PopViewController (true);
-					return;
-				}
-				imageIndex--;
-				if (imageIndex < 0)
-				{
-					imageIndex = 0;
-				}
-				viewController.SetImage (_images [imageIndex]);
-			});
+                if (_images.IsNullOrEmpty())
+                {
+                    NavigationController.PopViewController(true);
+                    return;
+                }
+                imageIndex--;
+                if (imageIndex < 0)
+                {
+                    imageIndex = 0;
+                }
+                viewController.SetImage(_images[imageIndex]);
+            });
         }
 
         private void OnShareClicked(object sender, EventArgs ea)
@@ -197,7 +197,7 @@ namespace Dojo
                 PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
                     () => PHAssetChangeRequest.DeleteAssets(new[] { asset }),
-					(result, error) => OnDeleteAssetsCompleted(image, result, error));
+                    (result, error) => OnDeleteAssetsCompleted(image, result, error));
             }
             catch (Exception ex)
             {
@@ -205,54 +205,77 @@ namespace Dojo
             }
         }
 
-		private void ResetDataSource()
-		{
-			_pageViewController.DataSource = null;
-			_pageViewController.DataSource = _pageViewDataSource;
-		}
+        private void ResetDataSource()
+        {
+            _pageViewController.DataSource = null;
+            _pageViewController.DataSource = _pageViewDataSource;
+        }
 
-		class MyDataSource : UIPageViewControllerDataSource
-		{
-			readonly UIPageViewController _pageViewController;
-			private readonly PhotoViewController1 _parentController;
 
-			public MyDataSource (PhotoViewController1 parentController, UIPageViewController pageViewController)
-			{
-				_pageViewController = pageViewController;
-				_parentController = parentController;
-			}
+        private class MyDataSource : UIPageViewControllerDataSource
+        {
+            private readonly PhotoViewController1 _parentController;
 
-			public override UIViewController GetPreviousViewController (UIPageViewController pageViewController,
-				UIViewController referenceViewController)
-			{
-				var currentPageController = referenceViewController as PhotoPage;
-				if (currentPageController.PageIndex <= 0)
-				{
-					return null;
-				}
-				else
-				{
-					int previousPageIndex = currentPageController.PageIndex - 1;
-					return new PhotoPage(_parentController, previousPageIndex, _parentController._images);
-				}
-			}
+            public MyDataSource(PhotoViewController1 parentController)
+            {
+                _parentController = parentController;
+            }
 
-			public override UIViewController GetNextViewController (UIPageViewController pageViewController,
-				UIViewController referenceViewController)
-			{
-				var currentPageController = referenceViewController as PhotoPage;
+            public override UIViewController GetNextViewController(UIPageViewController pageViewController,
+                UIViewController referenceViewController)
+            {
+                var currentPageController = referenceViewController as PhotoPage;
 
-				if (currentPageController.PageIndex >= (_parentController._images.Count - 1))
-				{
-					return null;
-				}
-				else
-				{
-					int nextPageIndex = currentPageController.PageIndex + 1;
+                if (currentPageController.PageIndex >= (_parentController._images.Count - 1))
+                {
+                    return null;
+                }
+                else
+                {
+                    int nextPageIndex = currentPageController.PageIndex + 1;
 
-					return new PhotoPage(_parentController, nextPageIndex, _parentController._images);
-				}
-			}
-		}
+                    return new PhotoPage(_parentController, nextPageIndex, _parentController._images);
+                }
+            }
+
+            public override UIViewController GetPreviousViewController(UIPageViewController pageViewController,
+                UIViewController referenceViewController)
+            {
+                var currentPageController = referenceViewController as PhotoPage;
+                if (currentPageController.PageIndex <= 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    int previousPageIndex = currentPageController.PageIndex - 1;
+                    return new PhotoPage(_parentController, previousPageIndex, _parentController._images);
+                }
+            }
+        }
+
+
+        private sealed class MyPageViewController : UIPageViewController
+        {
+            public MyPageViewController(UIPageViewControllerTransitionStyle scroll,
+                UIPageViewControllerNavigationOrientation orientation,
+                UIPageViewControllerSpineLocation location, float pageSpace) : base(scroll, orientation, location, pageSpace)
+            {
+            }
+
+            public override void SetViewControllers(
+                UIViewController[] viewControllers,
+                UIPageViewControllerNavigationDirection direction,
+                bool animated,
+                UICompletionHandler completionHandler)
+            {
+                UIViewController[] childControllers = ChildViewControllers;
+                foreach (UIViewController child in childControllers)
+                {
+                    child.SafeDispose();
+                }
+                base.SetViewControllers(viewControllers, direction, animated, completionHandler);
+            }
+        }
     }
 }
