@@ -63,7 +63,7 @@ namespace Dojo
                 return Option<ImageEntity>.Empty;
             }
 
-            int pageIndex = viewController.PageIndex;
+            int pageIndex = viewController.ImageIndex;
             ImageEntity image = _images[pageIndex];
             return image.ToOption();
         }
@@ -77,13 +77,13 @@ namespace Dojo
         {
             var currentPageController = referenceViewController as PhotoPage;
 
-            if (currentPageController.PageIndex >= (_images.Count - 1))
+            if (currentPageController.ImageIndex >= (_images.Count - 1))
             {
                 return null;
             }
             else
             {
-                int nextPageIndex = currentPageController.PageIndex + 1;
+                int nextPageIndex = currentPageController.ImageIndex + 1;
 
                 return new PhotoPage(this, nextPageIndex, _images);
             }
@@ -92,13 +92,13 @@ namespace Dojo
         private UIViewController GetPreviousViewController(UIPageViewController pageController, UIViewController referenceViewController)
         {
             var currentPageController = referenceViewController as PhotoPage;
-            if (currentPageController.PageIndex <= 0)
+            if (currentPageController.ImageIndex <= 0)
             {
                 return null;
             }
             else
             {
-                int previousPageIndex = currentPageController.PageIndex - 1;
+                int previousPageIndex = currentPageController.ImageIndex - 1;
 
                 return new PhotoPage(this, previousPageIndex, _images);
             }
@@ -118,26 +118,25 @@ namespace Dojo
             _images.Remove(removedImage);
             _imageCache.Remove(removedImage);
 
-
             InvokeOnMainThread(() =>
             {
                 ResetDataSource();
 
-				if (_images.IsNullOrEmpty())
-				{
-					NavigationController.PopViewController(true);
-					return;
-				}
-				var page = new PhotoPage(this, _currentImageIndex, _images);
+                if (_images.IsNullOrEmpty())
+                {
+                    NavigationController.PopViewController(true);
+                    return;
+                }
+                var page = new PhotoPage(this, _currentImageIndex, _images);
 
-				imageIndex--;
-				if (imageIndex < 0)
-				{
-					imageIndex = 0;
-				}
-				_pageViewController.SetViewControllers(new UIViewController[] { page },
-					UIPageViewControllerNavigationDirection.Forward,
-					false, null);
+                imageIndex--;
+                if (imageIndex < 0)
+                {
+                    imageIndex = 0;
+                }
+                _pageViewController.SetViewControllers(new UIViewController[] { page },
+                    UIPageViewControllerNavigationDirection.Forward,
+                    false, null);
             });
         }
 
@@ -192,7 +191,7 @@ namespace Dojo
                     return;
                 }
 
-                int pageIndex = viewController.PageIndex;
+                int pageIndex = viewController.ImageIndex;
                 ImageEntity image = _images[pageIndex];
                 PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
                 PHPhotoLibrary.SharedPhotoLibrary.PerformChanges(
@@ -214,42 +213,68 @@ namespace Dojo
 
         private class MyDataSource : UIPageViewControllerDataSource
         {
+            private readonly PhotoPage[] _pages = new PhotoPage[3];
             private readonly PhotoViewController1 _parentController;
 
             public MyDataSource(PhotoViewController1 parentController)
             {
                 _parentController = parentController;
+                _pages[0] = new PhotoPage(_parentController, 0, _parentController._images)
+                {
+                    Id = 0
+                };
+                _pages[1] = new PhotoPage(_parentController, 0, _parentController._images)
+                {
+                    Id = 1
+                };
+                _pages[2] = new PhotoPage(_parentController, 0, _parentController._images)
+                {
+                    Id = 2
+                };
             }
 
             public override UIViewController GetNextViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
             {
-                var currentPageController = referenceViewController as PhotoPage;
+                var currentPage = referenceViewController as PhotoPage;
 
-                if (currentPageController.PageIndex >= (_parentController._images.Count - 1))
+                if (currentPage.ImageIndex >= (_parentController._images.Count - 1))
                 {
                     return null;
                 }
                 else
                 {
-                    int nextPageIndex = currentPageController.PageIndex + 1;
-
-                    return new PhotoPage(_parentController, nextPageIndex, _parentController._images);
+                    int nextImageIndex = currentPage.ImageIndex + 1;
+                    int newId = currentPage.Id + 1;
+                    if (newId >= _pages.Length)
+                    {
+                        newId = 0;
+                    }
+                    _pages[newId].ImageIndex = nextImageIndex;
+                    return _pages[newId];
+                    //                    return new PhotoPage(_parentController, nextPageIndex, _parentController._images);
                 }
             }
 
             public override UIViewController GetPreviousViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
             {
-                var currentPageController = referenceViewController as PhotoPage;
-                if (currentPageController.PageIndex <= 0)
+                var currentPage = referenceViewController as PhotoPage;
+                if (currentPage.ImageIndex <= 0)
                 {
                     return null;
                 }
                 else
                 {
-                    int previousPageIndex = currentPageController.PageIndex - 1;
-                    return new PhotoPage(_parentController, previousPageIndex, _parentController._images);
+                    int previousImageIndex = currentPage.ImageIndex - 1;
+                    int newId = currentPage.Id - 1;
+                    if (newId < 0)
+                    {
+                        newId = _pages.Length - 1;
+                    }
+                    _pages[newId].ImageIndex = previousImageIndex;
+                    return _pages[newId];
+                    //                    return new PhotoPage(_parentController, previousImageIndex, _parentController._images);
                 }
             }
         }
