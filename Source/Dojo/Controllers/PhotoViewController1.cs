@@ -118,26 +118,26 @@ namespace Dojo
             _images.Remove(removedImage);
             _imageCache.Remove(removedImage);
 
+
             InvokeOnMainThread(() =>
             {
                 ResetDataSource();
-                var viewController = (PhotoPage)_pageViewController.ViewControllers.FirstOrDefault();
-                if (viewController == null)
-                {
-                    return;
-                }
 
-                if (_images.IsNullOrEmpty())
-                {
-                    NavigationController.PopViewController(true);
-                    return;
-                }
-                imageIndex--;
-                if (imageIndex < 0)
-                {
-                    imageIndex = 0;
-                }
-                viewController.SetImage(_images[imageIndex]);
+				if (_images.IsNullOrEmpty())
+				{
+					NavigationController.PopViewController(true);
+					return;
+				}
+				var page = new PhotoPage(this, _currentImageIndex, _images);
+
+				imageIndex--;
+				if (imageIndex < 0)
+				{
+					imageIndex = 0;
+				}
+				_pageViewController.SetViewControllers(new UIViewController[] { page },
+					UIPageViewControllerNavigationDirection.Forward,
+					false, null);
             });
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Domain;
 using Photos;
 using UIKit;
+using Core;
 
 namespace Dojo
 {
@@ -10,9 +11,10 @@ namespace Dojo
     {
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly List<ImageEntity> _images;
-        private readonly PhotoViewController1 _photoViewController;
+        private PhotoViewController1 _photoViewController;
         private bool _fullScreen;
         private UIImageView _imageView;
+		private static readonly PHImageRequestOptions _imageRequestOptions = new PHImageRequestOptions();
 
         public PhotoPage(PhotoViewController1 photoViewController, int pageIndex, List<ImageEntity> images)
         {
@@ -26,36 +28,31 @@ namespace Dojo
 
         public override void ViewDidLoad()
         {
-            base.ViewDidLoad();
-            _imageView = new UIImageView(View.Frame)
-            {
-                MultipleTouchEnabled = true,
-                UserInteractionEnabled = true,
-                ContentMode = UIViewContentMode.ScaleAspectFit,
-                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-            };
-            var tapGesture = new UITapGestureRecognizer(OnImageTap);
-            _imageView.AddGestureRecognizer(tapGesture);
-
+//            base.ViewDidLoad();
+			_imageView = new UIImageView(View.Frame)
+			{
+				MultipleTouchEnabled = true,
+				UserInteractionEnabled = true,
+				ContentMode = UIViewContentMode.ScaleAspectFit,
+				AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+			};
+			var tapGesture = new UITapGestureRecognizer(OnImageTap);
+			_imageView.AddGestureRecognizer(tapGesture);
             View.AddSubview(_imageView);
             UpdateImage();
         }
 
-		public void SetImage(ImageEntity image)
+		public override void ViewDidDisappear (bool animated)
 		{
-			var imageInadex = _images.FindIndex(x => x.Equals(image));
-			PageIndex = imageInadex;
-			PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
-			InvokeOnMainThread(() => UpdateImage(asset));
-		}
-
-		private void UpdateImage(PHAsset asset)
-		{
-			PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
-				PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
+			base.ViewDidDisappear (animated);
+			if (_imageView != null)
 			{
-				UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
-			});
+				_imageView.SafeDispose ();
+			}
+			if (Image != null)
+			{
+				Image.SafeDispose ();
+			}
 		}
 
         private void OnImageTap(UITapGestureRecognizer gesture)
@@ -68,13 +65,13 @@ namespace Dojo
 
         private void UpdateImage()
         {
-            ImageEntity _image = _images[PageIndex];
-            PHAsset asset = _imageCache.GetAsset(_image.LocalIdentifier);
+			ImageEntity image = _images[PageIndex];
+            PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
             PHImageManager.DefaultManager.RequestImageForAsset(
                 asset,
                 View.Frame.Size,
                 PHImageContentMode.AspectFit,
-                new PHImageRequestOptions(), (img, info) =>
+				_imageRequestOptions, (img, info) =>
                 {
                     _imageView.Image = img;
                     Image = img;
