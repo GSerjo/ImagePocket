@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Domain;
-using MonoTouch.Dialog;
 using MessageUI;
+using MonoTouch.Dialog;
 using UIKit;
 
 namespace Dojo
@@ -67,7 +67,7 @@ namespace Dojo
                 HeaderView = new MenuSectionView("Settings")
             };
             result.Add(new MenuElement("About", Resources.AboutImage, () => new AboutAppViewController("About")));
-            result.Add(new MenuElement("Feedback & Support", Resources.FlagImage, ()=> ContactUs()));
+            result.Add(new MenuElement("Feedback & Support", Resources.FlagImage, () => ContactUs()));
             return result;
         }
 

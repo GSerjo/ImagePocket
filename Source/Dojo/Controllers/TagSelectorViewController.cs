@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Domain;
 using CoreFoundation;
+using Domain;
 using Foundation;
-using UIKit;
 using NSTokenView;
+using UIKit;
 
 namespace Dojo
 {

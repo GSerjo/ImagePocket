@@ -194,30 +194,29 @@ namespace Dojo
             }
         }
 
-		private Task<List<UIImage>> GetSharedImages()
-		{
-			List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
-			var images = new List<UIImage>();
-			var options = new PHImageRequestOptions
-			{
-				Synchronous = true,
-				DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
-			};
-			return Task.Run(() =>
-			{
-				foreach (PHAsset asset in assets)
-				{
-					var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
-					PHImageManager.DefaultManager.RequestImageForAsset(asset,
-						size,
-						PHImageContentMode.AspectFit,
-						options,
-						(image, info) => images.Add(image));
-				}
-				return images;
-			});
-		}
-
+        private Task<List<UIImage>> GetSharedImages()
+        {
+            List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
+            var images = new List<UIImage>();
+            var options = new PHImageRequestOptions
+            {
+                Synchronous = true,
+                DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
+            };
+            return Task.Run(() =>
+            {
+                foreach (PHAsset asset in assets)
+                {
+                    var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
+                    PHImageManager.DefaultManager.RequestImageForAsset(asset,
+                        size,
+                        PHImageContentMode.AspectFit,
+                        options,
+                        (image, info) => images.Add(image));
+                }
+                return images;
+            });
+        }
 
         private void OnBatchSelect(object sender, EventArgs ea)
         {
@@ -253,12 +252,12 @@ namespace Dojo
         {
             if (_shareController == null)
             {
-				var images = await GetSharedImages();
+                List<UIImage> images = await GetSharedImages();
                 if (images.IsNullOrEmpty())
                 {
                     return;
                 }
-				var activityController = new UIActivityViewController(images.ToArray(), null);
+                var activityController = new UIActivityViewController(images.ToArray(), null);
                 activityController.SetCompletionHandler(
                     (activityType, completed, returnedItems, error) =>
                     {
