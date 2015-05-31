@@ -12,7 +12,11 @@ namespace Dojo
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly UIImageView _imageView;
         private readonly UIImageView _overlayView;
-
+		private static PHImageRequestOptions _options = new PHImageRequestOptions
+		{
+			NetworkAccessAllowed = true
+		};
+			
         [Export("initWithFrame:")]
         public ImagePreviewCell(RectangleF frame) : base(frame)
         {
@@ -41,7 +45,7 @@ namespace Dojo
             _imageCache.ImageManager.RequestImageForAsset(
                 asset,
                 _imageView.Frame.Size,
-                PHImageContentMode.AspectFit, null, UpdateImage);
+				PHImageContentMode.AspectFit, _options, UpdateImage);
         }
 
         public void UnselectCell()
