@@ -194,29 +194,31 @@ namespace Dojo
             }
         }
 
-        private Task<List<UIImage>> GetSharedImages()
-        {
-            List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
-            var images = new List<UIImage>();
-            var options = new PHImageRequestOptions
-            {
-                Synchronous = true,
-                DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
-            };
-            return Task.Run(() =>
-            {
-                foreach (PHAsset asset in assets)
-                {
-                    var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
-                    PHImageManager.DefaultManager.RequestImageForAsset(asset,
-                        size,
-                        PHImageContentMode.AspectFit,
-                        options,
-                        (image, info) => images.Add(image));
-                }
-                return images;
-            });
-        }
+		private List<Task<UIImage>> GetSharedImages()
+		{
+			List<PHAsset> assets = _selectedImages.Values.Select (x => _imageCache.GetAsset (x.LocalIdentifier)).ToList ();
+			var options = new PHImageRequestOptions {
+				Synchronous = true,
+				DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
+			};
+			var result = new List<Task<UIImage>> ();
+			foreach (PHAsset asset in assets)
+			{
+				var task = Task.Run<UIImage> (() =>
+				{
+					UIImage image = null;
+					var size = new CGSize (asset.PixelWidth, asset.PixelHeight);
+					PHImageManager.DefaultManager.RequestImageForAsset (asset,
+						size,
+						PHImageContentMode.AspectFit,
+						options,
+						(img, info) => image = img);
+					return image;
+				});
+				result.Add (task);
+			}
+			return result;
+		}
 
         private void OnBatchSelect(object sender, EventArgs ea)
         {
@@ -267,12 +269,12 @@ namespace Dojo
                 //                        options,
                 //                        (image, info) => { images.Add(image); });
                 //                }
-                List<UIImage> images = await GetSharedImages();
+				UIImage[] images = await Task.WhenAll(GetSharedImages());
                 if (images.IsNullOrEmpty())
                 {
                     return;
                 }
-                var activityController = new UIActivityViewController(images.ToArray(), null);
+                var activityController = new UIActivityViewController(images, null);
                 activityController.SetCompletionHandler(
                     (activityType, completed, returnedItems, error) =>
                     {
