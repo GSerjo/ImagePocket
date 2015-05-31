@@ -11,12 +11,14 @@ namespace Dojo
 {
     public sealed class PhotoViewController : UIViewController
     {
+        private readonly UIBarButtonItem _btShare;
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly List<ImageEntity> _images;
         private int _currentImageIndex;
         private bool _fullScreen;
         private ImageEntity _image;
         private UIImageView _imageView;
+        private UIPopoverController _shareController;
 
         public PhotoViewController(ImageEntity image, List<ImageEntity> images)
         {
@@ -28,9 +30,11 @@ namespace Dojo
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
             NavigationItem.RightBarButtonItem = tabButton;
 
+            _btShare = new UIBarButtonItem(UIBarButtonSystemItem.Action, OnShareClicked);
+
             var btTrash = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
-            ToolbarItems = new[] { deleteSpace, btTrash };
+            ToolbarItems = new[] { _btShare, deleteSpace, btTrash };
         }
 
         public override void ViewDidLoad()
@@ -144,6 +148,22 @@ namespace Dojo
             View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
         }
 
+        private void OnShareClicked(object sender, EventArgs ea)
+        {
+            if (_shareController == null)
+            {
+                var activityController = new UIActivityViewController(new NSObject[] { _imageView.Image }, null);
+                _shareController = new UIPopoverController(activityController);
+                _shareController.DidDismiss += (s, e) => _shareController = null;
+                _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
+            }
+            else
+            {
+                _shareController.Dismiss(true);
+                _shareController = null;
+            }
+        }
+
         private void OnTagClicked(object sender, EventArgs ea)
         {
             var controller = new TagSelectorViewController(_image)
@@ -184,12 +204,16 @@ namespace Dojo
 
         private void UpdateImage(PHAsset asset)
         {
+            //                      UIView.Animate(1, 0, UIViewAnimationOptions.TransitionCurlUp, () => _imageView.Image = img, ()=>{});
+
             PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
-                PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
-                {
-//                      UIView.Animate(1, 0, UIViewAnimationOptions.TransitionCurlUp, () => _imageView.Image = img, ()=>{});
-					UIView.Transition(_imageView, 1, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
-                });
+                PHImageContentMode.AspectFit, new PHImageRequestOptions(),
+                (image, info) => ReplaseImage(image));
+        }
+
+        private void ReplaseImage(UIImage image)
+        {
+            UIView.Transition(_imageView, 1, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = image, null);
         }
     }
 }
