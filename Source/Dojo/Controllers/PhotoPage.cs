@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Core;
 using Domain;
-using Foundation;
 using Photos;
 using UIKit;
 
@@ -10,16 +9,22 @@ namespace Dojo
 {
     public sealed class PhotoPage : UIViewController
     {
-        private static readonly PHImageRequestOptions _imageRequestOptions = new PHImageRequestOptions();
+        private static readonly PHImageRequestOptions _imageRequestOptions = new PHImageRequestOptions
+		{
+			Synchronous = false,
+			NetworkAccessAllowed = true,
+		};
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly List<ImageEntity> _images;
-        private readonly PhotoViewController1 _photoViewController;
+//        private readonly PhotoViewController1 _photoViewController;
         private bool _fullScreen;
         private UIImageView _imageView;
+		private WeakReference<PhotoViewController1> _photoViewController;
 
         public PhotoPage(PhotoViewController1 photoViewController, int imageIndex, List<ImageEntity> images)
         {
-            _photoViewController = photoViewController;
+//            _photoViewController = photoViewController;
+			_photoViewController = new WeakReference<PhotoViewController1>(photoViewController);
             _images = images;
             ImageIndex = imageIndex;
         }
@@ -31,43 +36,85 @@ namespace Dojo
             get { return _imageView.Image; }
         }
 
-        public int ImageIndex { get; set; }
+		public int ImageIndex { get; set; }
 
         public override void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);
             if (_imageView != null)
             {
+				_imageView.Image.SafeDispose ();
                 _imageView.SafeDispose();
+				_imageView.RemoveFromSuperview ();
+				_imageView = null;
             }
         }
+
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (_imageView != null)
+			{
+				_imageView.SafeDispose();
+				_imageView.RemoveFromSuperview ();
+				_imageView = null;
+			}
+		}
+
+		public override void ViewWillAppear (bool animated)
+		{
+//			base.ViewWillAppear (animated);
+			_imageView = new UIImageView(View.Frame)
+			{
+				MultipleTouchEnabled = true,
+				UserInteractionEnabled = true,
+				ContentMode = UIViewContentMode.ScaleAspectFit,
+				AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+			};
+			var tapGesture = new UITapGestureRecognizer(OnImageTap);
+			_imageView.AddGestureRecognizer(tapGesture);
+			View.AddSubview(_imageView);
+
+			UpdateImage();
+		}
 
         public override void ViewDidLoad()
         {
             //            base.ViewDidLoad();
-            _imageView = new UIImageView(View.Frame)
-            {
-                MultipleTouchEnabled = true,
-                UserInteractionEnabled = true,
-                ContentMode = UIViewContentMode.ScaleAspectFit,
-                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-            };
-            var tapGesture = new UITapGestureRecognizer(OnImageTap);
-            _imageView.AddGestureRecognizer(tapGesture);
-            View.AddSubview(_imageView);
-            UpdateImage();
+//            _imageView = new UIImageView(View.Frame)
+//            {
+//                MultipleTouchEnabled = true,
+//                UserInteractionEnabled = true,
+//                ContentMode = UIViewContentMode.ScaleAspectFit,
+//                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+//            };
+//            var tapGesture = new UITapGestureRecognizer(OnImageTap);
+//            _imageView.AddGestureRecognizer(tapGesture);
+//            View.AddSubview(_imageView);
+//
+//            UpdateImage();
         }
 
         private void OnImageTap(UITapGestureRecognizer gesture)
         {
-            _fullScreen = !_fullScreen;
-            _photoViewController.NavigationController.SetNavigationBarHidden(_fullScreen, false);
-            _photoViewController.NavigationController.SetToolbarHidden(_fullScreen, false);
-            View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
+			PhotoViewController1 controller; 
+			if(_photoViewController.TryGetTarget(out controller))
+			{
+				_fullScreen = !_fullScreen;
+				controller.NavigationController.SetNavigationBarHidden(_fullScreen, false);
+				controller.NavigationController.SetToolbarHidden(_fullScreen, false);
+				View.BackgroundColor = _fullScreen ? UIColor.Black : UIColor.White;
+			}
         }
 
-        private void SetImage(UIImage image, NSDictionary info)
+
+		private void SetImage(UIImage image)
         {
+			if (_imageView == null)
+			{
+				return;
+			}
+
             _imageView.Image = image;
         }
 
@@ -75,11 +122,14 @@ namespace Dojo
         {
             ImageEntity image = _images[ImageIndex];
             PHAsset asset = _imageCache.GetAsset(image.LocalIdentifier);
-            PHImageManager.DefaultManager.RequestImageForAsset(
+			PHImageManager.DefaultManager.RequestImageForAsset(
                 asset,
-                View.Frame.Size,
+				View.Frame.Size,
                 PHImageContentMode.AspectFit,
-                _imageRequestOptions, SetImage);
+				_imageRequestOptions, (img, y)=>
+			{
+				_imageView.Image = img;
+			});
         }
     }
 }
