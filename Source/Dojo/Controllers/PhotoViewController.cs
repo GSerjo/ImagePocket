@@ -195,6 +195,11 @@ namespace Dojo
             }
         }
 
+        private void ReplaseImage(UIImage image)
+        {
+            UIView.Transition(_imageView, 1, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = image, null);
+        }
+
         private void SwipeImage()
         {
             _image = _images[_currentImageIndex];
@@ -209,11 +214,6 @@ namespace Dojo
             PHImageManager.DefaultManager.RequestImageForAsset(asset, View.Frame.Size,
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(),
                 (image, info) => ReplaseImage(image));
-        }
-
-        private void ReplaseImage(UIImage image)
-        {
-            UIView.Transition(_imageView, 1, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = image, null);
         }
     }
 }

@@ -17,14 +17,17 @@ namespace Dojo
         private const string SelectImagesTitle = "Select images";
         private const string TagButonName = "Tag";
         private static readonly NSString _cellId = new NSString("ImageCell");
-        private UIBarButtonItem _btCancel, _btOpenMenu;
+        private UIBarButtonItem _btCancel;
+        private UIBarButtonItem _btOpenMenu;
         private UIBarButtonItem _btSelect;
+        private UIBarButtonItem _btShare;
         private UIBarButtonItem _btTag;
         private UIBarButtonItem _btTrash;
         private TagEntity _currentTag = TagEntity.All;
         private List<ImageEntity> _filteredImages = new List<ImageEntity>();
         private ImageCache _imageCache;
         private Dictionary<string, ImageEntity> _selectedImages = new Dictionary<string, ImageEntity>();
+        private UIPopoverController _shareController;
         private ViewMode _viewMode = ViewMode.Read;
 
         public HomeViewController(UICollectionViewLayout layout) : base(layout)
@@ -76,14 +79,14 @@ namespace Dojo
             if (_viewMode == ViewMode.Read)
             {
                 ImageEntity image = _filteredImages[(int)indexPath.Item];
-                                var photoController = new PhotoViewController(image, _filteredImages);
-                                NavigationController.PushViewController(photoController, true);
+                var photoController = new PhotoViewController(image, _filteredImages);
+                NavigationController.PushViewController(photoController, true);
 
                 //                var pageViewController = new PageViewController(image, _filteredImages);
                 //                NavigationController.PushViewController(pageViewController, true);
 
-//                var viewController = new PhotoViewController1(image, _filteredImages);
-//                NavigationController.PushViewController(viewController, false);
+                //                var viewController = new PhotoViewController1(image, _filteredImages);
+                //                NavigationController.PushViewController(viewController, false);
                 return;
             }
             var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);
@@ -103,6 +106,7 @@ namespace Dojo
 
             NavigationItem.LeftBarButtonItem.Enabled = _selectedImages.IsNotEmpty();
             _btTrash.Enabled = _selectedImages.IsNotEmpty();
+            _btShare.Enabled = _selectedImages.IsNotEmpty();
         }
 
         public override void ViewDidLoad()
@@ -160,10 +164,13 @@ namespace Dojo
             _btCancel = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, OnBatchSelectCancel);
             _btTag = new UIBarButtonItem(TagButonName, UIBarButtonItemStyle.Plain, OnTagClicked);
 
+            _btShare = new UIBarButtonItem(UIBarButtonSystemItem.Action, OnShareClicked);
+
             _btTrash = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnTrashClicked);
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
-            ToolbarItems = new[] { deleteSpace, _btTrash };
+            ToolbarItems = new[] { _btShare, deleteSpace, _btTrash };
             _btTrash.Enabled = false;
+            _btShare.Enabled = false;
         }
 
         private void ConfigureView()
@@ -213,6 +220,32 @@ namespace Dojo
         {
             FilterImages();
             BeginInvokeOnMainThread(ReloadData);
+        }
+
+        private void OnShareClicked(object sender, EventArgs ea)
+        {
+            if (_shareController == null)
+            {
+                List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
+                var images = new NSObject[assets.Count];
+                for (int i = 0; i < assets.Count; i++)
+                {
+                    PHImageManager.DefaultManager.RequestImageForAsset(assets[i],
+                        View.Frame.Size,
+                        PHImageContentMode.AspectFit,
+                        new PHImageRequestOptions(),
+                        (image, info) => images[i] = image);
+                }
+                var activityController = new UIActivityViewController(images, null);
+                _shareController = new UIPopoverController(activityController);
+                _shareController.DidDismiss += (s, e) => _shareController = null;
+                _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
+            }
+            else
+            {
+                _shareController.Dismiss(true);
+                _shareController = null;
+            }
         }
 
         private void OnTagClicked(object sender, EventArgs ea)
@@ -272,6 +305,7 @@ namespace Dojo
             NavigationItem.RightBarButtonItem = _btSelect;
             NavigationItem.LeftBarButtonItem = _btOpenMenu;
             _btTrash.Enabled = false;
+            _btShare.Enabled = false;
             _viewMode = ViewMode.Read;
             ClearSelectedCells();
         }
