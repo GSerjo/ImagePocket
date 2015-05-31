@@ -188,7 +188,7 @@ namespace Dojo
                 PHImageContentMode.AspectFit, new PHImageRequestOptions(), (img, info) =>
                 {
                     //					UIView.Animate(3, 0, UIViewAnimationOptions.CurveEaseInOut, () => _imageView.Image = img, ()=>{});
-                    UIView.Transition(_imageView, 0.5, UIViewAnimationOptions.CurveLinear, () => _imageView.Image = img, null);
+                    UIView.Transition(_imageView, 0.3, UIViewAnimationOptions.CurveEaseIn, () => _imageView.Image = img, null);
                 });
         }
     }
