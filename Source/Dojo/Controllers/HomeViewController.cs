@@ -194,31 +194,30 @@ namespace Dojo
             }
         }
 
-		private List<Task<UIImage>> GetSharedImages()
+		private Task<List<UIImage>> GetSharedImages()
 		{
-			List<PHAsset> assets = _selectedImages.Values.Select (x => _imageCache.GetAsset (x.LocalIdentifier)).ToList ();
-			var options = new PHImageRequestOptions {
+			List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
+			var images = new List<UIImage>();
+			var options = new PHImageRequestOptions
+			{
 				Synchronous = true,
 				DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
 			};
-			var result = new List<Task<UIImage>> ();
-			foreach (PHAsset asset in assets)
+			return Task.Run(() =>
 			{
-				var task = Task.Run<UIImage> (() =>
+				foreach (PHAsset asset in assets)
 				{
-					UIImage image = null;
-					var size = new CGSize (asset.PixelWidth, asset.PixelHeight);
-					PHImageManager.DefaultManager.RequestImageForAsset (asset,
+					var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
+					PHImageManager.DefaultManager.RequestImageForAsset(asset,
 						size,
 						PHImageContentMode.AspectFit,
 						options,
-						(img, info) => image = img);
-					return image;
-				});
-				result.Add (task);
-			}
-			return result;
+						(image, info) => images.Add(image));
+				}
+				return images;
+			});
 		}
+
 
         private void OnBatchSelect(object sender, EventArgs ea)
         {
@@ -254,27 +253,12 @@ namespace Dojo
         {
             if (_shareController == null)
             {
-                //                List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
-                //                var images = new List<UIImage>();
-                //                var options = new PHImageRequestOptions
-                //                {
-                //                    Synchronous = false,
-                //                    DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
-                //                };
-                //                for (int i = 0; i < assets.Count; i++)
-                //                {
-                //                    PHImageManager.DefaultManager.RequestImageForAsset(assets[i],
-                //                        View.Frame.Size,
-                //                        PHImageContentMode.AspectFit,
-                //                        options,
-                //                        (image, info) => { images.Add(image); });
-                //                }
-				UIImage[] images = await Task.WhenAll(GetSharedImages());
+				var images = await GetSharedImages();
                 if (images.IsNullOrEmpty())
                 {
                     return;
                 }
-                var activityController = new UIActivityViewController(images, null);
+				var activityController = new UIActivityViewController(images.ToArray(), null);
                 activityController.SetCompletionHandler(
                     (activityType, completed, returnedItems, error) =>
                     {
@@ -288,21 +272,6 @@ namespace Dojo
                 _shareController = new UIPopoverController(activityController);
                 _shareController.DidDismiss += (s, e) => { _shareController = null; };
                 _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
-
-                //                var activityController = new UIActivityViewController(images.ToArray(), null);
-                //                activityController.SetCompletionHandler(
-                //                    (activityType, completed, returnedItems, error) =>
-                //                    {
-                //                        if (completed)
-                //                        {
-                //                            OnTagSelectorCancel();
-                //                        }
-                //                        _shareController = null;
-                //                    });
-                //
-                //                _shareController = new UIPopoverController(activityController);
-                //                _shareController.DidDismiss += (s, e) => { _shareController = null; };
-                //                _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
             }
             else
             {
