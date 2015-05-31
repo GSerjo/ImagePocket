@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core;
 using CoreFoundation;
+using CoreGraphics;
 using Domain;
 using Foundation;
 using Photos;
@@ -192,6 +194,30 @@ namespace Dojo
             }
         }
 
+        private Task<List<UIImage>> GetSharedImages()
+        {
+            List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
+            var images = new List<UIImage>();
+            var options = new PHImageRequestOptions
+            {
+                Synchronous = true,
+                DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
+            };
+            return Task.Run(() =>
+            {
+                foreach (PHAsset asset in assets)
+                {
+                    var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
+                    PHImageManager.DefaultManager.RequestImageForAsset(asset,
+                        size,
+                        PHImageContentMode.AspectFit,
+                        options,
+                        (image, info) => images.Add(image));
+                }
+                return images;
+            });
+        }
+
         private void OnBatchSelect(object sender, EventArgs ea)
         {
             SetSelectMode();
@@ -222,49 +248,63 @@ namespace Dojo
             BeginInvokeOnMainThread(ReloadData);
         }
 
-        private void OnShareClicked(object sender, EventArgs ea)
+        private async void OnShareClicked(object sender, EventArgs ea)
         {
             if (_shareController == null)
             {
-                List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
-				var images = new List<UIImage>();
-				var options = new PHImageRequestOptions
-				{
-					Synchronous =false,
-					DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
-				};
-                for (int i = 0; i < assets.Count; i++)
+                //                List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
+                //                var images = new List<UIImage>();
+                //                var options = new PHImageRequestOptions
+                //                {
+                //                    Synchronous = false,
+                //                    DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
+                //                };
+                //                for (int i = 0; i < assets.Count; i++)
+                //                {
+                //                    PHImageManager.DefaultManager.RequestImageForAsset(assets[i],
+                //                        View.Frame.Size,
+                //                        PHImageContentMode.AspectFit,
+                //                        options,
+                //                        (image, info) => { images.Add(image); });
+                //                }
+                List<UIImage> images = await GetSharedImages();
+                if (images.IsNullOrEmpty())
                 {
-                    PHImageManager.DefaultManager.RequestImageForAsset(assets[i],
-                        View.Frame.Size,
-                        PHImageContentMode.AspectFit,
-						options,
-						(image, info) => 
-						{
-							images.Add(image);
-						});
+                    return;
                 }
-				var activityController = new UIActivityViewController(images.ToArray(), null);
-				activityController.SetCompletionHandler (
-					(activityType, completed, returnedItems, error) =>
-				{
-					if(completed)
-					{
-						OnTagSelectorCancel ();
-					}
-					_shareController = null;
-				});
-				
+                var activityController = new UIActivityViewController(images.ToArray(), null);
+                activityController.SetCompletionHandler(
+                    (activityType, completed, returnedItems, error) =>
+                    {
+                        if (completed)
+                        {
+                            OnTagSelectorCancel();
+                        }
+                        _shareController = null;
+                    });
+
                 _shareController = new UIPopoverController(activityController);
-				_shareController.DidDismiss += (s, e) =>
-				{
-					_shareController = null;
-				};
-				_shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
+                _shareController.DidDismiss += (s, e) => { _shareController = null; };
+                _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
+
+                //                var activityController = new UIActivityViewController(images.ToArray(), null);
+                //                activityController.SetCompletionHandler(
+                //                    (activityType, completed, returnedItems, error) =>
+                //                    {
+                //                        if (completed)
+                //                        {
+                //                            OnTagSelectorCancel();
+                //                        }
+                //                        _shareController = null;
+                //                    });
+                //
+                //                _shareController = new UIPopoverController(activityController);
+                //                _shareController.DidDismiss += (s, e) => { _shareController = null; };
+                //                _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
             }
             else
             {
-				_shareController.Dismiss(true);
+                _shareController.Dismiss(true);
                 _shareController = null;
             }
         }
@@ -275,7 +315,7 @@ namespace Dojo
             {
                 ModalPresentationStyle = UIModalPresentationStyle.FormSheet
             };
-			controller.Cancel += (s, e)=> OnTagSelectorCancel();
+            controller.Cancel += (s, e) => OnTagSelectorCancel();
             controller.Done += OnTagSelectorDone;
             NavigationController.PresentViewController(controller, true, null);
         }
