@@ -227,23 +227,44 @@ namespace Dojo
             if (_shareController == null)
             {
                 List<PHAsset> assets = _selectedImages.Values.Select(x => _imageCache.GetAsset(x.LocalIdentifier)).ToList();
-                var images = new NSObject[assets.Count];
+				var images = new List<UIImage>();
+				var options = new PHImageRequestOptions
+				{
+					Synchronous =false,
+					DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
+				};
                 for (int i = 0; i < assets.Count; i++)
                 {
                     PHImageManager.DefaultManager.RequestImageForAsset(assets[i],
                         View.Frame.Size,
                         PHImageContentMode.AspectFit,
-                        new PHImageRequestOptions(),
-                        (image, info) => images[i] = image);
+						options,
+						(image, info) => 
+						{
+							images.Add(image);
+						});
                 }
-                var activityController = new UIActivityViewController(images, null);
+				var activityController = new UIActivityViewController(images.ToArray(), null);
+				activityController.SetCompletionHandler (
+					(activityType, completed, returnedItems, error) =>
+				{
+					if(completed)
+					{
+						OnTagSelectorCancel ();
+					}
+					_shareController = null;
+				});
+				
                 _shareController = new UIPopoverController(activityController);
-                _shareController.DidDismiss += (s, e) => _shareController = null;
-                _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
+				_shareController.DidDismiss += (s, e) =>
+				{
+					_shareController = null;
+				};
+				_shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
             }
             else
             {
-                _shareController.Dismiss(true);
+				_shareController.Dismiss(true);
                 _shareController = null;
             }
         }
@@ -254,12 +275,12 @@ namespace Dojo
             {
                 ModalPresentationStyle = UIModalPresentationStyle.FormSheet
             };
-            controller.Cancel += OnTagSelectorCancel;
+			controller.Cancel += (s, e)=> OnTagSelectorCancel();
             controller.Done += OnTagSelectorDone;
             NavigationController.PresentViewController(controller, true, null);
         }
 
-        private void OnTagSelectorCancel(object sender, EventArgs ea)
+        private void OnTagSelectorCancel()
         {
             SetReadMode();
             ReloadData();
