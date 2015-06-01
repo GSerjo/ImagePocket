@@ -327,7 +327,7 @@ namespace Dojo
 
         private void ReloadData()
         {
-            DispatchQueue.MainQueue.DispatchAsync(CollectionView.ReloadData);
+            InvokeOnMainThread(CollectionView.ReloadData);
         }
 
         private void SetReadMode()
