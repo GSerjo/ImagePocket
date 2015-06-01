@@ -17,7 +17,7 @@ namespace Domain
 
         [Ignore]
         public static TagEntity All
-        {
+        { 
             get { return _all; }
         }
 

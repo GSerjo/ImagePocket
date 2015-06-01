@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.your-company.ImagePocket</string>
+	<string>org.nelibur.ImagePocket</string>
 	<key>CFBundleShortVersionString</key>
 	<string>3.0</string>
 	<key>CFBundleVersion</key>
@@ -33,5 +33,7 @@
 	<string>Launch</string>
 	<key>CFBundleDisplayName</key>
 	<string>Image Pocket</string>
+	<key>XSAppIconAssets</key>
+	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
 </dict>
 </plist>
