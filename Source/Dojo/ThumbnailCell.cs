@@ -46,7 +46,10 @@ namespace Dojo
         {
             PHAsset asset = _imageCache.GetAsset(localId);
             _imageCache.ImageManager.RequestImageForAsset(asset, _imageView.Frame.Size,
-                PHImageContentMode.AspectFit, null, (img, info) => { _imageView.Image = img; });
+                PHImageContentMode.AspectFit, null, (img, info) => 
+			{
+				_imageView.Image = img;
+			});
         }
 
         public void Unselect()
