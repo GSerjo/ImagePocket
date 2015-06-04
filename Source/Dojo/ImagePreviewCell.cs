@@ -1,9 +1,8 @@
-﻿using System;
-using System.Drawing;
-using Domain;
+﻿using Domain;
 using Foundation;
 using Photos;
 using UIKit;
+using CoreGraphics;
 
 namespace Dojo
 {
@@ -18,7 +17,7 @@ namespace Dojo
 		};
 			
         [Export("initWithFrame:")]
-        public ImagePreviewCell(RectangleF frame) : base(frame)
+        public ImagePreviewCell(CGRect frame) : base(frame)
         {
             _imageView = new UIImageView
             {
