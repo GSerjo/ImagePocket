@@ -1,24 +1,24 @@
-﻿using Domain;
+﻿using System;
+using CoreGraphics;
+using Domain;
 using Foundation;
 using Photos;
 using UIKit;
-using CoreGraphics;
-using System;
 
 namespace Dojo
 {
     public sealed class ImagePreviewCell : UICollectionViewCell
     {
+        private static readonly PHImageRequestOptions _options = new PHImageRequestOptions
+        {
+            NetworkAccessAllowed = true
+        };
+
         private readonly ImageCache _imageCache = ImageCache.Instance;
         private readonly UIImageView _imageView;
         private readonly UIImageView _overlayView;
-//		private readonly SelectView _selectView = new SelectView ();
+        //		private readonly SelectView _selectView = new SelectView ();
 
-		private static PHImageRequestOptions _options = new PHImageRequestOptions
-		{
-			NetworkAccessAllowed = true
-		};
-			
         [Export("initWithFrame:")]
         public ImagePreviewCell(CGRect frame) : base(frame)
         {
@@ -30,9 +30,9 @@ namespace Dojo
             };
             _overlayView = new UIImageView(Resources.SelectImage);
             _overlayView.Frame = Bounds;
-			ContentView.AddSubview(_imageView);
+            ContentView.AddSubview(_imageView);
 
-//			ContentView.AddSubview (_selectView);
+            //			ContentView.AddSubview (_selectView);
             ContentView.AddSubview(_overlayView);
         }
 
@@ -41,17 +41,17 @@ namespace Dojo
             Selected = true;
             _overlayView.Hidden = false;
             _imageView.Alpha = 0.6f;
-//			_selectView.Update (true);
+            //			_selectView.Update (true);
         }
 
-//		public override void LayoutSubviews ()
-//		{
-//			base.LayoutSubviews ();
-//
-//			_selectView.Frame = ContentView.Bounds;
-//			_imageView.Frame = Bounds;
-//			_selectView.SetNeedsDisplay ();
-//		}
+        //		public override void LayoutSubviews ()
+        //		{
+        //			base.LayoutSubviews ();
+        //
+        //			_selectView.Frame = ContentView.Bounds;
+        //			_imageView.Frame = Bounds;
+        //			_selectView.SetNeedsDisplay ();
+        //		}
 
         public void SetImage(string localId)
         {
@@ -59,7 +59,7 @@ namespace Dojo
             _imageCache.ImageManager.RequestImageForAsset(
                 asset,
                 _imageView.Frame.Size,
-				PHImageContentMode.AspectFit, _options, UpdateImage);
+                PHImageContentMode.AspectFit, _options, UpdateImage);
         }
 
         public void UnselectCell()
@@ -67,7 +67,7 @@ namespace Dojo
             Selected = false;
             _overlayView.Hidden = true;
             _imageView.Alpha = 1f;
-//			_selectView.Update (false);
+            //			_selectView.Update (false);
         }
 
         private void UpdateImage(UIImage image, NSDictionary imageInfo)
@@ -75,48 +75,48 @@ namespace Dojo
             _imageView.Image = image;
         }
 
-		private class SelectView : UIView
-		{
-			private bool _selected;
-			private static readonly CGGradient _gradient;
 
-			static SelectView()
-			{
-				using(var colorSpace = CGColorSpace.CreateDeviceRGB())
-				{
-					_gradient = new CGGradient(colorSpace, new nfloat[]{.52f, .69f, .96f, 1, .12f, .31f, .67f, 1}, null);
-				}
-			}
+        private class SelectView : UIView
+        {
+            private static readonly CGGradient _gradient;
+            private bool _selected;
 
-			public SelectView ()
-			{
-				BackgroundColor = UIColor.Clear;
-				Layer.BorderWidth = 1;
-				Layer.BorderColor = UIColor.White.CGColor;
-			}
+            static SelectView()
+            {
+                using (CGColorSpace colorSpace = CGColorSpace.CreateDeviceRGB())
+                {
+                    _gradient = new CGGradient(colorSpace, new nfloat[] { .52f, .69f, .96f, 1, .12f, .31f, .67f, 1 }, null);
+                }
+            }
 
-			public override void Draw (CGRect rect)
-			{
-				if (_selected)
-				{
-					var context = UIGraphics.GetCurrentContext ();
-					context.SaveState ();
-					context.AddEllipseInRect (new CGRect (10, 25, 30, 30));
-					context.Clip ();
+            public SelectView()
+            {
+                BackgroundColor = UIColor.Clear;
+                Layer.BorderWidth = 1;
+                Layer.BorderColor = UIColor.White.CGColor;
+            }
 
+            public override void Draw(CGRect rect)
+            {
+                if (_selected)
+                {
+                    CGContext context = UIGraphics.GetCurrentContext();
+                    context.SaveState();
+                    context.AddEllipseInRect(new CGRect(10, 25, 30, 30));
+                    context.Clip();
 
-					context.DrawLinearGradient (_gradient, new CGPoint (10, 25), new CGPoint (22, 44),
-						CGGradientDrawingOptions.DrawsAfterEndLocation);
+                    context.DrawLinearGradient(_gradient, new CGPoint(10, 25), new CGPoint(22, 44),
+                        CGGradientDrawingOptions.DrawsAfterEndLocation);
 
-					context.RestoreState ();
-				}
-			}
+                    context.RestoreState();
+                }
+            }
 
-			public void Update(bool select)
-			{
-				_selected = select;
-				SetNeedsDisplay ();
-			}
-		}
+            public void Update(bool select)
+            {
+                _selected = select;
+                SetNeedsDisplay();
+            }
+        }
     }
 }

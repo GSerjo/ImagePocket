@@ -80,14 +80,18 @@ namespace Dojo
             if (_viewMode == ViewMode.Read)
             {
                 ImageEntity image = _filteredImages[(int)indexPath.Item];
-                var photoController = new PhotoViewController(image, _filteredImages);
-                NavigationController.PushViewController(photoController, true);
+
+//                var photoController = new PhotoViewController(image, _filteredImages);
+//                NavigationController.PushViewController(photoController, true);
 
                 //                var pageViewController = new PageViewController(image, _filteredImages);
                 //                NavigationController.PushViewController(pageViewController, true);
 
                 //                var viewController = new PhotoViewController1(image, _filteredImages);
                 //                NavigationController.PushViewController(viewController, false);
+
+                var viewController = new PhotoViewController2(image, _filteredImages);
+                NavigationController.PushViewController(viewController, false);
                 return;
             }
             var cell = (ImagePreviewCell)collectionView.CellForItem(indexPath);
@@ -266,7 +270,6 @@ namespace Dojo
                         }
                         _shareController = null;
                     });
-
                 _shareController = new UIPopoverController(activityController);
                 _shareController.DidDismiss += (s, e) => { _shareController = null; };
                 _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
