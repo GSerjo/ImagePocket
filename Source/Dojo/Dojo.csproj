@@ -160,6 +160,7 @@
     <Compile Include="Controllers\DialogElements\MenuElement.cs" />
     <Compile Include="Controllers\AboutAppViewController.cs" />
     <Compile Include="TilingView.cs" />
+    <Compile Include="Controllers\PhotoViewController2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
