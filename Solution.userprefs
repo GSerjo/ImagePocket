@@ -1,10 +1,12 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadAir.8.3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/ImagePreviewCell.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PhotoViewController2.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="180" Column="61" />
-      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="148" Column="32" />
-      <File FileName="Source/Dojo/ImagePreviewCell.cs" Line="28" Column="22" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="204" Column="1" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController.cs" Line="23" Column="9" />
+      <File FileName="Source/Domain/Caches/ImageCache.cs" Line="12" Column="61" />
+      <File FileName="Source/Dojo/Controllers/PhotoViewController2.cs" Line="96" Column="1" />
+      <File FileName="Source/Dojo/Main.cs" Line="13" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -12,6 +14,8 @@
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="54" column="1" />
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="46" column="1" />
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/ThumbnailCell.cs" line="51" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoViewController2.cs" line="193" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoViewController2.cs" line="188" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
