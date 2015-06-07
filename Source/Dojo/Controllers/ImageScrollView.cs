@@ -13,7 +13,6 @@ namespace Dojo
     public class ImageScrollView : UIScrollView
     {
         // turn on to use tiled images, if off, we use whole images
-        private static List<ImageDetails> data;
         private bool TileImagesMode = true;
 
         private CGSize _imageSize;
@@ -221,7 +220,8 @@ namespace Dojo
             {
                 Synchronous = true,
             };
-            var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
+            //var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
+			var size = new CGSize(UIScreen.MainScreen.Bounds.Size.Width, UIScreen.MainScreen.Bounds.Size.Height);
             PHImageManager.DefaultManager.RequestImageForAsset(asset, size,
                 PHImageContentMode.AspectFit, options,
                 (image, info) => result = image);
