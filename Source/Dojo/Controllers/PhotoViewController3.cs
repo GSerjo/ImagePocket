@@ -7,14 +7,13 @@ namespace Dojo
 {
     public sealed class PhotoViewController3 : UIViewController
     {
-
         private PhotoViewController3(ImageEntity image)
         {
-			ImageEntity = image;
+            ImageEntity = image;
             Title = "Image";
         }
 
-        public ImageEntity ImageEntity { get; set; }
+        public ImageEntity ImageEntity { get; private set; }
 
         public static PhotoViewController3 ImageViewControllerForPageIndex(ImageEntity image)
         {
@@ -25,10 +24,9 @@ namespace Dojo
         {
             var scrollView = new ImageScrollView
             {
-				ImageEntity = ImageEntity,
+                ImageEntity = ImageEntity,
                 AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
             };
-
             View = scrollView;
         }
     }
@@ -58,13 +56,13 @@ namespace Dojo
             return _images.FindIndex(x => x.Equals(image));
         }
 
+
         private sealed class MyDataSource : UIPageViewControllerDataSource
         {
             public override UIViewController GetNextViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
             {
                 ImageEntity imageEntity = ((PhotoViewController3)referenceViewController).ImageEntity;
-				var t = GetIndex (imageEntity);
                 int index = GetIndex(imageEntity) + 1;
                 return index >= 0 && index < _images.Count ?
                     PhotoViewController3.ImageViewControllerForPageIndex(_images[index]) : null;
