@@ -153,11 +153,8 @@ namespace Dojo
             if (_shareController == null)
             {
                 var activityController = new UIActivityViewController(new NSObject[] { _imageView.Image }, null);
-				activityController.SetCompletionHandler(
-					(activityType, completed, returnedItems, error) =>
-				{
-					_shareController = null;
-				});
+                activityController.SetCompletionHandler(
+                    (activityType, completed, returnedItems, error) => { _shareController = null; });
                 _shareController = new UIPopoverController(activityController);
                 _shareController.DidDismiss += (s, e) => _shareController = null;
                 _shareController.PresentFromBarButtonItem(_btShare, UIPopoverArrowDirection.Up, true);
