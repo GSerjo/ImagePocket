@@ -90,7 +90,10 @@ namespace Dojo
                 //                var viewController = new PhotoViewController1(image, _filteredImages);
                 //                NavigationController.PushViewController(viewController, false);
 
-                var viewController = new PhotoViewController2(image, _filteredImages);
+//                var viewController = new PhotoViewController2(image, _filteredImages);
+//                NavigationController.PushViewController(viewController, false);
+
+                var viewController = new PhotoViewController4(image, _filteredImages);
                 NavigationController.PushViewController(viewController, false);
                 return;
             }
