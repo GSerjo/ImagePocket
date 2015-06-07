@@ -7,6 +7,11 @@ namespace Dojo
 {
     public sealed class PhotoViewController3 : UIViewController
     {
+		private ImageScrollView _scrollView = new ImageScrollView
+		{
+			AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+		};
+
         private PhotoViewController3(ImageEntity image)
         {
             ImageEntity = image;
@@ -22,13 +27,23 @@ namespace Dojo
 
         public override void LoadView()
         {
-            var scrollView = new ImageScrollView
-            {
-                ImageEntity = ImageEntity,
-                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
-            };
-            View = scrollView;
+//            var scrollView = new ImageScrollView
+//            {
+//                ImageEntity = ImageEntity,
+//                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+//            };
+//			View = scrollView;
+
+			_scrollView.ImageEntity = ImageEntity;
+			View = _scrollView;
         }
+
+		public override void ViewDidDisappear(bool animated)
+		{
+			base.ViewDidDisappear(animated);
+			View.Dispose ();
+			_scrollView = null;
+		}
     }
 
 
