@@ -3,6 +3,7 @@ using CoreGraphics;
 using Domain;
 using Photos;
 using UIKit;
+using Core;
 
 namespace Dojo
 {
@@ -83,11 +84,30 @@ namespace Dojo
             _zoomView.Frame = frameToCenter;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            _imageEntity = null;
-        }
+		public void ResetImage()
+		{
+			if (_zoomView.Image != null)
+			{
+				return;
+			}
+			PHAsset asset = ImageCache.Instance.GetAsset(ImageEntity.LocalIdentifier);
+			DisplayImage(GetImage(asset));
+		}
+
+		public void ReleaseResources()
+		{
+			_zoomView.Image.SafeDispose ();
+			_zoomView.Image = null;
+		}
+
+//		protected override void Dispose (bool disposing)
+//		{
+//			base.Dispose (disposing);
+//			_zoomView.Image.SafeDispose ();
+//			_zoomView.Image = null;
+//			_zoomView.SafeDispose ();
+//			_zoomView = null;
+//		}
 
         private static UIImage GetImage(PHAsset asset)
         {

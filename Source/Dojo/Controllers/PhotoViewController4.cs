@@ -14,15 +14,17 @@ namespace Dojo
     {
         private readonly UIBarButtonItem _btShare;
         private readonly ImageCache _imageCache = ImageCache.Instance;
-        private readonly MyDataSource _pageVewDataSource;
+		private readonly MyDataSource _pageVewDataSource = new MyDataSource();
         private static List<ImageEntity> _images;
         private UIPopoverController _shareController;
+		private readonly ImageEntity _image;
 
         public PhotoViewController4(ImageEntity image, List<ImageEntity> images)
             : base(UIPageViewControllerTransitionStyle.Scroll,
                 UIPageViewControllerNavigationOrientation.Horizontal,
                 UIPageViewControllerSpineLocation.None, 20f)
         {
+			_image = image;
             _images = images;
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
@@ -34,11 +36,6 @@ namespace Dojo
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
             ToolbarItems = new[] { _btShare, deleteSpace, btTrash };
 
-            PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(image);
-
-            var firstPage = new UIViewController[] { pageZero };
-            SetViewControllers(firstPage, UIPageViewControllerNavigationDirection.Forward, false, null);
-            _pageVewDataSource = new MyDataSource();
             DataSource = _pageVewDataSource;
         }
 
@@ -47,6 +44,14 @@ namespace Dojo
             DataSource = null;
             DataSource = _pageVewDataSource;
         }
+
+		public override void ViewDidLoad ()
+		{
+			PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(_image);
+
+			var firstPage = new UIViewController[] { pageZero };
+			SetViewControllers(firstPage, UIPageViewControllerNavigationDirection.Forward, false, null);
+		}
 
         private static UIImage GetImage(PHAsset asset)
         {

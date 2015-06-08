@@ -1,6 +1,7 @@
 using System;
 using Domain;
 using UIKit;
+using Core;
 
 namespace Dojo
 {
@@ -33,15 +34,43 @@ namespace Dojo
             //            };
             //			View = scrollView;
 
-            _scrollView.ImageEntity = ImageEntity;
-            View = _scrollView;
+//            _scrollView.ImageEntity = ImageEntity;
+//            View = _scrollView;
         }
+
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+			_scrollView.ImageEntity = ImageEntity;
+			View = _scrollView;
+		}
+
+		public override void ViewWillAppear (bool animated)
+		{
+			base.ViewWillAppear (animated);
+//			if (_scrollView != null)
+//			{
+//				return;
+//			}
+//
+//			_scrollView = new ImageScrollView
+//			{
+//				AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+//			};
+//			_scrollView.ImageEntity = ImageEntity;
+//
+//			_scrollView.ImageEntity = ImageEntity;
+//			View = _scrollView;
+			_scrollView.ResetImage();
+		}
 
         public override void ViewDidDisappear(bool animated)
         {
-            base.ViewDidDisappear(animated);
-            View.Dispose();
-            _scrollView = null;
+//            base.ViewDidDisappear(animated);
+			_scrollView.ReleaseResources ();
+//			_scrollView.ImageEntity = null;
+//			_scrollView = null;
+//			View.SafeDispose ();
         }
     }
 }
