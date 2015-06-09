@@ -14,11 +14,18 @@ namespace Dojo
         {
             Root = new RootElement(caption)
             {
-                CreateSection()
+				CreateAboutSection(),
+                CreateSocialSection()
             };
         }
 
-        private static Section CreateSection()
+		private static Section CreateAboutSection()
+		{
+			var result = new Section ("Test");
+			return result;
+		}
+
+        private static Section CreateSocialSection()
         {
 			var result = new Section {
 				new StringElement ("Follow on Twitter", ()=> OpenApp(TwitterUrl)),
