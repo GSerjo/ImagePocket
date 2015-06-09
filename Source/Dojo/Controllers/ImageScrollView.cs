@@ -100,15 +100,6 @@ namespace Dojo
             DisplayImage(GetImage(asset));
         }
 
-        //		protected override void Dispose (bool disposing)
-        //		{
-        //			base.Dispose (disposing);
-        //			_zoomView.Image.SafeDispose ();
-        //			_zoomView.Image = null;
-        //			_zoomView.SafeDispose ();
-        //			_zoomView = null;
-        //		}
-
         private static UIImage GetImage(PHAsset asset)
         {
             UIImage result = null;
@@ -197,23 +188,8 @@ namespace Dojo
             CGSize boundsSize = Bounds.Size;
             nfloat xScale = boundsSize.Width / _imageSize.Width;
             nfloat yScale = boundsSize.Height / _imageSize.Height;
-            //            bool imagePortrait = _imageSize.Height > _imageSize.Width;
-            //            bool phonePortrait = boundsSize.Height > boundsSize.Width;
-            //            nfloat minScale = imagePortrait == phonePortrait ? xScale : NMath.Min(xScale, yScale);
 
             nfloat minScale = NMath.Min(xScale, yScale);
-
-            //            nfloat maxScale = 1 / UIScreen.MainScreen.Scale;
-
-            //            if (minScale > maxScale)
-            //            {
-            //                minScale = maxScale;
-            //            }
-
-            //            MaximumZoomScale = maxScale;
-            //            MinimumZoomScale = minScale;
-
-            //			MinimumZoomScale = minScale;
             MaximumZoomScale = 2; //maxScale;
 
             if (minScale > 1)
@@ -226,25 +202,6 @@ namespace Dojo
                 MinimumZoomScale = minScale;
                 ZoomScale = minScale;
             }
-            //			ZoomScale = minScale;
         }
-
-        //		-(void)updateZoom {
-        //			self.scrollView.minimumZoomScale = MIN(self.scrollView.bounds.size.width / self.imageView.image.size.width, self.scrollView.bounds.size.height / self.imageView.image.size.height);
-        //
-        //			if (self.scrollView.zoomScale < self.scrollView.minimumZoomScale)
-        //				self.scrollView.zoomScale = self.scrollView.minimumZoomScale;
-        //		}
-
-        //		(void)updateZoom {
-        //			float zoomScale = MIN(self.view.bounds.size.width / self.imageView.image.size.width, self.view.bounds.size.height / self.imageView.image.size.height);
-        //
-        //			if (zoomScale > 1) {
-        //				self.scrollView.minimumZoomScale = 1;
-        //			}
-        //
-        //			self.scrollView.minimumZoomScale = zoomScale;
-        //			self.scrollView.zoomScale = zoomScale;
-        //		}
     }
 }
