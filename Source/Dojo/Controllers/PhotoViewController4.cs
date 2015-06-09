@@ -13,18 +13,18 @@ namespace Dojo
     public class PhotoViewController4 : UIPageViewController
     {
         private readonly UIBarButtonItem _btShare;
+        private readonly ImageEntity _image;
         private readonly ImageCache _imageCache = ImageCache.Instance;
-		private readonly MyDataSource _pageVewDataSource = new MyDataSource();
+        private readonly MyDataSource _pageVewDataSource = new MyDataSource();
         private static List<ImageEntity> _images;
         private UIPopoverController _shareController;
-		private readonly ImageEntity _image;
 
         public PhotoViewController4(ImageEntity image, List<ImageEntity> images)
             : base(UIPageViewControllerTransitionStyle.Scroll,
                 UIPageViewControllerNavigationOrientation.Horizontal,
                 UIPageViewControllerSpineLocation.None, 20f)
         {
-			_image = image;
+            _image = image;
             _images = images;
 
             var tabButton = new UIBarButtonItem("Tag", UIBarButtonItemStyle.Plain, OnTagClicked);
@@ -45,13 +45,13 @@ namespace Dojo
             DataSource = _pageVewDataSource;
         }
 
-		public override void ViewDidLoad ()
-		{
-			PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(_image);
+        public override void ViewDidLoad()
+        {
+            PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(_image);
 
-			var firstPage = new UIViewController[] { pageZero };
-			SetViewControllers(firstPage, UIPageViewControllerNavigationDirection.Forward, false, null);
-		}
+            var firstPage = new UIViewController[] { pageZero };
+            SetViewControllers(firstPage, UIPageViewControllerNavigationDirection.Forward, false, null);
+        }
 
         private static UIImage GetImage(PHAsset asset)
         {
