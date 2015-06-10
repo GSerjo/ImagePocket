@@ -15,7 +15,7 @@ namespace Dojo
         private readonly UIBarButtonItem _btShare;
         private readonly ImageEntity _image;
         private readonly ImageCache _imageCache = ImageCache.Instance;
-        private readonly MyDataSource _pageVewDataSource;
+		private readonly MyDataSource _pageVewDataSource = new MyDataSource();
         private static List<ImageEntity> _images;
         private UIPopoverController _shareController;
 
@@ -37,7 +37,6 @@ namespace Dojo
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
             ToolbarItems = new[] { _btShare, deleteSpace, btTrash };
 
-            _pageVewDataSource = new MyDataSource(this);
             DataSource = _pageVewDataSource;
         }
 
@@ -45,11 +44,23 @@ namespace Dojo
 
         public override void ViewDidLoad()
         {
-            PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(this.ToWeakReference(), _image);
+            PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(_image);
 
             var firstPage = new UIViewController[] { pageZero };
             SetViewControllers(firstPage, UIPageViewControllerNavigationDirection.Forward, false, null);
+
+			var tapGesture = new UITapGestureRecognizer(OnImageTap);
+			View.AddGestureRecognizer(tapGesture);
         }
+
+		private void OnImageTap(UITapGestureRecognizer gesture)
+		{
+			FullScreen = !FullScreen;
+			NavigationController.SetNavigationBarHidden (FullScreen, false);
+			NavigationController.SetToolbarHidden (FullScreen, false);
+
+			View.BackgroundColor = FullScreen ? UIColor.Black : UIColor.White;
+		}
 
         private static UIImage GetImage(PHAsset asset)
         {
@@ -91,10 +102,7 @@ namespace Dojo
             {
                 return;
             }
-            else
-            {
-                Console.WriteLine(error);
-            }
+
             int imageIndex = GetImageIndex(removedImage);
             _images.Remove(removedImage);
             _imageCache.Remove(removedImage);
@@ -114,7 +122,7 @@ namespace Dojo
                 {
                     imageIndex = 0;
                 }
-                PhotoViewPage1 page = PhotoViewPage1.ImageViewControllerForPageIndex(this.ToWeakReference(), _images[imageIndex]);
+                PhotoViewPage1 page = PhotoViewPage1.ImageViewControllerForPageIndex(_images[imageIndex]);
 
                 SetViewControllers(new UIViewController[] { page },
                     UIPageViewControllerNavigationDirection.Forward,
@@ -194,40 +202,28 @@ namespace Dojo
 
         private sealed class MyDataSource : UIPageViewControllerDataSource
         {
-            private readonly PhotoViewController4 _controller;
-
-            public MyDataSource(PhotoViewController4 controller)
-            {
-                _controller = controller;
-            }
 
             public override UIViewController GetNextViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
-            {
-                int index = GetPageIndex(referenceViewController) + 1;
-                if (index < 0 || index >= _images.Count)
-                {
-                    return null;
-                }
-                else
-                {
-                    return PhotoViewPage1.ImageViewControllerForPageIndex(_controller.ToWeakReference(), _images[index]);
-                }
-            }
+			{
+				int index = GetPageIndex (referenceViewController) + 1;
+				if (index < 0 || index >= _images.Count)
+				{
+					return null;
+				}
+				return PhotoViewPage1.ImageViewControllerForPageIndex (_images [index]);
+			}
 
             public override UIViewController GetPreviousViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
-            {
-                int index = GetPageIndex(referenceViewController) - 1;
-                if (index < 0 || index >= _images.Count)
-                {
-                    return null;
-                }
-                else
-                {
-                    return PhotoViewPage1.ImageViewControllerForPageIndex(_controller.ToWeakReference(), _images[index]);
-                }
-            }
+			{
+				int index = GetPageIndex (referenceViewController) - 1;
+				if (index < 0 || index >= _images.Count)
+				{
+					return null;
+				}
+				return PhotoViewPage1.ImageViewControllerForPageIndex (_images [index]);
+			}
 
             private int GetPageIndex(UIViewController controller)
             {

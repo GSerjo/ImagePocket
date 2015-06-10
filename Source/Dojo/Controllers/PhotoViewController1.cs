@@ -251,7 +251,7 @@ namespace Dojo
             private readonly UIPageViewControllerDataSource _pageViewDataSource;
 
             public MyPageViewController(PhotoViewController1 parentController) : base(
-                UIPageViewControllerTransitionStyle.PageCurl,
+                UIPageViewControllerTransitionStyle.Scroll,
                 UIPageViewControllerNavigationOrientation.Horizontal,
                 UIPageViewControllerSpineLocation.None, 10f)
             {

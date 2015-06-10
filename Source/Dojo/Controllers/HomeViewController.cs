@@ -81,17 +81,17 @@ namespace Dojo
             {
                 ImageEntity image = _filteredImages[(int)indexPath.Item];
 
-                //                var photoController = new PhotoViewController(image, _filteredImages);
-                //                NavigationController.PushViewController(photoController, true);
+//                var photoController = new PhotoViewController(image, _filteredImages);
+//                NavigationController.PushViewController(photoController, true);
 
-                //                var pageViewController = new PageViewController(image, _filteredImages);
+//                                var pageViewController = new PageViewController(image, _filteredImages);
                 //                NavigationController.PushViewController(pageViewController, true);
 
-                //                var viewController = new PhotoViewController1(image, _filteredImages);
-                //                NavigationController.PushViewController(viewController, false);
+//                                var viewController = new PhotoViewController1(image, _filteredImages);
+//                                NavigationController.PushViewController(viewController, false);
 
-                //                var viewController = new PhotoViewController2(image, _filteredImages);
-                //                NavigationController.PushViewController(viewController, false);
+//                var viewController = new PhotoViewController2(image, _filteredImages);
+//                NavigationController.PushViewController(viewController, false);
 
                 var viewController = new PhotoViewController4(image, _filteredImages);
                 NavigationController.PushViewController(viewController, false);
