@@ -15,7 +15,7 @@ namespace Dojo
         private readonly UIBarButtonItem _btShare;
         private readonly ImageEntity _image;
         private readonly ImageCache _imageCache = ImageCache.Instance;
-        private readonly MyDataSource _pageVewDataSource = new MyDataSource();
+        private readonly MyDataSource _pageVewDataSource;
         private static List<ImageEntity> _images;
         private UIPopoverController _shareController;
 
@@ -24,6 +24,7 @@ namespace Dojo
                 UIPageViewControllerNavigationOrientation.Horizontal,
                 UIPageViewControllerSpineLocation.None, 20f)
         {
+            FullScreen = false;
             _image = image;
             _images = images;
 
@@ -36,18 +37,15 @@ namespace Dojo
             var deleteSpace = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
             ToolbarItems = new[] { _btShare, deleteSpace, btTrash };
 
+            _pageVewDataSource = new MyDataSource(this);
             DataSource = _pageVewDataSource;
         }
 
-        public void ResetDataSource()
-        {
-            DataSource = null;
-            DataSource = _pageVewDataSource;
-        }
+        public bool FullScreen { get; set; }
 
         public override void ViewDidLoad()
         {
-            PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(_image);
+            PhotoViewPage1 pageZero = PhotoViewPage1.ImageViewControllerForPageIndex(this.ToWeakReference(), _image);
 
             var firstPage = new UIViewController[] { pageZero };
             SetViewControllers(firstPage, UIPageViewControllerNavigationDirection.Forward, false, null);
@@ -116,7 +114,7 @@ namespace Dojo
                 {
                     imageIndex = 0;
                 }
-                PhotoViewPage1 page = PhotoViewPage1.ImageViewControllerForPageIndex(_images[imageIndex]);
+                PhotoViewPage1 page = PhotoViewPage1.ImageViewControllerForPageIndex(this.ToWeakReference(), _images[imageIndex]);
 
                 SetViewControllers(new UIViewController[] { page },
                     UIPageViewControllerNavigationDirection.Forward,
@@ -187,9 +185,22 @@ namespace Dojo
             }
         }
 
+        private void ResetDataSource()
+        {
+            DataSource = null;
+            DataSource = _pageVewDataSource;
+        }
+
 
         private sealed class MyDataSource : UIPageViewControllerDataSource
         {
+            private readonly PhotoViewController4 _controller;
+
+            public MyDataSource(PhotoViewController4 controller)
+            {
+                _controller = controller;
+            }
+
             public override UIViewController GetNextViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
             {
@@ -200,7 +211,7 @@ namespace Dojo
                 }
                 else
                 {
-                    return PhotoViewPage1.ImageViewControllerForPageIndex(_images[index]);
+                    return PhotoViewPage1.ImageViewControllerForPageIndex(_controller.ToWeakReference(), _images[index]);
                 }
             }
 
@@ -214,7 +225,7 @@ namespace Dojo
                 }
                 else
                 {
-                    return PhotoViewPage1.ImageViewControllerForPageIndex(_images[index]);
+                    return PhotoViewPage1.ImageViewControllerForPageIndex(_controller.ToWeakReference(), _images[index]);
                 }
             }
 

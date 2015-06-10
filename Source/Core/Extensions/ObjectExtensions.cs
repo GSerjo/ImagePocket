@@ -23,5 +23,11 @@ namespace Core
             }
             eventToRaise(sender, eventArgsCreator());
         }
+
+        public static WeakReference<T> ToWeakReference<T>(this T value)
+            where T : class
+        {
+            return new WeakReference<T>(value);
+        }
     }
 }
