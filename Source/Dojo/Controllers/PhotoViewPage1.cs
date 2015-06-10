@@ -6,7 +6,6 @@ namespace Dojo
 {
     public sealed class PhotoViewPage1 : UIViewController
     {
-
         private readonly ImageScrollView _scrollView = new ImageScrollView
         {
             AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
@@ -34,7 +33,7 @@ namespace Dojo
         {
             base.ViewDidLoad();
             _scrollView.ImageEntity = ImageEntity;
-			View = _scrollView;
+            View = _scrollView;
         }
 
         public override void ViewWillAppear(bool animated)

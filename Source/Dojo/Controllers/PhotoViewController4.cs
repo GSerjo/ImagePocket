@@ -15,7 +15,7 @@ namespace Dojo
         private readonly UIBarButtonItem _btShare;
         private readonly ImageEntity _image;
         private readonly ImageCache _imageCache = ImageCache.Instance;
-		private readonly MyDataSource _pageVewDataSource = new MyDataSource();
+        private readonly MyDataSource _pageVewDataSource = new MyDataSource();
         private static List<ImageEntity> _images;
         private UIPopoverController _shareController;
 
@@ -49,18 +49,9 @@ namespace Dojo
             var firstPage = new UIViewController[] { pageZero };
             SetViewControllers(firstPage, UIPageViewControllerNavigationDirection.Forward, false, null);
 
-			var tapGesture = new UITapGestureRecognizer(OnImageTap);
-			View.AddGestureRecognizer(tapGesture);
+            var tapGesture = new UITapGestureRecognizer(OnImageTap);
+            View.AddGestureRecognizer(tapGesture);
         }
-
-		private void OnImageTap(UITapGestureRecognizer gesture)
-		{
-			FullScreen = !FullScreen;
-			NavigationController.SetNavigationBarHidden (FullScreen, false);
-			NavigationController.SetToolbarHidden (FullScreen, false);
-
-			View.BackgroundColor = FullScreen ? UIColor.Black : UIColor.White;
-		}
 
         private static UIImage GetImage(PHAsset asset)
         {
@@ -128,6 +119,15 @@ namespace Dojo
                     UIPageViewControllerNavigationDirection.Forward,
                     false, null);
             });
+        }
+
+        private void OnImageTap(UITapGestureRecognizer gesture)
+        {
+            FullScreen = !FullScreen;
+            NavigationController.SetNavigationBarHidden(FullScreen, false);
+            NavigationController.SetToolbarHidden(FullScreen, false);
+
+            View.BackgroundColor = FullScreen ? UIColor.Black : UIColor.White;
         }
 
         private void OnShareClicked(object sender, EventArgs ea)
@@ -202,28 +202,27 @@ namespace Dojo
 
         private sealed class MyDataSource : UIPageViewControllerDataSource
         {
-
             public override UIViewController GetNextViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
-			{
-				int index = GetPageIndex (referenceViewController) + 1;
-				if (index < 0 || index >= _images.Count)
-				{
-					return null;
-				}
-				return PhotoViewPage1.ImageViewControllerForPageIndex (_images [index]);
-			}
+            {
+                int index = GetPageIndex(referenceViewController) + 1;
+                if (index < 0 || index >= _images.Count)
+                {
+                    return null;
+                }
+                return PhotoViewPage1.ImageViewControllerForPageIndex(_images[index]);
+            }
 
             public override UIViewController GetPreviousViewController(UIPageViewController pageViewController,
                 UIViewController referenceViewController)
-			{
-				int index = GetPageIndex (referenceViewController) - 1;
-				if (index < 0 || index >= _images.Count)
-				{
-					return null;
-				}
-				return PhotoViewPage1.ImageViewControllerForPageIndex (_images [index]);
-			}
+            {
+                int index = GetPageIndex(referenceViewController) - 1;
+                if (index < 0 || index >= _images.Count)
+                {
+                    return null;
+                }
+                return PhotoViewPage1.ImageViewControllerForPageIndex(_images[index]);
+            }
 
             private int GetPageIndex(UIViewController controller)
             {

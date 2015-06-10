@@ -44,7 +44,7 @@ namespace Dojo
             base.ViewDidDisappear(animated);
             if (_imageView != null)
             {
-				_imageView.Image = null;
+                _imageView.Image = null;
                 _imageView.SafeDispose();
                 _imageView.RemoveFromSuperview();
                 _imageView = null;
@@ -52,44 +52,45 @@ namespace Dojo
         }
 
         public override void ViewDidLoad()
-		{
-			base.ViewDidLoad ();
-			if (_imageView != null)
-			{
-				_imageView.RemoveFromSuperview ();
-				_imageView = null;
-			}
+        {
+            base.ViewDidLoad();
+            if (_imageView != null)
+            {
+                _imageView.RemoveFromSuperview();
+                _imageView = null;
+            }
 
-			_imageView = new UIImageView (View.Frame) {
-				MultipleTouchEnabled = true,
-				UserInteractionEnabled = true,
-				ContentMode = UIViewContentMode.ScaleAspectFit,
-				AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-			};
+            _imageView = new UIImageView(View.Frame)
+            {
+                MultipleTouchEnabled = true,
+                UserInteractionEnabled = true,
+                ContentMode = UIViewContentMode.ScaleAspectFit,
+                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+            };
 
-			var tapGesture = new UITapGestureRecognizer (OnImageTap);
-			View.AddGestureRecognizer (tapGesture);
-			View.AddSubview (_imageView);
-            
-			UpdateImage ();
-		}
+            var tapGesture = new UITapGestureRecognizer(OnImageTap);
+            View.AddGestureRecognizer(tapGesture);
+            View.AddSubview(_imageView);
 
-//        public override void ViewWillAppear(bool animated)
-//        {
-//            //			base.ViewWillAppear (animated);
-//            _imageView = new UIImageView(View.Frame)
-//            {
-//                MultipleTouchEnabled = true,
-//                UserInteractionEnabled = true,
-//                ContentMode = UIViewContentMode.ScaleAspectFit,
-//                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-//            };
-//            var tapGesture = new UITapGestureRecognizer(OnImageTap);
-//            _imageView.AddGestureRecognizer(tapGesture);
-//            View.AddSubview(_imageView);
-//
-//            UpdateImage();
-//        }
+            UpdateImage();
+        }
+
+        //        public override void ViewWillAppear(bool animated)
+        //        {
+        //            //			base.ViewWillAppear (animated);
+        //            _imageView = new UIImageView(View.Frame)
+        //            {
+        //                MultipleTouchEnabled = true,
+        //                UserInteractionEnabled = true,
+        //                ContentMode = UIViewContentMode.ScaleAspectFit,
+        //                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        //            };
+        //            var tapGesture = new UITapGestureRecognizer(OnImageTap);
+        //            _imageView.AddGestureRecognizer(tapGesture);
+        //            View.AddSubview(_imageView);
+        //
+        //            UpdateImage();
+        //        }
 
         protected override void Dispose(bool disposing)
         {
