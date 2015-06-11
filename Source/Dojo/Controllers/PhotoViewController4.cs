@@ -38,6 +38,8 @@ namespace Dojo
             ToolbarItems = new[] { _btShare, deleteSpace, btTrash };
 
             DataSource = _pageVewDataSource;
+			AutomaticallyAdjustsScrollViewInsets = false;
+
         }
 
         public bool FullScreen { get; set; }
