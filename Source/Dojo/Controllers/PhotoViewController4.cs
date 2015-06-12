@@ -9,7 +9,7 @@ using Photos;
 using UIKit;
 
 namespace Dojo
-{
+{ 
     public class PhotoViewController4 : UIPageViewController
     {
         private readonly UIBarButtonItem _btShare;
@@ -126,8 +126,8 @@ namespace Dojo
         private void OnImageTap(UITapGestureRecognizer gesture)
         {
             FullScreen = !FullScreen;
-            NavigationController.SetNavigationBarHidden(FullScreen, false);
-            NavigationController.SetToolbarHidden(FullScreen, false);
+			NavigationController.SetNavigationBarHidden(FullScreen, true);
+			NavigationController.SetToolbarHidden(FullScreen, true);
 
             View.BackgroundColor = FullScreen ? UIColor.Black : UIColor.White;
         }
