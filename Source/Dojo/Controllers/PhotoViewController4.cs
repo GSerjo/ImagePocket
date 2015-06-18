@@ -9,7 +9,7 @@ using Photos;
 using UIKit;
 
 namespace Dojo
-{ 
+{
     public class PhotoViewController4 : UIPageViewController
     {
         private readonly UIBarButtonItem _btShare;
@@ -38,8 +38,7 @@ namespace Dojo
             ToolbarItems = new[] { _btShare, deleteSpace, btTrash };
 
             DataSource = _pageVewDataSource;
-			AutomaticallyAdjustsScrollViewInsets = false;
-
+            AutomaticallyAdjustsScrollViewInsets = false;
         }
 
         public bool FullScreen { get; set; }
@@ -126,8 +125,8 @@ namespace Dojo
         private void OnImageTap(UITapGestureRecognizer gesture)
         {
             FullScreen = !FullScreen;
-			NavigationController.SetNavigationBarHidden(FullScreen, true);
-			NavigationController.SetToolbarHidden(FullScreen, true);
+            NavigationController.SetNavigationBarHidden(FullScreen, true);
+            NavigationController.SetToolbarHidden(FullScreen, true);
 
             View.BackgroundColor = FullScreen ? UIColor.Black : UIColor.White;
         }

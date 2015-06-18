@@ -66,7 +66,7 @@ namespace Dojo
             {
                 HeaderView = new MenuSectionView("Settings")
             };
-//            result.Add(new MenuElement("About", Resources.AboutImage, () => new AboutAppViewController("About")));
+            //            result.Add(new MenuElement("About", Resources.AboutImage, () => new AboutAppViewController("About")));
             result.Add(new MenuElement("Feedback & Support", Resources.FlagImage, () => ContactUs()));
             return result;
         }

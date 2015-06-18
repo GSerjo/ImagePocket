@@ -10,7 +10,7 @@ namespace Dojo
             : base(new RectangleF(0, 0, 320, 27))
         {
             BackgroundColor = UIColor.FromRGB(50, 50, 50);
-//			BackgroundColor = UIColor.LightGray;
+            //			BackgroundColor = UIColor.LightGray;
             var label = new UILabel
             {
                 BackgroundColor = UIColor.Clear,

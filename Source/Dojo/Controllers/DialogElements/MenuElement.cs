@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using MonoTouch.Dialog;
 using Foundation;
+using MonoTouch.Dialog;
 using UIKit;
 
 namespace Dojo
