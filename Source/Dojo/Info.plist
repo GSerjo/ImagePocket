@@ -34,6 +34,6 @@
 	<key>CFBundleDisplayName</key>
 	<string>Image Pocket</string>
 	<key>XSAppIconAssets</key>
-	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
+	<string>Images.xcassets/AppIcons.appiconset</string>
 </dict>
 </plist>
