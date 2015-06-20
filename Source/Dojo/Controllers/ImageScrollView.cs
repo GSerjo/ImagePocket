@@ -111,9 +111,7 @@ namespace Dojo
             nfloat scale = UIScreen.MainScreen.Scale;
             var size = new CGSize(UIScreen.MainScreen.Bounds.Size.Width * scale,
                 UIScreen.MainScreen.Bounds.Size.Height * scale);
-            PHImageManager.DefaultManager.RequestImageForAsset(asset, size,
-                PHImageContentMode.AspectFit, options,
-                (image, info) => result = image);
+            ImageCache.Instance.GetImage(asset, size, options, x => result = x);
             return result;
         }
 

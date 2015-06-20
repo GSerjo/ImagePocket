@@ -207,18 +207,15 @@ namespace Dojo
             var options = new PHImageRequestOptions
             {
                 Synchronous = true,
-                DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat
+                DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat,
+                NetworkAccessAllowed = true
             };
             return Task.Run(() =>
             {
                 foreach (PHAsset asset in assets)
                 {
                     var size = new CGSize(asset.PixelWidth, asset.PixelHeight);
-                    PHImageManager.DefaultManager.RequestImageForAsset(asset,
-                        size,
-                        PHImageContentMode.AspectFit,
-                        options,
-                        (image, info) => images.Add(image));
+                    _imageCache.GetImage(asset, size, options, x => images.Add(x));
                 }
                 return images;
             });

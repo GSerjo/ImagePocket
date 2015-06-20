@@ -141,7 +141,6 @@
     <Compile Include="Controllers\PhotoViewController1.cs" />
     <Compile Include="Controllers\PhotoViewController4.cs" />
     <Compile Include="Controllers\PhotoViewPage1.cs" />
-    <Compile Include="ImageDetails.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Controllers\HomeViewController.cs" />
@@ -153,17 +152,12 @@
       <DependentUpon>TagSelectorViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Resources.cs" />
-    <Compile Include="ThumbnailCell.cs" />
-    <Compile Include="ThumbnailCell.designer.cs">
-      <DependentUpon>ThumbnailCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="Layouts\CollectionViewWaterfallLayout.cs" />
     <Compile Include="Layouts\CollectionViewWaterfallLayoutItemRenderDirection.cs" />
     <Compile Include="Layouts\CollectionViewDelegateWaterfallLayout.cs" />
     <Compile Include="Controllers\DialogElements\MenuSectionView.cs" />
     <Compile Include="Controllers\DialogElements\MenuElement.cs" />
     <Compile Include="Controllers\AboutAppViewController.cs" />
-    <Compile Include="TilingView.cs" />
     <Compile Include="Controllers\PhotoViewController2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -230,17 +224,39 @@
     <ImageAsset Include="Images.xcassets\Selected.imageset\Selected%403x.png">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Contents.json" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-72.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-72%402x.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-76.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-76%402x.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small%402x.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-40.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-40%402x.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-50.png" />
-    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-50%402x.png" />
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-72.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-72%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-76.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-76%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-40.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-40%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-50.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Images.xcassets\AppIcons.appiconset\Icon-Small-50%402x.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>

@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using CoreGraphics;
 using Photos;
+using UIKit;
 
 namespace Domain
 {
     public sealed class ImageCache
     {
         private static readonly ImageCache _instance = new ImageCache();
-        private readonly PHCachingImageManager _imageManager = new PHCachingImageManager();
+        private readonly PHCachingImageManager _cachingImageManager = new PHCachingImageManager();
         private readonly ImageRepository _imageRepository = ImageRepository.Instance;
         private readonly object _locker = new object();
         private readonly PhotoLibraryObserver _photoLibraryObserver;
@@ -35,16 +37,57 @@ namespace Domain
             get { return _instance; }
         }
 
-        public PHCachingImageManager ImageManager
-        {
-            get { return _imageManager; }
-        }
-
         public PHAsset GetAsset(string localId)
         {
             lock (_locker)
             {
                 return _assets[localId];
+            }
+        }
+
+        public void GetCachingImage(PHAsset asset, CGSize size, PHImageRequestOptions options, Action<UIImage> action)
+        {
+            try
+            {
+                _cachingImageManager.RequestImageForAsset(asset, size, PHImageContentMode.AspectFit, options,
+                    (image, info) =>
+                    {
+                        try
+                        {
+                            action(image);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        public void GetImage(PHAsset asset, CGSize size, PHImageRequestOptions options, Action<UIImage> action)
+        {
+            try
+            {
+                PHImageManager.DefaultManager.RequestImageForAsset(asset, size, PHImageContentMode.AspectFit, options,
+                    (image, info) =>
+                    {
+                        try
+                        {
+                            action(image);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 

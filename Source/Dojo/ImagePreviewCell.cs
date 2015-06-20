@@ -11,7 +11,8 @@ namespace Dojo
     {
         private static readonly PHImageRequestOptions _options = new PHImageRequestOptions
         {
-            NetworkAccessAllowed = true
+            NetworkAccessAllowed = true,
+            Synchronous = false
         };
 
         private readonly ImageCache _imageCache = ImageCache.Instance;
@@ -28,8 +29,10 @@ namespace Dojo
                 ContentMode = UIViewContentMode.ScaleAspectFit,
                 ClipsToBounds = true
             };
-            _overlayView = new UIImageView(Resources.SelectImage);
-            _overlayView.Frame = Bounds;
+            _overlayView = new UIImageView(Resources.SelectImage)
+            {
+                Frame = Bounds
+            };
             ContentView.AddSubview(_imageView);
 
             //			ContentView.AddSubview (_selectView);
@@ -56,10 +59,7 @@ namespace Dojo
         public void SetImage(string localId)
         {
             PHAsset asset = _imageCache.GetAsset(localId);
-            _imageCache.ImageManager.RequestImageForAsset(
-                asset,
-                _imageView.Frame.Size,
-                PHImageContentMode.AspectFit, _options, UpdateImage);
+            _imageCache.GetCachingImage(asset, _imageView.Frame.Size, _options, x => _imageView.Image = x);
         }
 
         public void UnselectCell()
