@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain;
 using StoreKit;
 using Xamarin.InAppPurchase;
 
@@ -7,8 +8,10 @@ namespace Dojo
     public sealed class PurchaseManager
     {
         private const string AppStoreProductId = "";
+        private const int MaxTagCount = 3;
         private static readonly PurchaseManager _instance = new PurchaseManager();
         private readonly InAppPurchaseManager _purchaseManager = new InAppPurchaseManager();
+        private readonly TagCache _tagCache = TagCache.Instance;
         private bool _productPurchased;
 
         private PurchaseManager()
@@ -28,7 +31,19 @@ namespace Dojo
             get { return _instance; }
         }
 
-        public bool ProductPurchased
+        public bool RequirePurchase
+        {
+            get
+            {
+                if (_tagCache.UserTagCount < MaxTagCount)
+                {
+                    return false;
+                }
+                return !ProductPurchased;
+            }
+        }
+
+        private bool ProductPurchased
         {
             get
             {

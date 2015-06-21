@@ -21,6 +21,11 @@ namespace Domain
             get { return _instance; }
         }
 
+        public int UserTagCount
+        {
+            get { return _tags.Count; }
+        }
+
         public bool Contains(int id)
         {
             return _tags.ContainsKey(id);
