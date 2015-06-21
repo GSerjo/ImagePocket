@@ -126,10 +126,14 @@
       <HintPath>..\..\Components\rxforxamarin-2.1\lib\ios\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="MonoTouch.Dialog-1" />
+    <Reference Include="Xamarin.InAppPurchase-Unified">
+      <HintPath>..\..\Components\xamarin.inapppurchase-2.6\lib\ios-unified\Xamarin.InAppPurchase-Unified.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images.xcassets\Selected.imageset\" />
     <Folder Include="Resources\Images.xcassets\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -159,6 +163,7 @@
     <Compile Include="Controllers\DialogElements\MenuElement.cs" />
     <Compile Include="Controllers\AboutAppViewController.cs" />
     <Compile Include="Controllers\PhotoViewController2.cs" />
+    <Compile Include="Security\PurchaseManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -261,5 +266,11 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork%402x" />
+  </ItemGroup>
+  <ItemGroup>
+    <XamarinComponentReference Include="xamarin.inapppurchase">
+      <Version>2.6</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
   </ItemGroup>
 </Project>
