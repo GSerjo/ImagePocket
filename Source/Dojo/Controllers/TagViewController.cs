@@ -53,7 +53,7 @@ namespace Dojo
             if (MFMailComposeViewController.CanSendMail)
             {
                 _mailViewController = new MFMailComposeViewController();
-                _mailViewController.SetToRecipients(new[] { "smorenko@gmail.com" });
+                _mailViewController.SetToRecipients(new[] { "supprot@tikron.com" });
                 _mailViewController.Finished += (sender, e) => e.Controller.DismissViewController(true, null);
                 _mailViewController.SetSubject("Feedback");
                 PresentViewController(_mailViewController, true, null);
