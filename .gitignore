@@ -14,3 +14,4 @@ _ReSharper.*
 *.ncrunchsolution
 *.ncrunchproject
 Icons
+packages
