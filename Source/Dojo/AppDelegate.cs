@@ -4,6 +4,7 @@ using System.Linq;
 using Foundation;
 using MonoTouch.SlideoutNavigation;
 using UIKit;
+using Xamarin;
 
 namespace Dojo
 {
@@ -26,25 +27,32 @@ namespace Dojo
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            // create a new window instance based on the screen size
-            window = new UIWindow(UIScreen.MainScreen.Bounds);
-
-            Menu = new SimpleSlideoutNavigationController();
-            HomeViewController homeController = CreateHomeController();
-            Menu.MainViewController = new MainNavigationController(homeController, Menu);
-            Menu.MenuViewController = new MenuNavigationController(new TagViewController(homeController), Menu)
-            {
-                NavigationBarHidden = true,
-            };
-
-            // If you have defined a root view controller, set it here:
-            window.RootViewController = Menu;
-            UpdateTheme();
-
-            // make the window visible
-            window.MakeKeyAndVisible();
-
-            return true;
+			try
+			{
+				// create a new window instance based on the screen size
+				window = new UIWindow (UIScreen.MainScreen.Bounds);
+            	
+				Menu = new SimpleSlideoutNavigationController ();
+				HomeViewController homeController = CreateHomeController ();
+				Menu.MainViewController = new MainNavigationController (homeController, Menu);
+				Menu.MenuViewController = new MenuNavigationController (new TagViewController (homeController), Menu) {
+					NavigationBarHidden = true,
+				};
+            	
+				// If you have defined a root view controller, set it here:
+				window.RootViewController = Menu;
+				UpdateTheme ();
+            	
+				// make the window visible
+				window.MakeKeyAndVisible ();
+            	
+				return true;
+			}
+			catch (Exception ex)
+			{
+				Insights.Report (ex);
+				throw;
+			}
         }
 
         private HomeViewController CreateHomeController()

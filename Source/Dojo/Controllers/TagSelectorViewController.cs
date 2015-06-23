@@ -212,6 +212,7 @@ namespace Dojo
             {
                 _controller._tagTokenSource.RemoveTagAtIndex(index);
                 tokenView.ReloadData();
+				_controller._tagTableSource.Filter(string.Empty);
             }
 
             public override void FilterToken(TokenView tokenView, string text)
