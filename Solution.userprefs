@@ -1,12 +1,30 @@
 ﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="AppStore|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/PhotoViewController4.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/TagSelectorViewController.cs">
     <Files>
-      <File FileName="Source/Dojo/Controllers/PhotoViewController4.cs" Line="15" Column="29" />
-      <File FileName="Source/Dojo/Controllers/PhotoViewPage1.cs" Line="1" Column="1" />
       <File FileName="Source/Dojo/Controllers/ImageScrollView.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Images.xcassets/LaunchImages.launchimage/Contents.json" />
+      <File FileName="Source/Dojo/Security/PurchaseManager.cs" Line="9" Column="6" />
+      <File FileName="Source/Dojo/Main.cs" Line="15" Column="14" />
+      <File FileName="Source/Dojo/AppDelegate.cs" Line="54" Column="11" />
+      <File FileName="Source/Dojo/ImagePreviewCell.cs" Line="62" Column="1" />
+      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="136" Column="26" />
+      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="218" Column="52" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Solution" expanded="True">
+            <Node name="Dojo" expanded="True" selected="True">
+              <Node name="Controllers" expanded="True" />
+            </Node>
+            <Node name="Domain" expanded="True">
+              <Node name="Caches" expanded="True" />
+            </Node>
+            <Node name="NSTokenView" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
