@@ -1,13 +1,14 @@
 ﻿using System;
 using Domain;
 using StoreKit;
+using UIKit;
 using Xamarin.InAppPurchase;
 
 namespace Dojo
 {
     public sealed class PurchaseManager
     {
-        private const string AppStoreProductId = "";
+        private const string AppStoreProductId = "org.nelibur.ImagePocket";
         private const int MaxTagCount = 3;
         private static readonly PurchaseManager _instance = new PurchaseManager();
         private readonly InAppPurchaseManager _purchaseManager = new InAppPurchaseManager();
@@ -18,7 +19,10 @@ namespace Dojo
         {
             _purchaseManager.SimulateiTunesAppStore = false;
             _purchaseManager.PublicKey = "5266B284A4D747FFBEAA01F4081A29E2";
-            _purchaseManager.AutomaticPersistenceType = InAppPurchasePersistenceType.UserDefaults;
+            _purchaseManager.AutomaticPersistenceType = InAppPurchasePersistenceType.LocalFile;
+            _purchaseManager.PersistenceFilename = "5C3419ECCBDB4257894C8460686C92FE";
+            _purchaseManager.RestoreProducts();
+
             QueryInventory();
 
             _purchaseManager.InAppProductPurchaseFailed += OnInAppProductPurchaseFailed;
@@ -68,6 +72,14 @@ namespace Dojo
         {
             try
             {
+                if (_purchaseManager.CanMakePayments == false)
+                {
+                    using (var alert = new UIAlertView("Warning", "Sorry but you cannot make purchases from the In App Billing store. Please try again later.", null, "OK", null))
+                    {
+                        alert.Show();
+                    }
+                    return;
+                }
                 Console.WriteLine("Buy");
                 _purchaseManager.BuyProduct(AppStoreProductId);
             }
