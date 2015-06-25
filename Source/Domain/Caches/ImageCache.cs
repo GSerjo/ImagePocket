@@ -45,25 +45,6 @@ namespace Domain
             }
         }
 
-		public void StartCachingImagePreview()
-		{
-			try
-			{
-				var options = new PHImageRequestOptions
-				{
-					Synchronous = false,
-					NetworkAccessAllowed = true
-				};
-				var imageSize = new CGSize (16, 160);
-				_cachingImageManager.StartCaching (_assets.Values.ToArray (), imageSize, PHImageContentMode.AspectFit, options);
-
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine (ex);
-			}
-		}
-
         public void GetCachingImage(PHAsset asset, CGSize size, PHImageRequestOptions options, Action<UIImage> action)
         {
             try
@@ -149,6 +130,24 @@ namespace Domain
         {
             _imageRepository.SaveOrUpdate(images);
             UpdateTaggedImages(images);
+        }
+
+        public void StartCachingImagePreview()
+        {
+            try
+            {
+                var options = new PHImageRequestOptions
+                {
+                    Synchronous = false,
+                    NetworkAccessAllowed = true
+                };
+                var imageSize = new CGSize(16, 160);
+                _cachingImageManager.StartCaching(_assets.Values.ToArray(), imageSize, PHImageContentMode.AspectFit, options);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private ImageEntity CreateImage(PHAsset asset)

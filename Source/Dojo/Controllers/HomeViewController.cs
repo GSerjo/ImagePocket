@@ -157,7 +157,7 @@ namespace Dojo
             ConfigureView();
             ConfigureToolbar();
             _imageCache.PhotoLibraryChanged += OnPhotoLibraryChanged;
-			Task.Run (_imageCache.StartCachingImagePreview);
+            Task.Run(() => _imageCache.StartCachingImagePreview());
         }
 
         private void ClearSelectedCells()
