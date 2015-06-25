@@ -103,12 +103,6 @@
     <MtouchUseLlvm>true</MtouchUseLlvm>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PLCrashReporterUnifiedBinding">
-      <HintPath>..\..\packages\Xamarin.Insights.1.10.4.112\lib\Xamarin.iOS10\PLCrashReporterUnifiedBinding.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Insights">
-      <HintPath>..\..\packages\Xamarin.Insights.1.10.4.112\lib\Xamarin.iOS10\Xamarin.Insights.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.iOS" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -134,6 +128,12 @@
     <Reference Include="MonoTouch.Dialog-1" />
     <Reference Include="Xamarin.InAppPurchase-Unified">
       <HintPath>..\..\Components\xamarin.inapppurchase-2.6\lib\ios-unified\Xamarin.InAppPurchase-Unified.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Insights">
+      <HintPath>..\..\packages\Xamarin.Insights.1.10.4.112\lib\Xamarin.iOS10\Xamarin.Insights.dll</HintPath>
+    </Reference>
+    <Reference Include="PLCrashReporterUnifiedBinding">
+      <HintPath>..\..\packages\Xamarin.Insights.1.10.4.112\lib\Xamarin.iOS10\PLCrashReporterUnifiedBinding.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

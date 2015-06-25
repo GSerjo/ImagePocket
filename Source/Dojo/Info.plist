@@ -6,8 +6,6 @@
 	<string>org.nelibur.ImagePocket</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-	<key>CFBundleVersion</key>
-	<string>1.9</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -35,5 +33,7 @@
 	<string>Image Pocket</string>
 	<key>XSAppIconAssets</key>
 	<string>Images.xcassets/AppIcons.appiconset</string>
+	<key>CFBundleVersion</key>
+	<string>2.0</string>
 </dict>
 </plist>
