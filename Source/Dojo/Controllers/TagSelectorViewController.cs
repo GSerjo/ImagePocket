@@ -12,8 +12,8 @@ namespace Dojo
 {
     public partial class TagSelectorViewController : UIViewController
     {
+        private static readonly PurchaseManager _purchaseManager = PurchaseManager.Instance;
         private static readonly TagCache _tagCache = TagCache.Instance;
-		private static readonly PurchaseManager _purchaseManager = PurchaseManager.Instance;
         private readonly List<ImageEntity> _images = new List<ImageEntity>();
         private TagTableSource _tagTableSource;
         private TagTokenDelegate _tagTokenDelegate;
@@ -104,15 +104,29 @@ namespace Dojo
             _images.Iter(x => x.RemoveTag(tag));
         }
 
-		private bool RequirePurchase()
-		{
-			var result = _purchaseManager.RequirePurchase;
-			if (result)
-			{
-				_purchaseManager.Buy ();
-			}
-			return _purchaseManager.RequirePurchase;
-		}
+        private bool RequirePurchase()
+        {
+            bool result = _purchaseManager.RequirePurchase;
+            if (result == false)
+            {
+                return false;
+            }
+
+            var alertController = UIAlertController.Create("Lite version", "Only five tags are available in this lite version", UIAlertControllerStyle.ActionSheet);
+            alertController.AddAction(UIAlertAction.Create("Upgrade", UIAlertActionStyle.Default, x => _purchaseManager.Buy()));
+            alertController.AddAction(UIAlertAction.Create("Restore previous purchase ", UIAlertActionStyle.Default, x => _purchaseManager.Restore()));
+            alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, x => Console.WriteLine("Cancel was clicked")));
+
+            UIPopoverPresentationController presentationPopover = alertController.PopoverPresentationController;
+            if (presentationPopover != null)
+            {
+                presentationPopover.SourceView = View;
+                presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
+            }
+
+            PresentViewController(alertController, true, null);
+            return _purchaseManager.RequirePurchase;
+        }
 
 
         private sealed class TagTableSource : UITableViewSource
@@ -177,11 +191,11 @@ namespace Dojo
                 TagEntity selectedTag = _tags[(int)indexPath.Item];
                 if (selectedTag.IsAddTagRequest)
                 {
-					var requirePurchase = _controller.RequirePurchase ();
-					if (requirePurchase)
-					{
-						return;
-					}
+                    bool requirePurchase = _controller.RequirePurchase();
+                    if (requirePurchase)
+                    {
+                        return;
+                    }
                     addTag = new TagEntity { Name = selectedTag.Name };
                 }
                 else
@@ -228,7 +242,7 @@ namespace Dojo
             {
                 _controller._tagTokenSource.RemoveTagAtIndex(index);
                 tokenView.ReloadData();
-				_controller._tagTableSource.Filter(string.Empty);
+                _controller._tagTableSource.Filter(string.Empty);
             }
 
             public override void FilterToken(TokenView tokenView, string text)
