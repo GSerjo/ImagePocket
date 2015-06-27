@@ -112,7 +112,7 @@ namespace Dojo
                 return false;
             }
 
-            var alertController = UIAlertController.Create("Lite version", "Only five tags are available in this lite version", UIAlertControllerStyle.ActionSheet);
+			var alertController = UIAlertController.Create("Lite version", "Only five tags are available in this lite version", UIAlertControllerStyle.Alert);
             alertController.AddAction(UIAlertAction.Create("Upgrade", UIAlertActionStyle.Default, x => _purchaseManager.Buy()));
             alertController.AddAction(UIAlertAction.Create("Restore previous purchase ", UIAlertActionStyle.Default, x => _purchaseManager.Restore()));
             alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, x => Console.WriteLine("Cancel was clicked")));
@@ -123,9 +123,8 @@ namespace Dojo
                 presentationPopover.SourceView = View;
                 presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
             }
-
-            PresentViewController(alertController, true, null);
-            return _purchaseManager.RequirePurchase;
+			PresentViewController(alertController, true, ()=> result = _purchaseManager.RequirePurchase);
+			return result;
         }
 
 
