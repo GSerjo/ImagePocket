@@ -9,7 +9,7 @@ namespace Dojo
     public sealed class PurchaseManager
     {
         private const string AppStoreProductId = "org.nelibur.ImagePocket";
-        private const int MaxTagCount = 3;
+        private const int MaxTagCount = 2;
         private static readonly PurchaseManager _instance = new PurchaseManager();
         private readonly InAppPurchaseManager _purchaseManager = new InAppPurchaseManager();
         private readonly TagCache _tagCache = TagCache.Instance;
@@ -17,7 +17,10 @@ namespace Dojo
 
         private PurchaseManager()
         {
-            _purchaseManager.SimulateiTunesAppStore = false;
+            _purchaseManager.SimulateiTunesAppStore = true;
+
+//			_purchaseManager.SimulateiTunesAppStore = false;
+
             _purchaseManager.PublicKey = "5266B284A4D747FFBEAA01F4081A29E2";
             _purchaseManager.AutomaticPersistenceType = InAppPurchasePersistenceType.LocalFile;
             _purchaseManager.PersistenceFilename = "5C3419ECCBDB4257894C8460686C92FE";

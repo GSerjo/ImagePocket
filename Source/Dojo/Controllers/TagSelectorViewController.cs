@@ -13,6 +13,7 @@ namespace Dojo
     public partial class TagSelectorViewController : UIViewController
     {
         private static readonly TagCache _tagCache = TagCache.Instance;
+		private static readonly PurchaseManager _purchaseManager = PurchaseManager.Instance;
         private readonly List<ImageEntity> _images = new List<ImageEntity>();
         private TagTableSource _tagTableSource;
         private TagTokenDelegate _tagTokenDelegate;
@@ -103,6 +104,16 @@ namespace Dojo
             _images.Iter(x => x.RemoveTag(tag));
         }
 
+		private bool RequirePurchase()
+		{
+			var result = _purchaseManager.RequirePurchase;
+			if (result)
+			{
+				_purchaseManager.Buy ();
+			}
+			return _purchaseManager.RequirePurchase;
+		}
+
 
         private sealed class TagTableSource : UITableViewSource
         {
@@ -166,6 +177,11 @@ namespace Dojo
                 TagEntity selectedTag = _tags[(int)indexPath.Item];
                 if (selectedTag.IsAddTagRequest)
                 {
+					var requirePurchase = _controller.RequirePurchase ();
+					if (requirePurchase)
+					{
+						return;
+					}
                     addTag = new TagEntity { Name = selectedTag.Name };
                 }
                 else
