@@ -190,11 +190,11 @@ namespace Dojo
                 TagEntity selectedTag = _tags[(int)indexPath.Item];
                 if (selectedTag.IsAddTagRequest)
                 {
-                    bool requirePurchase = _controller.RequirePurchase();
-                    if (requirePurchase)
-                    {
-                        return;
-                    }
+//                    bool requirePurchase = _controller.RequirePurchase();
+//                    if (requirePurchase)
+//                    {
+//                        return;
+//                    }
                     addTag = new TagEntity { Name = selectedTag.Name };
                 }
                 else

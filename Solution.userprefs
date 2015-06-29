@@ -1,13 +1,13 @@
-﻿<Properties StartupItem="Source/Dojo/Dojo.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadAir.8.3" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/TagSelectorViewController.cs">
+﻿<Properties StartupItem="Source/Dojo/ImagePocket.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="AppStore|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.iSerjoAir" />
+  <MonoDevelop.Ide.Workbench>
     <Files>
       <File FileName="Source/Dojo/Controllers/ImageScrollView.cs" Line="1" Column="1" />
       <File FileName="Source/Dojo/Main.cs" Line="1" Column="1" />
       <File FileName="Source/Dojo/AppDelegate.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="125" Column="14" />
-      <File FileName="Source/Dojo/Security/PurchaseManager.cs" Line="1" Column="1" />
+      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="69" Column="40" />
+      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="179" Column="21" />
+      <File FileName="Source/Dojo/Security/PurchaseManager.cs" Line="59" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -18,6 +18,11 @@
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoViewController2.cs" line="199" column="1" />
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoViewController2.cs" line="194" column="1" />
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PhotoPage.cs" line="110" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Security/PurchaseManager.cs" line="104" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Security/PurchaseManager.cs" line="115" column="38" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Security/PurchaseManager.cs" line="110" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Security/PurchaseManager.cs" line="120" column="1" />
+      <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/TagSelectorViewController.cs" line="127" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
