@@ -155,7 +155,7 @@ namespace Domain
             var result = new ImageEntity
             {
                 LocalIdentifier = asset.LocalIdentifier,
-                CreateTime = (DateTime)asset.CreationDate
+                CreateTime = asset.CreationDate.ToDateTime()
             };
             return result;
         }
