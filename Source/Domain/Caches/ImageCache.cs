@@ -152,12 +152,24 @@ namespace Domain
 
         private ImageEntity CreateImage(PHAsset asset)
         {
-            var result = new ImageEntity
+            try
             {
-                LocalIdentifier = asset.LocalIdentifier,
-                CreateTime = asset.CreationDate.ToDateTime()
-            };
-            return result;
+                var result = new ImageEntity
+                {
+                    LocalIdentifier = asset.LocalIdentifier,
+                    CreateTime = asset.CreationDate.ToDateTime()
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return new ImageEntity
+                {
+                    LocalIdentifier = asset.LocalIdentifier,
+                    CreateTime = DateTime.MinValue
+                };
+            }
         }
 
         private List<TagEntity> GetDistinctTags(List<ImageEntity> images)
