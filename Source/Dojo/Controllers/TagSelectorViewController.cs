@@ -112,7 +112,7 @@ namespace Dojo
                 return false;
             }
 
-			var alertController = UIAlertController.Create("Lite version", "Only five tags are available in this lite version", UIAlertControllerStyle.Alert);
+            UIAlertController alertController = UIAlertController.Create("Lite version", "Only five tags are available in this lite version", UIAlertControllerStyle.Alert);
             alertController.AddAction(UIAlertAction.Create("Upgrade", UIAlertActionStyle.Default, x => _purchaseManager.Buy()));
             alertController.AddAction(UIAlertAction.Create("Restore previous purchase ", UIAlertActionStyle.Default, x => _purchaseManager.Restore()));
             alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, x => Console.WriteLine("Cancel was clicked")));
@@ -123,8 +123,8 @@ namespace Dojo
                 presentationPopover.SourceView = View;
                 presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
             }
-			PresentViewController(alertController, true, ()=> result = _purchaseManager.RequirePurchase);
-			return result;
+            PresentViewController(alertController, true, () => result = _purchaseManager.RequirePurchase);
+            return result;
         }
 
 
@@ -173,7 +173,11 @@ namespace Dojo
                 TagEntity tag = _tags[indexPath.Row];
                 if (tag.IsAddTagRequest)
                 {
-                    cell.TextLabel.Text = string.Format("Create new tag \"{0}\"", tag.Name);
+                    var text = new NSMutableAttributedString("Create");
+                    text.Append(new NSMutableAttributedString(" new"), UIFont.BoldSystemFontOfSize(14f));
+                    text.Append(new NSMutableAttributedString(string.Format(" tag \"{0}\"", tag.Name)));
+                    cell.TextLabel.AttributedText = text;
+                    //                    cell.TextLabel.Text = string.Format(" new tag \"{0}\"", tag.Name);
                     cell.TextLabel.TextColor = UIColor.FromRGB(99, 194, 188);
                 }
                 else
@@ -190,11 +194,11 @@ namespace Dojo
                 TagEntity selectedTag = _tags[(int)indexPath.Item];
                 if (selectedTag.IsAddTagRequest)
                 {
-//                    bool requirePurchase = _controller.RequirePurchase();
-//                    if (requirePurchase)
-//                    {
-//                        return;
-//                    }
+                    //                    bool requirePurchase = _controller.RequirePurchase();
+                    //                    if (requirePurchase)
+                    //                    {
+                    //                        return;
+                    //                    }
                     addTag = new TagEntity { Name = selectedTag.Name };
                 }
                 else
