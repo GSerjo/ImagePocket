@@ -76,6 +76,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchUseLlvm>true</MtouchUseLlvm>
     <AssemblyName>ImagePocket</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>full</DebugType>
@@ -95,10 +96,9 @@
     <OutputPath>bin\iPhone\AppStore</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Distribution: Sergey Morenko (NAXXC43K8R)</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <ConsolePause>false</ConsolePause>
-    <CodesignProvision>450de100-9976-474c-9cf8-347c6147760a</CodesignProvision>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
     <MtouchI18n>
     </MtouchI18n>
@@ -106,6 +106,8 @@
     <MtouchUseLlvm>true</MtouchUseLlvm>
     <AssemblyName>ImagePocket</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
+    <IpaPackageName>
+    </IpaPackageName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Xamarin.iOS" />
