@@ -173,19 +173,19 @@ namespace Dojo
                 TagEntity tag = _tags[indexPath.Row];
                 if (tag.IsAddTagRequest)
                 {
-					var firstAttributes = new UIStringAttributes {
-						Font = UIFont.BoldSystemFontOfSize(18f)
-					};
+                    var firstAttributes = new UIStringAttributes
+                    {
+                        Font = UIFont.BoldSystemFontOfSize(18f)
+                    };
 
-					var createNewTagText = string.Format ("Add new tag \"{0}\"", tag.Name);
-					var prettyString = new NSMutableAttributedString (createNewTagText);
-					prettyString.SetAttributes (firstAttributes.Dictionary, new NSRange (13, tag.Name.Length));
+                    string createNewTagText = string.Format("Add new tag \"{0}\"", tag.Name);
+                    var prettyString = new NSMutableAttributedString(createNewTagText);
+                    prettyString.SetAttributes(firstAttributes.Dictionary, new NSRange(13, tag.Name.Length));
 
-					cell.TextLabel.AttributedText = prettyString;
-					//                    cell.TextLabel.Text = string.Format("Create new tag \"{0}\"", tag.Name);
-//                    cell.TextLabel.TextColor = UIColor.FromRGB(99, 194, 188);
-					cell.TextLabel.TextColor = UIColor.FromRGB(254, 102, 2);
-
+                    cell.TextLabel.AttributedText = prettyString;
+                    //                    cell.TextLabel.Text = string.Format("Create new tag \"{0}\"", tag.Name);
+                    //                    cell.TextLabel.TextColor = UIColor.FromRGB(99, 194, 188);
+                    cell.TextLabel.TextColor = UIColor.FromRGB(254, 102, 2);
                 }
                 else
                 {
