@@ -1,16 +1,6 @@
 ﻿<Properties StartupItem="Source/Dojo/ImagePocket.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPadAir.8.4" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Source/Dojo/Controllers/TagSelectorViewController.cs">
-    <Files>
-      <File FileName="Source/Dojo/Controllers/ImageScrollView.cs" Line="19" Column="33" />
-      <File FileName="Source/Dojo/Main.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/AppDelegate.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controllers/TagViewController.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controllers/TagSelectorViewController.cs" Line="302" Column="1" />
-      <File FileName="Source/Dojo/Security/PurchaseManager.cs" Line="1" Column="1" />
-      <File FileName="Source/Dojo/Controllers/HomeViewController.cs" Line="1" Column="1" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="AppStore|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Development/Xamarin/ImagePocket/Source/Dojo/Controllers/PageViewController.cs" line="54" column="1" />
